@@ -15,6 +15,14 @@ PAGER='less'
 #EDITOR='mate -w'
 EDITOR='ged'
 
+####
+# Host-specific settings!
+####
+. $HOME/.shell/hosts/"`hostname`"
+
+####
+# ZSH colors
+####
 autoload colors zsh/terminfo
 if [[ "$terminfo[colors]" -ge 8 ]]; then
 	colors
@@ -28,10 +36,11 @@ done
 # sanity colors
 # . $HOME/.shell/colors
 
+####
+# Prompt
+####
 PR_NO_COLOR="%{$terminfo[sgr0]%}"
 PS1="${PR_LIGHT_BLACK}[$PR_LIGHT_BLUE%n${PR_LIGHT_BLACK}@$PR_NO_COLOR$PR_GREEN%m${PR_LIGHT_BLACK}:$PR_LIGHT_GREEN%2c${PR_LIGHT_BLACK}]$PR_NO_COLOR$PR_RED %(!.#.$)$PR_NO_COLOR "
-#PS1="$PR_LIGHT_BLACK[$PR_NO_COLOR $PR_LIGHT_BLUE%n$PR_NO_COLOR@$PR_LIGHT_GREEN%U%m%u$PR_NO_COLOR: $PR_LIGHT_RED%2c$PR_NO_COLOR]%(!.#.$) "
-#PS1="${PR_LIGHT_BLACK}[$PR_LIGHT_BLUE"
 RPS1="$PR_LIGHT_BLACK(%D{%m-%d %H:%M})$PR_NO_COLOR"
 
 #LANGUAGE=
@@ -41,9 +50,10 @@ LC_CTYPE=C
 # DISPLAY=:0
 
 unsetopt ALL_EXPORT
-# # --------------------------------------------------------------------
-# # aliases
-# # --------------------------------------------------------------------
+
+####
+# Aliases
+####
 . $HOME/.shell/aliases
 alias f=finger
 
@@ -62,6 +72,9 @@ bindkey "^[[3~" delete-char
 
 #chpwd
 
+####
+# Keybinds
+####
 autoload -U compinit
 compinit
 bindkey '^r' history-incremental-search-backward
@@ -85,7 +98,7 @@ zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %
 zstyle ':completion:*:processes' command 'ps -axw'
 zstyle ':completion:*:processes-names' command 'ps -awxho command'
 
-#port completion ????
+# outdated completion for Macports
 # zstyle ':completion:*:portlist' $(port list | awk '{print $1}')
 # zstyle ':completion:*:*:port:*' $(port list | awk '{print $1}')
 

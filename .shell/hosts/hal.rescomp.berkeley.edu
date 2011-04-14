@@ -1,0 +1,3 @@
+# PATH for Berkeley's Rescomp hosts
+PATH="$PATH:/usr/local/rescomp/bin:/usr/local/rescomp/sbin"
+
