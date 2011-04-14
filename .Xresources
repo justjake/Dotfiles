@@ -1,0 +1,116 @@
+!{{{ URXVT
+!
+! General
+urxvt*termName:  rxvt-256color
+urxvt*loginShell:         true
+urxvt*scrollBar:         false
+urxvt*secondaryScroll:    true
+urxvt*saveLines:         65535
+urxvt*cursorBlink:       false
+!urxvt*cursorUnderline:   true
+urxvt*urgentOnBell:       true
+!urxvt*override-redirect:false
+!urxvt*borderLess:       false
+!urxvt*internalBorder:       0
+!urxvt*externalBorder:       0
+!
+! Extensions
+! urxvt*perl-lib:        /usr/lib/urxvt/perl/
+!urxvt*perl-ext-common: default,matcher,searchable-scrollback,
+! urxvt*urlLauncher:     /usr/local/bin/firefox
+! urxvt*matcher.button:  1
+! Catch ugly URLs
+urxvt*cutchars:        '"'()*<>[]{|}
+!
+! Appearance
+! urxvt*font:     -xos4-terminus-medium-*-*-*-12-*-*-*-*-*-iso8859-2
+! urxvt*boldFont: -xos4-terminus-bold-*-*-*-12-*-*-*-*-*-iso8859-2
+!
+! Cursor
+urxvt*cursorColor: #7F7F7F
+!
+! Pseudo Transparency
+!urxvt*shading:    50
+!urxvt*transparent:true
+! 
+! Zenburn color-scheme
+urxvt*background:  #272728
+urxvt*foreground:  #D9DAD8
+! black + red
+!urxvt*color0:     #3f3f3f
+urxvt*color0:      #272728
+urxvt*color1:      #C33E2E
+! green + yellow
+urxvt*color2:      #B1D074
+urxvt*color3:      #D1C732
+! blue + purple
+urxvt*color4:      #80A4C6
+urxvt*color5:      #8856D2
+! cyan + white
+urxvt*color6:      #50CACA
+urxvt*color7:      #D9DAD8
+! bright-black + bright-red
+urxvt*color8:      #555555
+urxvt*color9:      #D7893D
+! bright-green + bright-yellow
+urxvt*color10:     #D9D735
+urxvt*color11:     #FFF990
+! bright-blue + bright-purple
+urxvt*color12:     #C2E9FA
+urxvt*color13:     #BE73FD
+! bright-cyan + bright-white
+urxvt*color14:     #93e0e3
+urxvt*color15:     #ffffff
+
+URxvt.perl-ext-common: macosx-clipboard
+URxvt.keysym.M-c: perl:macosx-clipboard:copy
+URxvt.keysym.M-v: perl:macosx-clipboard:paste
+
+!}}}
+
+
+!{{{ XTERM
+xterm*internalBorder:        0
+xterm*loginShell:         true
+xterm*scrollBar:         false
+xterm*cursorBlink:       false
+!xterm*geometry:         80x26
+xterm*saveLines:         65535
+xterm*dynamicColors:        on
+xterm*highlightSelection: true
+! Appearance
+xterm*utf8:          2
+xterm*eightBitInput: true
+! xterm*font:        -xos4-terminus-medium-*-*-*-12-*-*-*-*-*-iso8859-2
+! xterm*boldFont:    -xos4-terminus-bold-*-*-*-12-*-*-*-*-*-iso8859-2
+
+xterm*cursorColor: #DCDCCC
+! Zenburn
+xterm*background:  #343434
+xterm*foreground:  #D9DAD8
+! black + red
+!xterm*color0:     #3f3f3f
+xterm*color0:      #1E2320
+xterm*color1:      #C33E2E
+! green + yellow
+xterm*color2:      #B1D074
+xterm*color3:      #D1C732
+! blue + purple
+xterm*color4:      #80A4C6
+xterm*color5:      #8856D2
+! cyan + white
+xterm*color6:      #50CACA
+xterm*color7:      #D9DAD8
+! bright-black + bright-red
+xterm*color8:      #555555
+xterm*color9:      #D7893D
+! bright-green + bright-yellow
+xterm*color10:     #D9D735
+xterm*color11:     #FFF990
+! bright-blue + bright-purple
+xterm*color12:     #C2E9FA
+xterm*color13:     #BE73FD
+! bright-cyan + bright-white
+xterm*color14:     #93e0e3
+xterm*color15:     #ffffff
+!}}}
