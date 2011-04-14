@@ -1,42 +1,9 @@
-######################################################################
-#		      Jake's .zshrc
-#			from mako's .zshrc	
-# 
-######################################################################
+####
+#   Jake's .zshrc
+#   <just.1.jake@gmail.com>
+#   from mako's .zshrc
+####
 
-# next lets set some enviromental/shell pref stuff up
-# setopt NOHUP
-#setopt NOTIFY
-#setopt NO_FLOW_CONTROL
-setopt APPEND_HISTORY
-# setopt AUTO_LIST		# these two should be turned off
-# setopt AUTO_REMOVE_SLASH
-# setopt AUTO_RESUME		# tries to resume command of same name
-unsetopt BG_NICE		# do NOT nice bg commands
-setopt CORRECT			# command CORRECTION
-setopt EXTENDED_HISTORY		# puts timestamps in the history
-# setopt HASH_CMDS		# turns on hashing
-setopt HIST_ALLOW_CLOBBER
-setopt HIST_REDUCE_BLANKS
-setopt INC_APPEND_HISTORY SHARE_HISTORY
-setopt ALL_EXPORT
-
-setopt MENUCOMPLETE
-# Set/unset  shell options
-setopt   notify globdots correct pushdtohome cdablevars autolist
-setopt   correctall autocd recexact longlistjobs
-setopt   autoresume histignoredups pushdsilent noclobber
-setopt   autopushd pushdminus extendedglob rcquotes mailwarning
-unsetopt bgnice autoparamslash
-
-# Autoload zsh modules when they are referenced
-zmodload -a zsh/stat stat
-zmodload -a zsh/zpty zpty
-zmodload -a zsh/zprof zprof
-# zmodload -ap zsh/mapfile mapfile
-
-
-PATH="/Users/justjake/Documents/Scripts:/Users/justjake/.local/bin:/Users/justjake/.local/sbin:$PATH"
 MANSECT=1:1p:8:2:3:3p:4:5:6:7:9:0p:n:l:o
 TZ="America/Los_Angeles"
 HISTFILE=$HOME/.zhistory
@@ -45,21 +12,27 @@ SAVEHIST=1000
 HOSTNAME="`hostname`"
 PAGER='less'
 #EDITOR='bbedit -uw'
-EDITOR='mate -w'
+#EDITOR='mate -w'
+EDITOR='ged'
 
 autoload colors zsh/terminfo
 if [[ "$terminfo[colors]" -ge 8 ]]; then
 	colors
 fi
-for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-	eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
-	eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
+for color in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+	eval PR_LIGHT_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+	eval PR_$color='%{$fg[${(L)color}]%}'
 	(( count = $count + 1 ))
 done
 
+# sanity colors
+# . $HOME/.shell/colors
+
 PR_NO_COLOR="%{$terminfo[sgr0]%}"
-PS1="[$PR_LIGHT_BLUE%n$PR_NO_COLOR@$PR_LIGHT_GREEN%U%m%u$PR_NO_COLOR: $PR_LIGHT_RED%2c$PR_NO_COLOR]%(!.#.$) "
-RPS1="$PR_BLUE(%D{%m-%d %H:%M})$PR_NO_COLOR"
+PS1="${PR_LIGHT_BLACK}[$PR_LIGHT_BLUE%n${PR_LIGHT_BLACK}@$PR_NO_COLOR$PR_GREEN%m${PR_LIGHT_BLACK}:$PR_LIGHT_GREEN%2c${PR_LIGHT_BLACK}]$PR_NO_COLOR$PR_RED %(!.#.$)$PR_NO_COLOR "
+#PS1="$PR_LIGHT_BLACK[$PR_NO_COLOR $PR_LIGHT_BLUE%n$PR_NO_COLOR@$PR_LIGHT_GREEN%U%m%u$PR_NO_COLOR: $PR_LIGHT_RED%2c$PR_NO_COLOR]%(!.#.$) "
+#PS1="${PR_LIGHT_BLACK}[$PR_LIGHT_BLUE"
+RPS1="$PR_LIGHT_BLACK(%D{%m-%d %H:%M})$PR_NO_COLOR"
 
 #LANGUAGE=
 LC_ALL='en_US.UTF-8'
@@ -71,15 +44,8 @@ unsetopt ALL_EXPORT
 # # --------------------------------------------------------------------
 # # aliases
 # # --------------------------------------------------------------------
-alias slrn="slrn -n"
-alias man='LC_ALL=C LANG=C man'
+. $HOME/.shell/aliases
 alias f=finger
-alias ll='ls -al'
-alias ls='ls -GF'
-alias offlineimap-tty='offlineimap -u TTY.TTYUI'
-alias hnb-partecs='hnb $HOME/partecs/partecs-hnb.xml'
-alias rest2html-css='rst2html --embed-stylesheet --stylesheet-path=/usr/share/python-docutils/s5_html/themes/default/print.css'
-alias dmesg="sudo dmesg"
 
 # alias	=clear
 stty erase ^H &>/dev/null
@@ -131,7 +97,7 @@ zstyle ':completion:*::::' completer _expand _complete _ignored _approximate
 # allow one error for every three characters typed in approximate completer
 zstyle -e ':completion:*:approximate:*' max-errors \
     'reply=( $(( ($#PREFIX+$#SUFFIX)/2 )) numeric )'
-    
+
 # insert all expansions for expand completer
 zstyle ':completion:*:expand:*' tag-order all-expansions
 #
@@ -139,7 +105,7 @@ zstyle ':completion:*:expand:*' tag-order all-expansions
 # 1. All /etc/hosts hostnames are in autocomplete
 # 2. If you have a comment in /etc/hosts like #%foobar.domain,
 #    then foobar.domain will show up in autocomplete!
-zstyle ':completion:*' hosts $(awk '/^[^#]/ {print $2 $3" "$4" "$5}' /etc/hosts | grep -v ip6- && grep "^#%" /etc/hosts | awk -F% '{print $2}') 
+zstyle ':completion:*' hosts $(awk '/^[^#]/ {print $2 $3" "$4" "$5}' /etc/hosts | grep -v ip6- && grep "^#%" /etc/hosts | awk -F% '{print $2}')
 # formatting and messages
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*:descriptions' format '%B%d%b'
@@ -176,3 +142,4 @@ zstyle ':completion:*:ssh:*' tag-order \
 zstyle ':completion:*:ssh:*' group-order \
    hosts-domain hosts-host users hosts-ipaddr
 zstyle '*' single-ignored show
+

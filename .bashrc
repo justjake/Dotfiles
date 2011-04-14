@@ -36,9 +36,9 @@ if [ "$COLORTERM" = "gnome-terminal" ]; then
     TERM="xterm-color"
 fi
 
-case "$TERM" in
-    xterm-color) color_prompt=yes;;
-esac
+if [[ "$terminfo[colors]" -ge 8 ]]; then
+   color_prompt=yes;;
+fi
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
@@ -57,12 +57,12 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-#    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+#    PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # load colors for sanity purposes
     . "$HOME/.bash/colors"
 
-    PS1="${debian_chroot:+($debian_chroot)}${BRIGHT_BLACK}[${BRIGHT_BLUE}\u${BRIGHT_BLACK}:${BRIGHT_GREEN}\w${BRIGHT_BLACK}] ${RED}\\$ ${RESET}"
+    PS1="${BRIGHT_BLACK}[${BRIGHT_BLUE}\u${BRIGHT_BLACK}@${BRIGHT_GREEN}\h${BRIGHT_BLACK}:${BRIGHT_GREEN}\w${BRIGHT_BLACK}] ${RED}\\$ ${RESET}"
 
 else
 #    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
@@ -108,6 +108,10 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
+fi
+
+if [ -f ~/.shell/aliases ]; then
+    . ~/.shell/aliases
 fi
 
 # enable programmable completion features (you don't need to enable

@@ -1,0 +1,25 @@
+###
+# aliases
+# for zsh and bash
+###
+
+# ls differs in FreeBSD and Linux
+if [[ FreeBSD == $(uname) ]] ; then
+        alias ls='ls -G'
+else
+        alias ls='ls --color'
+fi
+
+# Show only the defined mailboxes when you open mutt
+alias mutt="mutt -y"
+
+# colored commands
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
