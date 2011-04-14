@@ -36,8 +36,8 @@ if [ "$COLORTERM" = "gnome-terminal" ]; then
     TERM="xterm-color"
 fi
 
-if [[ "$terminfo[colors]" -ge 8 ]]; then
-   color_prompt=yes;;
+if [ "$terminfo[colors]" -ge 8 ]; then
+   color_prompt=yes
 fi
 
 # uncomment for a colored prompt, if the terminal has the capability; turned

@@ -17,6 +17,7 @@ EDITOR='ged'
 
 ####
 # Host-specific settings!
+# IE, PATH
 ####
 . $HOME/.shell/hosts/"`hostname`"
 
