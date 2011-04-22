@@ -6,20 +6,36 @@
 
 MANSECT=1:1p:8:2:3:3p:4:5:6:7:9:0p:n:l:o
 TZ="America/Los_Angeles"
-HISTFILE=$HOME/.zhistory
+HISTFILE=$HOME/.zhistory-"`hostname`""
 HISTSIZE=1000
 SAVEHIST=1000
 HOSTNAME="`hostname`"
 PAGER='less'
 #EDITOR='bbedit -uw'
 #EDITOR='mate -w'
-EDITOR='ged'
+
 
 ####
 # Host-specific settings!
 # IE, PATH
 ####
-. $HOME/.shell/hosts/"`hostname`"
+# . "$HOME/.shell/hosts/"`hostname`"
+if [[ -h "$HOME/.shell/local" ]]; then
+    . "$HOME/.shell/local"
+else
+    echo "No local settings found"
+    echo "Please ln -s \$HOME/.shell/host/\$HOSTNAME \$HOME/.shell/local"
+#    echo "This will be done for you at next run"
+
+#    if [[ !( -r "$HOME/.shell/hosts/`hostname`.wasWarned" ) ]]; then
+#        touch "$HOME/.shell/hosts/`hostname`.wasWarned"
+#    else
+#        rm "$HOME/.shell/hosts/`hostname`.wasWarned"
+#        touch "$HOME/.shell/hosts/`hostname`"
+#        ln -s "$HOME/.shell/host/`hostname`" "$HOME/.shell/local"
+#    fi
+
+fi
 
 ####
 # ZSH colors
@@ -60,7 +76,7 @@ alias f=finger
 
 # alias	=clear
 stty erase ^H &>/dev/null
-bindkey "^[[3~" delete-char
+#bindkey "^[[3~" delete-char
 #chpwd() {
 #     [[ -t 1 ]] || return
 #     case $TERM in
