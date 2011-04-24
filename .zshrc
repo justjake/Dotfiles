@@ -25,16 +25,6 @@ if [[ -h "$HOME/.shell/local" ]]; then
 else
     echo "No local settings found"
     echo "Please ln -s \$HOME/.shell/host/\$HOSTNAME \$HOME/.shell/local"
-#    echo "This will be done for you at next run"
-
-#    if [[ !( -r "$HOME/.shell/hosts/`hostname`.wasWarned" ) ]]; then
-#        touch "$HOME/.shell/hosts/`hostname`.wasWarned"
-#    else
-#        rm "$HOME/.shell/hosts/`hostname`.wasWarned"
-#        touch "$HOME/.shell/hosts/`hostname`"
-#        ln -s "$HOME/.shell/host/`hostname`" "$HOME/.shell/local"
-#    fi
-
 fi
 
 ####
@@ -71,10 +61,12 @@ unsetopt ALL_EXPORT
 ####
 # Aliases
 ####
-. $HOME/.shell/aliases
-alias f=finger
+if [[ -h "$HOME/.shell/aliases" ]]; then
+	. $HOME/.shell/aliases
+else
+	echo "No aliases found"
+fi
 
-# alias	=clear
 stty erase ^H &>/dev/null
 #bindkey "^[[3~" delete-char
 #chpwd() {
