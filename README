@@ -1,0 +1,7 @@
+### Dotfiles
+
+to install, just
+    
+    wget --no-check-certificate https://github.com/justjake/Dotfiles/raw/master/.shell/update.sh
+
+Uses <code>git</code> when it has the chance.
