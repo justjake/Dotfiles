@@ -57,6 +57,14 @@ function downloadDots {
 	fi
 }
 
+function handleFile {
+	if [[ -a "$DIRNAME"/"$1" ]]; then
+		echo "$1 exists; skipping."
+	else
+		echo "Linking $1"
+		ln -s "$DIRNAME"/"$1" "$1"
+	fi
+}
 
 
 # check if this dir exists and has files
@@ -83,11 +91,20 @@ shopt -s dotglob # To include hidden files
 for file in *
 do
 	cd "$HOME"
-	if [[ -a "$DIRNAME"/"$file" ]]; then
-		echo "$file exists; skipping."
-	else
-		echo "Linking $file"
-		ln -s "$DIRNAME"/"$file" "$file"
-	fi
+	
+	case "$file" in
+		".git")
+			echo "skipping $file - local exists"
+			;;
+		"README")
+			# Do nothing
+			echo "Skipping $file - local exists"
+			;;
+		*)
+			# copy the file
+			handleFile "$file"
+			;;
+		esac
+		
 	cd "$LOCAL"
 done
