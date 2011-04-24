@@ -20,6 +20,7 @@ fi
 # @TODO
 # use newest update.sh
 
+cd "$HOME"
 
 function updateDots {
 	if [ ! -z "$USEGIT" ]; then
@@ -61,11 +62,11 @@ function downloadDots {
 }
 
 function handleFile {
-	if [[ -a "$DIRNAME"/"$1" ]]; then
+	if [[ -a "$HOME/$1" ]]; then
 		echo "$1 exists; skipping."
 	else
 		echo "Linking $1"
-		ln -s "$DIRNAME"/"$1" "$1"
+		ln -s "$LOCAL"/"$1" "$HOME/$1"
 	fi
 }
 

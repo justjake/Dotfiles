@@ -24,7 +24,7 @@ if [[ -h "$HOME/.shell/local" ]]; then
     . "$HOME/.shell/local"
 else
     echo "No local settings found"
-    echo "Please ln -s \$HOME/.shell/host/\$HOSTNAME \$HOME/.shell/local"
+    echo "Please ln -s \$HOME/.shell/hosts/\$HOSTNAME \$HOME/.shell/local"
 fi
 
 ####
@@ -61,7 +61,7 @@ unsetopt ALL_EXPORT
 ####
 # Aliases
 ####
-if [[ -h "$HOME/.shell/aliases" ]]; then
+if [[ -a "$HOME/.shell/aliases" ]]; then
 	. $HOME/.shell/aliases
 else
 	echo "No aliases found"
