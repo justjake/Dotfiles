@@ -94,11 +94,11 @@ do
 	
 	case "$file" in
 		".git")
-			echo "skipping $file - local exists"
+			echo "skipping $file - part of version control"
 			;;
 		"README")
 			# Do nothing
-			echo "Skipping $file - local exists"
+			echo "Skipping $file - part of version control"
 			;;
 		*)
 			# copy the file
