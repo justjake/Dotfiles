@@ -17,6 +17,9 @@ else
 	USEGIT=""
 fi
 
+# @TODO
+# use newest update.sh
+
 
 function updateDots {
 	if [ ! -z "$USEGIT" ]; then

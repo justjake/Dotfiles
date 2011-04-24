@@ -1,10 +1,9 @@
 ###
 # aliases
-# for zsh and bash
 ###
 
 # ls differs in FreeBSD and Linux
-if [[ FreeBSD == $(uname) ]] ; then
+if [[ FreeBSD == $(uname) || Darwin == $(uname) ]] ; then
         alias ls='ls -G'
 else
         alias ls='ls --color'
