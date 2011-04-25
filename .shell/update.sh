@@ -27,7 +27,7 @@ echo "= grab the newest updater by"
 echo "curl -fsSL https://github.com/justjake/Dotfiles/raw/master/.shell/update.sh | bash"
 
 function downloadTarball {
-	curl -fsSL $1 | tar -zx
+	curl -fsSL $1 | tar -zxf -
 	mv justjake-Dotfiles-* $2
 }
 
