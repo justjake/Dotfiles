@@ -23,12 +23,16 @@ fi
 cd "$HOME"
 
 echo "==== Dotfiles Updater"
+echo "= grab the newest updater by"
+echo "curl -fsSL https://github.com/justjake/Dotfiles/raw/master/.shell/update.sh | bash"
+echo "="
 
 function updateDots {
     echo "== $DIRNAME found, updating Dotfiles"
 	if [ ! -z "$USEGIT" ]; then
 		# just run git update
 		echo "Updating via git pull"
+		echo "If git pull throws errors, please update manually"
 		cd "$LOCAL"
 		git pull
 	else
