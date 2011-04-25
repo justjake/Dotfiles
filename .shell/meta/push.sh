@@ -39,10 +39,9 @@ function upload {
 	echo "= upload complete"
 }
 
-echo "===Push.sh"
+echo "=== Push.sh"
 makeTarball master.tar.gz
 upload master.tar.gz
 rm master.tar.gz
 push
-
 exit 0
