@@ -27,7 +27,7 @@ echo "= grab the newest updater by"
 echo "curl -fsSL https://github.com/justjake/Dotfiles/raw/master/.shell/update.sh | bash"
 
 function downloadTarball {
-	curl -fsSL $1 | tar -zxf -
+	curl -fsSL $1 | tar -zxf - -C $2
 	mv justjake-Dotfiles-* $2
 }
 
@@ -49,8 +49,9 @@ function updateDots {
 		for file in $(find * -type f)
 		do
 			rm ../"$file"
-			mv $file ../
+			mv $file ../"$file"
 		done
+		rm -r UpdateSource
 	fi
 	echo "= Update complete"
 }
