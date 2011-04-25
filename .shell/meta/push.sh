@@ -11,6 +11,8 @@ LOCAL="$HOME/$DIRNAME"
 SERVER="ftp.teton-landis.org"
 REMOTE="public_html/jake/repo/dotfiles"
 
+curlGetHeaders="--header \"User-Agent: NOT CURL I PROMISE\""
+
 # include hidden files
 shopt -s nullglob
 shopt -s dotglob

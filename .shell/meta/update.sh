@@ -2,9 +2,11 @@
 # Update dotfiles from repo
 
 REPO="git://github.com/justjake/Dotfiles.git"
-TARBALL="https://github.com/justjake/Dotfiles/tarball/master"
+TARBALL="http://jake.teton-landis.org/repo/dotfiles/master.tar.gz"
 DIRNAME=".dotfiles"
 LOCAL="$HOME/$DIRNAME"
+
+
 
 # include hidden files
 shopt -s nullglob
@@ -27,8 +29,7 @@ echo "= grab the newest updater by"
 echo "curl -fsSL https://github.com/justjake/Dotfiles/raw/master/.shell/update.sh | bash"
 
 function downloadTarball {
-	curl -fsSL $1 | tar -zxf -
-	mv justjake-Dotfiles-* $2
+	curl -H "User-Agent: Not cURL I promise" -fsSL $1 | tar -zx --keep-newer-files -f -
 }
 
 function updateDots {
@@ -42,15 +43,15 @@ function updateDots {
 	else
 	    echo "updating via tarball at $TARBALL"
 		cd "$LOCAL"
-		downloadTarball "$TARBALL" UpdateSource
-		cd UpdateSource
-		shopt -s nullglob
-		shopt -s dotglob # To include hidden files
-		for file in $(find * -type f)
-		do
-			rm ../"$file"
-			mv $file ../
-		done
+		downloadTarball "$TARBALL"
+		# cd UpdateSource
+		# shopt -s nullglob
+		# shopt -s dotglob # To include hidden files
+		# for file in $(find * -type f)
+		# do
+		# 	rm ../"$file"
+		# 	mv $file ../
+		# done
 	fi
 	echo "= Update complete"
 }
@@ -64,10 +65,7 @@ function downloadDots {
 	else
 		mkdir "$LOCAL"; cd "$LOCAL"
 	    echo "Downloading via tarball at $TARBALL"
-		downloadTarball "$TARBALL" UpdateSource
-		mv UpdateSource/* ./
-
-		rm -r UpdateSource
+		downloadTarball "$TARBALL"
 	fi
 	echo "= Download complete."
 }
