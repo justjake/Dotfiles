@@ -10,7 +10,7 @@ HISTFILE=$HOME/.zhistory-"`hostname`""
 HISTSIZE=1000
 SAVEHIST=1000
 HOSTNAME="`hostname`"
-PAGER='less'
+PAGER='cat'
 #EDITOR='bbedit -uw'
 #EDITOR='mate -w'
 

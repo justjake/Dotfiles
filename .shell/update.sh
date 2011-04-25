@@ -25,7 +25,11 @@ cd "$HOME"
 echo "==== Dotfiles Updater"
 echo "= grab the newest updater by"
 echo "curl -fsSL https://github.com/justjake/Dotfiles/raw/master/.shell/update.sh | bash"
-echo "="
+
+function downloadTarball {
+	curl -fsSL $1 | tar -zx
+	mv justjake-Dotfiles-* $2
+}
 
 function updateDots {
     echo "== $DIRNAME found, updating Dotfiles"
@@ -38,11 +42,7 @@ function updateDots {
 	else
 	    echo "updating via tarball at $TARBALL"
 		cd "$LOCAL"
-		wget --no-check-certificate "$TARBALL"
-		tar -zxf justjake-Dotfiles-*.tar.gz
-		rm justjake-Dotfiles-*.tar.gz
-		mv justjake-Dotfiles-* UpdateSource
-
+		downloadTarball "$TARBALL" UpdateSource
 		cd UpdateSource
 		shopt -s nullglob
 		shopt -s dotglob # To include hidden files
@@ -64,13 +64,10 @@ function downloadDots {
 	else
 		mkdir "$LOCAL"; cd "$LOCAL"
 	    echo "Downloading via tarball at $TARBALL"
-		wget --no-check-certificate "$TARBALL"
-		tar -zxf justjake-Dotfiles-*.tar.gz
-		rm justjake-Dotfiles-*.tar.gz
+		downloadTarball "$TARBALL" UpdateSource
+		mv UpdateSource/* ./
 
-		mv justjake-Dotfiles-*/* ./
-
-		rm -r justjake-Dotfiles-*
+		rm -r UpdateSource
 	fi
 	echo "= Download complete."
 }
