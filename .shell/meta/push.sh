@@ -19,21 +19,27 @@ shopt -s dotglob
 
 
 function push {
+	echo "== running git push"
 	cd $LOCAL
 	git push
+	echo "= push finished"
 }
 
 function makeTarball {
+	echo "== Building Tarball"
 	tarOptions="-cj --exclude '.git' --exclude '.gitignore' --exclude '.git'"
 	cd $LOCAL
 	tar $tarOptions * > $1
 }
 
 function upload {
-	curlArgs="--verbose --user jake@teton-landis.org --upload-file $1"
+	echo "== uploading tarball to $1"
+	curlArgs="--user jake@teton-landis.org --upload-file $1"
 	curl $curlArgs ftp://$SERVER/$REMOTE/$1
+	echo "= upload complete"
 }
 
+echo "===Push.sh"
 makeTarball master.tar.gz
 upload master.tar.gz
 rm master.tar.gz
