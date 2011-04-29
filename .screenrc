@@ -1,0 +1,10 @@
+#####
+# .Screenrc
+# Jake Teton-Landis <just.1.jake@gmail.com>
+#####
+
+startup_message off
+
+# Get some status up in here!
+
+hardstatus alwayslastline "%{=b}%{G} %{b}%w %=%{kG}%C%A  %D, %M/%d/%Y "
