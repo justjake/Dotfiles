@@ -1,3 +1,4 @@
+#!/usr/bin/env zsh
 ####
 #   Jake's .zshrc
 #   <just.1.jake@gmail.com>
