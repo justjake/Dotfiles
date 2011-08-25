@@ -1,6 +1,7 @@
 !{{{ URXVT
 !
 ! General
+! -------------------------------------------------------------
 urxvt*termName:  rxvt-256color
 urxvt*loginShell:         true
 urxvt*scrollBar:         false
@@ -16,15 +17,18 @@ urxvt*urgentOnBell:       true
 !
 ! Extensions
 ! urxvt*perl-lib:        /usr/lib/urxvt/perl/
-!urxvt*perl-ext-common: default,matcher,searchable-scrollback,
-! urxvt*urlLauncher:     /usr/local/bin/firefox
-! urxvt*matcher.button:  1
+urxvt*perl-ext-common: default,matcher,searchable-scrollback
+urxvt*urlLauncher:     /usr/bin/firefox
+urxvt*matcher.button:  1
 ! Catch ugly URLs
 urxvt*cutchars:        '"'()*<>[]{|}
-!
-! Appearance
+
+! ------ Appearance -------------------------------------------
 ! urxvt*font:     -xos4-terminus-medium-*-*-*-12-*-*-*-*-*-iso8859-2
 ! urxvt*boldFont: -xos4-terminus-bold-*-*-*-12-*-*-*-*-*-iso8859-2
+URxvt.font: xft:monaco:size=10:antialias=false
+
+
 !
 ! Cursor
 urxvt*cursorColor: #7F7F7F
@@ -62,9 +66,10 @@ urxvt*color13:     #BE73FD
 urxvt*color14:     #93e0e3
 urxvt*color15:     #ffffff
 
-URxvt.perl-ext-common: macosx-clipboard
-URxvt.keysym.M-c: perl:macosx-clipboard:copy
-URxvt.keysym.M-v: perl:macosx-clipboard:paste
+! Mac-only settings
+!URxvt.perl-ext-common: macosx-clipboard
+!URxvt.keysym.M-c: perl:macosx-clipboard:copy
+!URxvt.keysym.M-v: perl:macosx-clipboard:paste
 
 !}}}
 

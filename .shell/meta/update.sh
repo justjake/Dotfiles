@@ -113,7 +113,7 @@ do
 			echo "skipping $file - part of version control"
 			;;
 		"README")
-			echo "skipping $file - part of version control"
+			echo "skipping $file - part of Git repo info"
 			;;
 		*)
 			# copy the file
