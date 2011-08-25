@@ -76,4 +76,3 @@ autocmd FileType perl set autowrite
 set number
 set numberwidth=4
 
-set viminfo='20,\"500
