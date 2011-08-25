@@ -4,16 +4,19 @@
 #   <just.1.jake@gmail.com>
 #   from mako's .zshrc
 ####
-
+setopt ALL_EXPORT
 MANSECT=1:1p:8:2:3:3p:4:5:6:7:9:0p:n:l:o
 TZ="America/Los_Angeles"
-HISTFILE=$HOME/.zhistory-"`hostname`""
-HISTSIZE=1000
-SAVEHIST=1000
+HISTFILE=$HOME/.zsh/zhistory."`hostname`"
+HISTSIZE=100000
+SAVEHIST=100000
 HOSTNAME="`hostname`"
-PAGER='cat'
-#EDITOR='bbedit -uw'
-#EDITOR='mate -w'
+PAGER='less'
+EDITOR='vim'
+VISUAL="$EDITOR"
+
+# ZSH settings
+setopt NO_BEEP
 
 
 ####
@@ -21,12 +24,14 @@ PAGER='cat'
 # IE, PATH
 ####
 # . "$HOME/.shell/hosts/"`hostname`"
-if [[ -h "$HOME/.shell/local" ]]; then
-    . "$HOME/.shell/local"
+if [[ -f "$HOME/.shell/hosts/`hostname`" ]]; then
+    . "$HOME/.shell/hosts/`hostname`"
 else
-    echo "No local settings found"
-    echo "Please ln -s \$HOME/.shell/hosts/\`hostname\` \$HOME/.shell/local"
+    echo "No local settings found at ~/.shell/hosts/`hostname`"
 fi
+
+# Replicate EDITOR to SVN_EDITOR
+SVN_EDITOR="$EDITOR"
 
 ####
 # ZSH colors
@@ -40,9 +45,6 @@ for color in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
 	eval PR_$color='%{$fg[${(L)color}]%}'
 	(( count = $count + 1 ))
 done
-
-# sanity colors
-# . $HOME/.shell/colors
 
 ####
 # Prompt
@@ -82,11 +84,14 @@ stty erase ^H &>/dev/null
 
 #chpwd
 
+
+
+
 ####
 # Keybinds
 ####
 autoload -U compinit
-compinit
+compinit -d ~/.zsh/zcompdump.`hostname -s`
 bindkey '^r' history-incremental-search-backward
 bindkey "^[[5~" up-line-or-history
 bindkey "^[[6~" down-line-or-history
@@ -149,8 +154,8 @@ zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
 zstyle '*' hosts $hosts
 
 # Filename suffixes to ignore during completion (except after rm command)
-zstyle ':completion:*:*:(^rm):*:*files' ignored-patterns '*?.o' '*?.c~' \
-    '*?.old' '*?.pro'
+# zstyle ':completion:*:*:(^rm):*:*files' ignored-patterns '*?.o' '*?.c~' \
+#    '*?.old' '*?.pro'
 # the same for old style completion
 #fignore=(.o .c~ .old .pro)
 
@@ -164,5 +169,5 @@ zstyle ':completion:*:ssh:*' tag-order \
    users 'hosts:-host hosts:-domain:domain hosts:-ipaddr"IP\ Address *'
 zstyle ':completion:*:ssh:*' group-order \
    hosts-domain hosts-host users hosts-ipaddr
-zstyle '*' single-ignored show
+# zstyle '*' single-ignored show
 
