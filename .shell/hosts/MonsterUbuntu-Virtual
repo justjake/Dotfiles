@@ -1,0 +1,1 @@
+alias awesomerc="$EDITOR ~/.config/awesome/rc.lua"

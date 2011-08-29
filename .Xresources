@@ -2,18 +2,18 @@
 !
 ! General
 ! -------------------------------------------------------------
-urxvt*termName:  rxvt-256color
+!urxvt*termName:  rxvt-256color
 urxvt*loginShell:         true
-urxvt*scrollBar:         false
+!urxvt*scrollBar:         false
 urxvt*secondaryScroll:    true
 urxvt*saveLines:         65535
 urxvt*cursorBlink:       false
 !urxvt*cursorUnderline:   true
 urxvt*urgentOnBell:       true
 !urxvt*override-redirect:false
-!urxvt*borderLess:       false
-!urxvt*internalBorder:       0
-!urxvt*externalBorder:       0
+urxvt*borderLess:       false
+urxvt*internalBorder:       0
+urxvt*externalBorder:       0
 !
 ! Extensions
 ! urxvt*perl-lib:        /usr/lib/urxvt/perl/
@@ -84,8 +84,8 @@ xterm*saveLines:         65535
 xterm*dynamicColors:        on
 xterm*highlightSelection: true
 ! Appearance
-xterm*utf8:          2
-xterm*eightBitInput: true
+!xterm*utf8:          2
+!xterm*eightBitInput: true
 ! xterm*font:        -xos4-terminus-medium-*-*-*-12-*-*-*-*-*-iso8859-2
 ! xterm*boldFont:    -xos4-terminus-bold-*-*-*-12-*-*-*-*-*-iso8859-2
 
