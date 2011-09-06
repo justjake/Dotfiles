@@ -112,7 +112,7 @@ do
 		".gitignore")
 			echo "skipping $file - part of version control"
 			;;
-		"README")
+		"README.md")
 			echo "skipping $file - part of Git repo info"
 			;;
 		*)
