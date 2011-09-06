@@ -18,4 +18,9 @@ PATH="$PATH:/usr/local/rescomp/bin:/usr/local/rescomp/sbin"
 # SVN PATH
 SVNRPATH="https://svn.rescomp.berkeley.edu/marketing"
 
+if [[ $TERM == "rxvt-unicode" ]] ; then
+	export TERM="xterm-256color"
+fi
+
+
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session.	
