@@ -1,1 +1,3 @@
 alias awesomerc="$EDITOR ~/.config/awesome/rc.lua"
+alias hal="ssh just.jake@hal.rescomp.berkeley.edu"
+alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000"

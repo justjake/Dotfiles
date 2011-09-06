@@ -21,7 +21,7 @@ syntax on
 filetype plugin on
 filetype indent on
 
-colorscheme desert 
+"colorscheme desert 
 
 " For twiki syntax folding
 let g:Twiki_FoldAtHeadings = 1
@@ -33,7 +33,7 @@ map <Leader>f 072lBi<cr><esc>
 set autoindent		" Always have autoindenting on
 set tabstop=4
 set shiftwidth=4
-"set expandtab
+set expandtab
 set smarttab
 " set shiftround
 " set textwidth=72
@@ -76,3 +76,7 @@ autocmd FileType perl set autowrite
 set number
 set numberwidth=4
 
+" Appearance Options
+set t_co=256
+"let g:zenburn_high_Contrast=1
+colors zenburn
