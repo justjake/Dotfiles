@@ -1,0 +1,11 @@
+[ui]
+username = Jake Teton-Landis <just.1.jake@gmail.com>
+
+[extensions]
+color = 
+
+[color]
+mode = auto
+
+[trusted]
+users = root

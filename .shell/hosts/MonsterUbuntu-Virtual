@@ -1,3 +1,13 @@
+
+# Edit settings
 alias awesomerc="$EDITOR ~/.config/awesome/rc.lua"
+
+# SSH Hosts
 alias hal="ssh just.jake@hal.rescomp.berkeley.edu"
 alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000"
+
+# Locations
+alias xinit="cd /usr/share/xinit; ls"
+
+# GUI stuff
+alias open="gnome-open"
