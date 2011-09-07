@@ -2,7 +2,8 @@
 # Update dotfiles from repo
 
 REPO="git://github.com/justjake/Dotfiles.git"
-TARBALL="http://jake.teton-landis.org/repo/dotfiles/master.tar.gz"
+# TARBALL="http://jake.teton-landis.org/repo/dotfiles/master.tar.gz"
+TARBALL="https://github.com/justjake/Dotfiles/tarball/master"
 DIRNAME=".dotfiles"
 LOCAL="$HOME/$DIRNAME"
 
@@ -30,6 +31,7 @@ echo "curl -fsSL https://github.com/justjake/Dotfiles/raw/master/.shell/update.s
 
 function downloadTarball {
 	curl -H "User-Agent: Not cURL I promise" -fsSL $1 | tar -zx --keep-newer-files -f -
+    mv justjake-Dotfiles-* new
 }
 
 function updateDots {
@@ -67,7 +69,11 @@ function downloadDots {
 	    echo "Downloading via tarball at $TARBALL"
 		downloadTarball "$TARBALL"
 	fi
-	echo "= Download complete."
+	echo "= Download complete to $LOCAL/new"
+}
+
+function activateTarballDots {
+    mv "$LOCAL/new/*" "$LOCAL"
 }
 
 function handleFile {
@@ -79,7 +85,7 @@ function handleFile {
 	fi
 }
 
-
+function install {
 # check if this dir exists and has files
 if [ -d "$LOCAL" ]; then
 	shopt -s nullglob
@@ -96,6 +102,10 @@ else
 	downloadDots
 fi
 
+link
+}
+
+function link {
 # link all
 cd "$LOCAL"
 echo "== Linking files"
@@ -123,5 +133,11 @@ do
 
 	cd "$LOCAL"
 done
-echo "=== update complete"
+echo "=== Linking complete"
 
+}
+
+alias download="downloadDots"
+
+# run command
+$1
