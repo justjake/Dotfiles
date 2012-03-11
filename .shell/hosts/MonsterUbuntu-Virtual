@@ -2,12 +2,29 @@
 # Edit settings
 alias awesomerc="$EDITOR ~/.config/awesome/rc.lua"
 
+# Add rubygems to path
+PATH="$PATH:/var/lib/gems/1.8/bin"
+
 # SSH Hosts
 alias hal="ssh just.jake@hal.rescomp.berkeley.edu"
 alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000"
 
 # Locations
 alias xinit="cd /usr/share/xinit; ls"
+alias cs61a="cd ~/Documents/Personal/Berkeley/CS61A/; ls"
+alias berkeley="cd ~/Documents/Personal/Berkeley/; ls"
+winhome="/mnt/winhome"
+alias winhome="cd $winhome"
+
+hal="/remote/hal"
+reshome="$hal/home/just.jake"
+webtree="$reshome/src/webtree"
+
 
 # GUI stuff
 alias open="gnome-open"
+
+# console session
+alias gui="gnome-settings-manager; roxterm"
+
+alias apache="sudo /etc/init.d/apache2"

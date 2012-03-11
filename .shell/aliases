@@ -23,7 +23,6 @@ alias la='ls -A'
 alias l='ls -CF'
 
 # directories
-export webtree="~/src/webtree"
 alias webtree="clear; cd $webtree; ls"
 alias oldtree="clear; cd ~/src/webtree-legacy; ls"
 alias prefix="cd $PREFIX"
@@ -40,3 +39,9 @@ alias deverror="tail -f ~/.dev-www10-httpd-error.log"
 
 # hosts
 alias star="ssh cs61a-zz@star.cs.berkeley.edu"
+alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
+
+# commands
+alias pi="python3.2 -i"
+alias derptest="python3.2 -m doctest"
+alias resource="source ~/.zshrc"
