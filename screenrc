@@ -14,4 +14,3 @@ bell_msg " Bell in GNU screen window %n "
 
 # Scrollback
 defscrollback 10000
-
