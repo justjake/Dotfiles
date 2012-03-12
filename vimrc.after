@@ -1,0 +1,33 @@
+" Break a line
+map <Leader>f 072lBi<cr><esc>
+
+" Tabbing
+set tabstop=4
+set shiftwidth=4
+" set shiftround
+" set textwidth=72
+
+" Makefiles don't like spaces
+au FileType make set noexpandtab
+
+" Fold Conf Files
+au FileType conf syn region confBraces start="{" end="}" transparent fold
+
+" Fix backspaces
+set t_kb=
+set t_kD=[3~
+
+" If I paste and indentation gets fsck'd:
+inoremap <silent> <C-g> <ESC>u:set paste<CR>.:set nopaste<CR>gi
+
+" Tab Navigation
+map <C-t> <ESC>:tabnew
+
+" Enable using the mouse to click to locations in the file!
+" This also means vim takes control of the scrollwheel intelligently.
+
+set mouse=a
+" Appearance Options
+set t_co=256
+"let g:zenburn_high_Contrast=1
+colors zenburn
