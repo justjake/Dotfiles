@@ -1,0 +1,143 @@
+#!/usr/bin/env bash
+# Update dotfiles from repo
+
+REPO="git://github.com/justjake/Dotfiles.git"
+# TARBALL="http://jake.teton-landis.org/repo/dotfiles/master.tar.gz"
+TARBALL="https://github.com/justjake/Dotfiles/tarball/master"
+DIRNAME=".dotfiles"
+LOCAL="$HOME/$DIRNAME"
+
+
+
+# include hidden files
+shopt -s nullglob
+shopt -s dotglob
+
+#test for git
+if [ ! -z "$(which git)" ]; then
+	USEGIT="true"
+else
+	USEGIT=""
+fi
+
+# @TODO
+# use newest update.sh
+
+cd "$HOME"
+
+echo "==== Dotfiles Updater"
+echo "= grab the newest updater by"
+echo "curl -fsSL https://github.com/justjake/Dotfiles/raw/master/.shell/update.sh | bash"
+
+function downloadTarball {
+	curl -H "User-Agent: Not cURL I promise" -fsSL $1 | tar -zx --keep-newer-files -f -
+    mv justjake-Dotfiles-* new
+}
+
+function updateDots {
+    echo "== $DIRNAME found, updating Dotfiles"
+	if [ ! -z "$USEGIT" ]; then
+		# just run git update
+		echo "Updating via git pull"
+		echo "If git pull throws errors, please update manually"
+		cd "$LOCAL"
+		git pull
+	else
+	    echo "updating via tarball at $TARBALL"
+		cd "$LOCAL"
+		downloadTarball "$TARBALL"
+		# cd UpdateSource
+		# shopt -s nullglob
+		# shopt -s dotglob # To include hidden files
+		# for file in $(find * -type f)
+		# do
+		# 	rm ../"$file"
+		# 	mv $file ../
+		# done
+	fi
+	echo "= Update complete"
+}
+
+function downloadDots {
+	echo "== No $DIRNAME found, new Dotfiles installation"
+	if [ ! -z "$USEGIT" ]; then
+	    echo "Downloading via git clone"
+		git clone "https://justjake@github.com/justjake/Dotfiles.git" "$LOCAL"
+		echo "Remember to 'git remote rm origin; git remote add git@github.com:justjake/Dotfiles.git' to make changes"
+	else
+		mkdir "$LOCAL"; cd "$LOCAL"
+	    echo "Downloading via tarball at $TARBALL"
+		downloadTarball "$TARBALL"
+	fi
+	echo "= Download complete to $LOCAL/new"
+}
+
+function activateTarballDots {
+    mv "$LOCAL/new/*" "$LOCAL"
+}
+
+function handleFile {
+	if [[ -a "$HOME/$1" ]]; then
+		echo "$1 exists; skipping."
+	else
+		echo "Linking $1 -> $LOCAL/$1"
+		ln -s "$LOCAL"/"$1" "$HOME/$1"
+	fi
+}
+
+function install {
+# check if this dir exists and has files
+if [ -d "$LOCAL" ]; then
+	shopt -s nullglob
+	shopt -s dotglob # To include hidden files
+	files=($LOCAL/*)
+	if [ ${#files[@]} -gt 0 ]; then
+		## DO UPDATE
+		updateDots
+	else
+		# no files in dir
+		downloadDots
+	fi
+else
+	downloadDots
+fi
+
+link
+}
+
+function link {
+# link all
+cd "$LOCAL"
+echo "== Linking files"
+shopt -s nullglob
+shopt -s dotglob # To include hidden files
+for file in *
+do
+	cd "$HOME"
+
+	case "$file" in
+		".git")
+			echo "skipping $file - part of version control"
+			;;
+		".gitignore")
+			echo "skipping $file - part of version control"
+			;;
+		"README.md")
+			echo "skipping $file - part of Git repo info"
+			;;
+		*)
+			# copy the file
+			handleFile "$file"
+			;;
+		esac
+
+	cd "$LOCAL"
+done
+echo "=== Linking complete"
+
+}
+
+alias download="downloadDots"
+
+# run command
+$1

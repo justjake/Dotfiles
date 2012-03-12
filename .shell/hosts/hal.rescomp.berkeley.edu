@@ -1,0 +1,26 @@
+# Use VIM for our editor
+EDITOR="vim"
+# Use hal prefix; add prefix to path
+PREFIX="$HOME/prefixes/hal"
+PATH="$PATH:$PREFIX/bin"
+# PATH for Berkeley's Rescomp hosts
+PATH="$PATH:/usr/local/rescomp/bin:/usr/local/rescomp/sbin"
+
+### Personal ruby support disabled in favor of RVM
+# PATH for rubygems
+# PATH="$PATH:$HOME/lib/ruby/gems/1.8/bin"
+# export GEM_HOME=$PREFIX/lib/ruby/gems/1.8
+# export RUBYLIB=$PREFIX/lib/ruby:$PREFIX/lib/site_ruby/1.8
+
+# USE nvm to manage node.js
+# source "$PREFIX/nvm/nvm.sh"
+
+# SVN PATH
+SVNRPATH="https://svn.rescomp.berkeley.edu/marketing"
+
+if [[ $TERM == "rxvt-unicode" ]] ; then
+	export TERM="xterm-256color"
+fi
+
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session.	

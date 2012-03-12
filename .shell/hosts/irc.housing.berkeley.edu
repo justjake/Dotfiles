@@ -1,0 +1,4 @@
+# Grab screen EVERY TIME
+# bad idea
+# exec screen -DR
+alias stealthirssi="irssi --home=~/.stealthirssi"

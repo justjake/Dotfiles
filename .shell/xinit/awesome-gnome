@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Init VM tools
+vmware-user &
+
+# Session language settings
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+export LANGUAGE="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+
+# Start Gnome stuff
+gnome-settings-daemon &
+gnome-volume-manager &
+
+# Gnome auth
+polkit-gnome-authentication-agent-1 &
+
+gnome-keyring-daemon --start --components=ssh &
+gnome-keyring-daemon --start --components=secrets &
+gnome-keyring-daemon --start --components=pkcs11 &
+
+# clipboard sychronization for urxvt
+parcellite &
+
+# Start window manager
+exec awesome
