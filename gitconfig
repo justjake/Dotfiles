@@ -1,0 +1,16 @@
+# git config
+[user]
+	name = Jake Teton-Landis
+	email = just.1.jake@gmail.com
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+	ui = auto
+[alias]
+  # 'add all' stages all new+changed+deleted files
+	aa = !git ls-files -d | xargs -r git rm && git ls-files -m -o --exclude-standard | xargs -r git add
+	st = !git status
+  ci = !git commit
+
