@@ -4,3 +4,6 @@
 [submodule "janus/vim-colors-solarized"]
 	path = janus/vim-colors-solarized
 	url = https://github.com/altercation/vim-colors-solarized.git
+[submodule "janus/zencoding-vim"]
+	path = janus/zencoding-vim
+	url = https://github.com/mattn/zencoding-vim.git
