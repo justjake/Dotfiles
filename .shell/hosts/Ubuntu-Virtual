@@ -1,4 +1,0 @@
-# Settings for Ubuntu Virtual Machine
-PATH="$PATH:$HOME/bin"
-EDITOR='ged'
-

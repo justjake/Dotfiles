@@ -4,6 +4,11 @@ call pathogen#infect()
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+
+" PATHOGEN to manage vim bundles
+call pathogen#infect()
+
+
 " allow backspacing over everything in insert mode
 set backspace=eol,indent,start
 
@@ -76,6 +81,7 @@ autocmd FileType perl set autowrite
 " textwidth set to 72.  Up to 4 digits are okay for line numbers
 set number
 set numberwidth=4
+
 
 " Appearance Options
 set t_Co=256

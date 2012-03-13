@@ -18,6 +18,10 @@ VISUAL="$EDITOR"
 # ZSH settings
 setopt NO_BEEP
 
+# compensate for ROXterm being terribad
+if [[ $COLORTERM == roxterm ]]; then
+    TERM=xterm-256color
+fi
 
 ####
 # Host-specific settings!
