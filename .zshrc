@@ -34,10 +34,18 @@ fi
 SVN_EDITOR="$EDITOR"
 
 ####
+# Handle gnome-terminal always being
+# TERM=xterm && COLORTERM=gnome*
+####
+if [[ ($TERM == "xterm") && ($COLORTERM == "gnome-terminal") ]]; then
+    TERM="xterm-256color"
+fi
+
+####
 # ZSH colors
 ####
 autoload colors zsh/terminfo
-if [[ "$terminfo[colors]" -ge 8 ]]; then
+if [[ "$terminfo[colors]" -ge 8  ]]; then
 	colors
 fi
 for color in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do

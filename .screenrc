@@ -9,9 +9,7 @@ startup_message off
 
 hardstatus alwayslastline "%{=b}%{G} %{b}%w %=%{kG}%C%A  %D, %M/%d/%Y "
 
-vbell_msg " --- DA HERRO !!! --- "
-bell_msg " Bell in GNU screen window %n "
+bell_msg " Bell in GNU screen window %n"
 
 # Scrollback
 defscrollback 10000
-

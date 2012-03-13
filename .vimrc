@@ -1,3 +1,5 @@
+call pathogen#infect()
+
 "Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
 set nocompatible
@@ -17,11 +19,9 @@ set foldmethod=syntax	" Fold on syntax by default
 set visualbell	" Noises are irritating
 
 " Make vim smart
-syntax on
+syntax enable
 filetype plugin on
 filetype indent on
-
-"colorscheme desert 
 
 " For twiki syntax folding
 let g:Twiki_FoldAtHeadings = 1
@@ -65,6 +65,7 @@ set mouse=a
 
 " Search as you type
 set incsearch
+set hlsearch
 
 " check perl code with :make
 autocmd FileType perl set makeprg=perl\ -c\ %\ $*
@@ -77,6 +78,11 @@ set number
 set numberwidth=4
 
 " Appearance Options
-set t_co=256
+set t_Co=256
+set nowrap
+
 "let g:zenburn_high_Contrast=1
-colors zenburn
+" colors zenburn
+let g:solarized_termcolors=256
+set background=dark
+colorscheme solarized

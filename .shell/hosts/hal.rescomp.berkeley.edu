@@ -2,7 +2,7 @@
 EDITOR="vim"
 # Use hal prefix; add prefix to path
 PREFIX="$HOME/prefixes/hal"
-PATH="$PATH:$PREFIX/bin"
+PATH="$PREFIX/bin:$PATH"
 # PATH for Berkeley's Rescomp hosts
 PATH="$PATH:/usr/local/rescomp/bin:/usr/local/rescomp/sbin"
 
