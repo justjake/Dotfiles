@@ -31,6 +31,6 @@ set mouse=a
 set t_co=256
 "let g:zenburn_high_Contrast=1
 "colors zenburn
-let g:solarized_termcolors=256
+"let g:solarized_termcolors=256
 set background=dark
 colorscheme solarized

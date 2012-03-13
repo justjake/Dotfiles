@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # Install dotfiles from ~/.dotfiles into $HOME
 # inspired by https://github.com/joshuaclayton/dotfiles/blob/master/Rakefile, but rewritten in
 # plain shell script because who knows if `hostname` has rake?
