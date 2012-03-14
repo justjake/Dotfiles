@@ -61,3 +61,4 @@ expand-or-complete-with-dots() {
     zle expand-or-complete
     zle redisplay
 }
+zle -N expand-or-complete-with-dots # create widget
