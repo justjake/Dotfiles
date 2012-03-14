@@ -28,6 +28,7 @@ map <C-t> <ESC>:tabnew
 
 set mouse=a
 " Appearance Options
+set t_Co=256
 set t_co=256
 "let g:zenburn_high_Contrast=1
 colors zenburn

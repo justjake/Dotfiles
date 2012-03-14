@@ -27,7 +27,6 @@ if [[ $COLORTERM == "roxterm" || $COLORTERM == "gnome-terminal" ]]; then
 fi
 
 autoload colors zsh/terminfo && colors
-
 for color in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
 	eval PR_LIGHT_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
 	eval PR_$color='%{$fg[${(L)color}]%}'

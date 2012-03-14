@@ -76,19 +76,21 @@ urxvt*color15:     #ffffff
 
 
 !{{{ XTERM
-xterm*internalBorder:        0
-xterm*loginShell:         true
-xterm*scrollBar:         false
-xterm*cursorBlink:       false
-!xterm*geometry:         80x26
-xterm*saveLines:         65535
-xterm*dynamicColors:        on
-xterm*highlightSelection: true
+xterm*internalBorder:           internalBorder0
+xterm*loginShell:               true
+xterm*scrollBar:                false
+xterm*cursorBlink:              false
+xterm*geometry:                 80x75
+xterm*saveLines:                65535
+xterm*dynamicColors:            on
+xterm*highlightSelection:       true
+! no bold text
+xterm*boldMode:                 off
+xterm*font:                     fixed
+xterm*boldFont:                 fixed
 ! Appearance
-!xterm*utf8:          2
-!xterm*eightBitInput: true
-! xterm*font:        -xos4-terminus-medium-*-*-*-12-*-*-*-*-*-iso8859-2
-! xterm*boldFont:    -xos4-terminus-bold-*-*-*-12-*-*-*-*-*-iso8859-2
+xterm*utf8:                     2
+xterm*termName:                 xterm-256color
 
 xterm*cursorColor: #DCDCCC
 ! Zenburn
