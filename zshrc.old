@@ -2,176 +2,86 @@
 ####
 #   Jake's .zshrc
 #   <just.1.jake@gmail.com>
-#   from mako's .zshrc
 ####
+# export all of these settings
 setopt ALL_EXPORT
+
 MANSECT=1:1p:8:2:3:3p:4:5:6:7:9:0p:n:l:o
 TZ="America/Los_Angeles"
-HISTFILE=$HOME/.zsh/zhistory."`hostname`"
-HISTSIZE=100000
-SAVEHIST=100000
 HOSTNAME="`hostname`"
 PAGER='less'
 EDITOR='vim'
+SVN_EDITOR="$EDITOR"
 VISUAL="$EDITOR"
+#LANGUAGE=
+LANG='en_US.UTF-8'
+LC_ALL='en_US.UTF-8'
+LC_CTYPE=C
 
-# ZSH settings
-setopt NO_BEEP
-
+####
+# Colors and Prompt
+####
 # map colorterms to xterm-256color support
 if [[ $COLORTERM == "roxterm" || $COLORTERM == "gnome-terminal" ]]; then
     TERM=xterm-256color
 fi
 
-####
-# Host-specific settings!
-# IE, PATH
-####
-# . "$HOME/.shell/hosts/"`hostname`"
-if [[ -f "$HOME/.shell/hosts/`hostname`" ]]; then
-    . "$HOME/.shell/hosts/`hostname`"
-else
-    echo "No local settings found at ~/.shell/hosts/`hostname`"
-fi
+autoload -U colors zsh/terminfo && colors
 
-# Replicate EDITOR to SVN_EDITOR
-SVN_EDITOR="$EDITOR"
-
-####
-# ZSH colors
-####
-autoload colors zsh/terminfo
-if [[ "$terminfo[colors]" -ge 8 ]]; then
-	colors
-fi
 for color in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
 	eval PR_LIGHT_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
 	eval PR_$color='%{$fg[${(L)color}]%}'
 	(( count = $count + 1 ))
 done
-
-####
-# Prompt
-####
 PR_NO_COLOR="%{$terminfo[sgr0]%}"
+
+# prompt
 PS1="${PR_LIGHT_BLACK}[$PR_LIGHT_BLUE%n${PR_LIGHT_BLACK}@$PR_NO_COLOR$PR_GREEN%m${PR_LIGHT_BLACK}:$PR_LIGHT_GREEN%2c${PR_LIGHT_BLACK}]$PR_NO_COLOR$PR_RED %(!.#.$)$PR_NO_COLOR "
 RPS1="$PR_LIGHT_BLACK(%D{%m-%d %H:%M})$PR_NO_COLOR"
 
-#LANGUAGE=
-LC_ALL='en_US.UTF-8'
-LANG='en_US.UTF-8'
-LC_CTYPE=C
-# DISPLAY=:0
+####
+# History
+####
+HISTFILE="$HOME/.zsh/cache/`hostname`.zhistory"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt hist_ignore_dups
+setopt share_history
+setopt hist_verify
+setopt inc_append_history
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_ignore_space
 
 unsetopt ALL_EXPORT
 
 ####
-# Aliases
+# Other ZSH Settings
 ####
-if [[ -a "$HOME/.shell/aliases" ]]; then
-	. $HOME/.shell/aliases
-else
-	echo "No aliases found"
-fi
+setopt NO_BEEP
+setopt auto_cd
+setopt auto_pushd
+setopt vi
 
-stty erase ^H &>/dev/null
-#bindkey "^[[3~" delete-char
-#chpwd() {
-#     [[ -t 1 ]] || return
-#     case $TERM in
-#     sun-cmd) print -Pn "\e]l%~\e\\"
-#     ;;
-#    *xterm*|screen|rxvt|(dt|k|E)term) print -Pn "\e]2;%~\a"
-#    ;;
-#    esac
-#}
-
-#chpwd
-
-
-
+####
+# Completion
+####
+setopt prompt_subst
+autoload -U compinit
+compinit -d ~/.zsh/cache/"`hostname -s`".zcompdump
+zstyle ':completion::complete:*' use-cache on
+zstyle ':completion::complete:*' cache-path ~/.zsh/cache/$HOST.zcompcache
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # case insensitive for lowercase
 
 ####
 # Keybinds
 ####
-autoload -U compinit
-compinit -d ~/.zsh/zcompdump.`hostname -s`
-bindkey '^r' history-incremental-search-backward
-bindkey "^[[5~" up-line-or-history
-bindkey "^[[6~" down-line-or-history
-bindkey "^[[H" beginning-of-line
-bindkey "^[[1~" beginning-of-line
-bindkey "^[[F"  end-of-line
-bindkey "^[[4~" end-of-line
 bindkey ' ' magic-space    # also do history expansion on space
 bindkey '^I' complete-word # complete on tab, leave expansion to _expand
 
-zstyle ':completion::complete:*' use-cache on
-zstyle ':completion::complete:*' cache-path ~/.zsh/cache/$HOST
 
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
-zstyle ':completion:*' menu select=1 _complete _ignored _approximate
-zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/2 )) numeric )'
-zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
-zstyle ':completion:*:processes' command 'ps -axw'
-zstyle ':completion:*:processes-names' command 'ps -awxho command'
-
-# outdated completion for Macports
-# zstyle ':completion:*:portlist' $(port list | awk '{print $1}')
-# zstyle ':completion:*:*:port:*' $(port list | awk '{print $1}')
-
-# Completion Styles
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-# list of completers to use
-zstyle ':completion:*::::' completer _expand _complete _ignored _approximate
-
-# allow one error for every three characters typed in approximate completer
-zstyle -e ':completion:*:approximate:*' max-errors \
-    'reply=( $(( ($#PREFIX+$#SUFFIX)/2 )) numeric )'
-
-# insert all expansions for expand completer
-zstyle ':completion:*:expand:*' tag-order all-expansions
-#
-#NEW completion:
-# 1. All /etc/hosts hostnames are in autocomplete
-# 2. If you have a comment in /etc/hosts like #%foobar.domain,
-#    then foobar.domain will show up in autocomplete!
-zstyle ':completion:*' hosts $(awk '/^[^#]/ {print $2 $3" "$4" "$5}' /etc/hosts | grep -v ip6- && grep "^#%" /etc/hosts | awk -F% '{print $2}')
-# formatting and messages
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*:descriptions' format '%B%d%b'
-zstyle ':completion:*:messages' format '%d'
-zstyle ':completion:*:warnings' format 'No matches for: %d'
-zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
-zstyle ':completion:*' group-name ''
-
-# match uppercase from lowercase
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-# offer indexes before parameters in subscripts
-zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
-
-# command for process lists, the local web server details and host completion
-#zstyle ':completion:*:processes' command 'ps -o pid,s,nice,stime,args'
-#zstyle ':completion:*:urls' local 'www' '/var/www/htdocs' 'public_html'
-zstyle '*' hosts $hosts
-
-# Filename suffixes to ignore during completion (except after rm command)
-# zstyle ':completion:*:*:(^rm):*:*files' ignored-patterns '*?.o' '*?.c~' \
-#    '*?.old' '*?.pro'
-# the same for old style completion
-#fignore=(.o .c~ .old .pro)
-
-# ignore completion functions (until the _ignored completer)
-zstyle ':completion:*:functions' ignored-patterns '_*'
-zstyle ':completion:*:scp:*' tag-order \
-   files users 'hosts:-host hosts:-domain:domain hosts:-ipaddr"IP\ Address *'
-zstyle ':completion:*:scp:*' group-order \
-   files all-files users hosts-domain hosts-host hosts-ipaddr
-zstyle ':completion:*:ssh:*' tag-order \
-   users 'hosts:-host hosts:-domain:domain hosts:-ipaddr"IP\ Address *'
-zstyle ':completion:*:ssh:*' group-order \
-   hosts-domain hosts-host users hosts-ipaddr
-# zstyle '*' single-ignored show
-
+####
+# Source external files
+####
+[[ -a "$HOME/.zsh/aliases" ]] && source "$HOME/.zsh/aliases"
+[[ -f "$HOME/.zsh/hosts/`hostname`" ]] && source "$HOME/.zsh/hosts/`hostname`"
