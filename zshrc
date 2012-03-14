@@ -58,7 +58,7 @@ setopt NO_share_history
 ####
 # Completion
 ####
-source .zsh/completion.zsh
+source "$HOME/.zsh/completion.zsh"
 
 ####
 # Misc Options
