@@ -1,3 +1,2 @@
 .DS_Store
-.shell/local
-.vim/.netrwhist
+zsh/cache/*
