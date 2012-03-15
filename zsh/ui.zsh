@@ -1,5 +1,27 @@
 #!/usr/bin/env zsh
-# UI set-up for ZSH
+####
+# Colors and Prompt
+####
+# map colorterms to xterm-256color support
+if [[ $COLORTERM == "roxterm" || $COLORTERM == "gnome-terminal" ]]; then
+    export TERM=xterm-256color
+fi
+
+autoload colors zsh/terminfo && colors
+for color in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+	eval PR_LIGHT_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+	eval PR_$color='%{$fg[${(L)color}]%}'
+	(( count = $count + 1 ))
+done
+PR_RESET_COLOR="%{$reset_color%}"
+
+# prompt
+export PS1="${PR_LIGHT_BLACK}[${PR_LIGHT_BLUE}%n${PR_LIGHT_BLACK}@${PR_RESET_COLOR}${PR_GREEN}%m${PR_LIGHT_BLACK}:${PR_LIGHT_GREEN}%2c${PR_LIGHT_BLACK}]${PR_RESET_COLOR}${PR_RED} %(!.#.$)${PR_RESET_COLOR} "
+export RPS1="${PR_LIGHT_BLACK}(%D{%m-%d %H:%M}) [%?]${PR_RESET_COLOR}" # shows exit status of previous command
+
+####
+# Title
+####
 title () {
   # escape '%' chars in $1, make nonprintables visible
   a=${(V)1//\%/\%\%}
