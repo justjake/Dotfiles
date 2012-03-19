@@ -1,7 +1,7 @@
 ###
 # aliases
 ###
-
+setopt ALL_EXPORT
 # ls differs in FreeBSD and Linux
 if [[ FreeBSD == $(uname) || Darwin == $(uname) ]] ; then
         alias ls='ls -G'
@@ -42,6 +42,5 @@ alias star="ssh cs61a-zz@star.cs.berkeley.edu"
 alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
 
 # commands
-alias pi="python3.2 -i"
-alias derptest="python3.2 -m doctest"
 alias resource="source ~/.zshrc"
+setopt NO_ALL_EXPORT

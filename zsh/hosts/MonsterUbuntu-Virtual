@@ -28,3 +28,6 @@ alias open="gnome-open"
 alias gui="gnome-settings-manager; roxterm"
 
 alias apache="sudo /etc/init.d/apache2"
+# CS61A python stuff
+alias pi="python3.2 -i"
+alias derptest="python3.2 -m doctest"
