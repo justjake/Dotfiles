@@ -74,7 +74,7 @@ setopt    auto_pushd
 setopt    auto_cd
 setopt    pushd_ignore_dups
 #### Keybinds
-bindkey -v # VI keybinds
+# bindkey -v # VI keybinds # are rather odd on the CLI
 bindkey ' ' magic-space    # also do history expansion on space
 bindkey "^I" expand-or-complete-with-dots
 
