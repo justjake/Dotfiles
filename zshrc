@@ -18,6 +18,9 @@ LANG='en_US.UTF-8'
 LC_ALL='en_US.UTF-8'
 LC_CTYPE=C
 
+DOTFILES="$HOME/.dotfiles"
+ZSH_FILES="$HOME/.zsh"
+
 ####
 # Colors and Prompt
 ####
@@ -58,7 +61,7 @@ setopt NO_share_history
 ####
 # Completion
 ####
-source "$HOME/.zsh/completion.zsh"
+source "$ZSH_FILES/completion.zsh"
 
 ####
 # Misc Options
@@ -81,9 +84,14 @@ bindkey "^I" expand-or-complete-with-dots
 ####
 # Host-specific Settings
 ####
-[[ -f "$HOME/.zsh/hosts/`hostname`" ]] && source "$HOME/.zsh/hosts/`hostname`"
+[[ -f "$ZSH_FILES/hosts/`hostname`" ]] && source "$ZSH_FILES/hosts/`hostname`"
 
 ####
 # Aliases
 ####
-source "$HOME/.zsh/aliases.zsh"
+source "$ZSH_FILES/aliases.zsh"
+
+####
+# Functions
+####
+source "$ZSH_FILES/functions.zsh"
