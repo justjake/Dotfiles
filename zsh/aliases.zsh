@@ -23,11 +23,7 @@ alias la='ls -A'
 alias l='ls -CF'
 
 # directories
-alias webtree="clear; cd $webtree; ls"
-alias oldtree="clear; cd ~/src/webtree-legacy; ls"
 alias prefix="cd $PREFIX"
-alias templates="clear; cd ~/src/templates; ls"
-alias lib="clear; cd ~/src/lib/; ls"
 
 # edit settings
 alias hostsettings="$EDITOR ~/.shell/hosts/$HOSTNAME"
