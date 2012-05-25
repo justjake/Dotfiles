@@ -16,4 +16,4 @@
 	co = checkout
 	br = branch
 [core]
-	excludesfile = ~/.gitignore_global
+	excludesfile = ~/.dotfiles/gitignore_global

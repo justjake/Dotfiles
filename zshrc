@@ -19,7 +19,7 @@ LC_ALL='en_US.UTF-8'
 LC_CTYPE=C
 
 DOTFILES="$HOME/.dotfiles"
-ZSH_FILES="$HOME/.zsh"
+ZSH_FILES="$DOTFILES/zsh"
 
 ####
 # Colors and Prompt
