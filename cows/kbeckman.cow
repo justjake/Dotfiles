@@ -1,0 +1,49 @@
+$the_cow = <<EOC;
+   $thoughts                                           ..
+    $thoughts                                  .. .. ...  ..
+     $thoughts                             .  ...: :: .  .  . cc.
+      $thoughts                    .. :c:....   .   .    ..:..:.....
+       $thoughts              .::cccooccooooc:::.::c:. ::::..   ..:.:..
+        $thoughts          .ccooocooCoooooooooooooc:::c...:c:... ........
+                  ccocoCooCO8\@\@\@\@\@\@\@\@\@\@\@8Coooococc:.:c:cc::.:..:.
+               :ccoo::.co8\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@8OOCCCCCCooooooooocc
+            .c:ooc:::oO8\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@Ooc.
+           :o:co:c:co8\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@OCoc.
+         .::c.:coccoO8888\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@8OCocc
+         .cc::ccocoooOOOO\@8\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@88OCooc:
+        ..::cocc:cccoO8OOO8\@\@\@\@\@88\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@88OCCCoooc
+        ..::ccco:.oooOO8OO888888888O88\@\@\@88\@\@\@\@88\@\@\@\@\@\@888OOOCooooooo
+        .:..::c:.::oCOOOOO88888OCCO8888\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@88OCOCoooooo.
+        ....:....::ooCOO8O888OOO\@\@8O88\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@88OOCooooooo.
+      . ...  . .:.:coCCOOOOO8\@\@8\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@88OCooooo
+      :.  ... ....:oCoCOOOO8\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@OCooooc
+      .  ... .:.::coCCOOO8\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@\@8O88OCOOOoo:
+ :oc.  .  . ...coooCCO8O8\@\@\@\@\@\@\@888CCCooooCCoO8O88888OOOOCCoooCOOOOo.
+cco8\@\@8o.  .. .cCOOCCCCO\@8OCo:...:.        .coooooCCooooc::... .::co.
+c   .coC8: .. coOOCCoCOCocccc:. .....        .oooCOoooc          .co
+c. coc  coc  .:COOOCCCcocc:.  .coooccc:      .oC\@\@\@\@Cc      ::cc.:c.
+cc.oooooc:o. :cCOOCoooo:   .c:      .o:      .o8\@\@\@\@\@.       :c  :o:
+.ocoo.    :c :coCCooooooc. .:coo:..:oooc:cc::ooO\@\@\@\@\@C:ccoc::ooo:.:
+ .ooo  :ooOC  cooooOOOOCoooooccccoo:::    :coooC8\@\@\@\@8    .::cccoo:
+  :ccC::oo8O:.cooooCOO8888888Oo:.    .coooCCOO8O\@\@\@\@\@8oc::.   :ooo.
+    o:o8OocCCooooooCCO8\@\@\@\@\@\@\@8OCoooooC8CCO88\@\@\@\@\@\@\@\@8oooooooooooo
+     coc88CoooooooooCC88\@\@\@\@\@\@\@\@\@88\@\@\@\@\@88888\@\@\@\@\@\@\@\@\@ooCCOCoCCooo
+       oOCoCoooooooCOCCCO8\@\@\@\@\@\@\@\@\@\@\@\@\@\@8OooOO8\@\@\@\@\@\@\@OoC8888OCooc
+        :O\@\@CoooCCCoCCCCCO8\@\@\@\@\@\@\@\@\@\@\@\@Oooo8\@\@\@\@\@\@\@\@\@\@88oC888OCoo:
+            :oooCCCooCCCOO8\@\@\@\@\@\@\@\@\@\@8OoooC88OCoCOOOoCCoooOOOOooo:
+             ooooCCooCCCOOOOOO8\@\@\@\@\@OooCCo.       ....:cCooCCCooo.   
+             :oooCCooooooooCCOOOO8OoooC88OOCoc..    .cooCCCCooooo   
+             .ooooCoooooooooooooooooC888\@8CCCooo::cccooooCOoooooc  
+              :coooooooooooooooooooCoooCOOCCCOOooooooooooooooooo. 
+              .:ooooooooocoooooooooc..ooCOOoccccoCooccoCo::ooooc 
+                .ccooooooooooooooc         .         .    .cooo. 
+                  :c:ccooooooooooooooooooooCCo::.:ccoccoooocoo:
+                     ..:cccoccocccoooooooooocccooooc:coooooco:
+                       ..:ccccccooooooooc:..         .cooooo.
+                         .::ccoooooooooooooc::. .::cooooooo 
+                           :oooooooooooooooooooooooooooooo.
+                             :ooooooCOCCCOOoooooooooooooo.
+                               .ccoooooCoooooooooooooooo
+                                   :ooooooooooooooooooc
+                                       .::::cc:c::...
+EOC
