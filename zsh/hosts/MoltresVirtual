@@ -3,6 +3,7 @@ alias awesomerc="$EDITOR ~/.config/awesome/rc.lua"
 
 # Add rubygems to path
 PATH="$PATH:/var/lib/gems/1.8/bin"
+MANPATH="`manpath`:/var/lib/gems/1.8/doc"
 
 # SSH Hosts
 alias hal="ssh just.jake@hal.rescomp.berkeley.edu"
