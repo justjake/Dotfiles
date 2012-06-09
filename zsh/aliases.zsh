@@ -39,4 +39,5 @@ alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
 
 # commands
 alias resource="source ~/.zshrc"
+alias sasswatch="sass --watch stylesheets/source:stylesheets"
 setopt NO_ALL_EXPORT
