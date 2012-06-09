@@ -7,3 +7,6 @@
 [submodule "janus/zencoding-vim"]
 	path = janus/zencoding-vim
 	url = https://github.com/mattn/zencoding-vim.git
+[submodule "osx/iterm2-colors"]
+    path = osx/iterm2-colors
+    url = https://github.com/baskerville/iTerm-2-Color-Themes.git
