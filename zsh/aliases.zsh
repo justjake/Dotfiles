@@ -23,11 +23,7 @@ alias la='ls -A'
 alias l='ls -CF'
 
 # directories
-webtree="$HOME/src/webtree"
-alias oldtree="clear; cd ~/src/webtree-legacy; ls"
 alias prefix="cd $PREFIX"
-alias templates="clear; cd ~/src/templates; ls"
-alias lib="clear; cd ~/src/lib/; ls"
 
 # edit settings
 alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME"
@@ -43,6 +39,7 @@ alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
 
 # commands
 alias resource="source ~/.zshrc"
+alias sasswatch="sass --watch stylesheets/source:stylesheets"
 setopt NO_ALL_EXPORT
 
 # rdesktop

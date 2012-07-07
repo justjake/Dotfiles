@@ -1,4 +1,10 @@
 #!/usr/bin/env zsh
+# load and style support for version control systems
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' actionformats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+zstyle ':vcs_info:*' formats       '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+
 ####
 # Colors and Prompt
 ####
@@ -16,7 +22,7 @@ done
 PR_RESET_COLOR="%{$reset_color%}"
 
 # prompt
-export PS1="${PR_LIGHT_BLACK}[${PR_LIGHT_BLUE}%n${PR_LIGHT_BLACK}@${PR_RESET_COLOR}${PR_GREEN}%m${PR_LIGHT_BLACK}:${PR_LIGHT_GREEN}%2c${PR_LIGHT_BLACK}]${PR_RESET_COLOR}${PR_RED} %(!.#.$)${PR_RESET_COLOR} "
+export PS1="${PR_LIGHT_BLACK}[${PR_LIGHT_BLUE}%n${PR_LIGHT_BLACK}@${PR_RESET_COLOR}${PR_GREEN}%m${PR_LIGHT_BLACK}:${PR_LIGHT_GREEN}%2c${PR_LIGHT_BLACK}]${PR_RESET_COLOR}${PR_RED} %1v %(!.#.$)${PR_RESET_COLOR} "
 export RPS1="${PR_LIGHT_BLACK}(%D{%m-%d %H:%M}) [%?]${PR_RESET_COLOR}" # shows exit status of previous command
 
 ####
@@ -46,7 +52,10 @@ TITLE_LOCATION="[%m:%~]"
 
 # precmd is called just before the prompt is printed
 function precmd() {
-  title "zsh" "$TITLE_LOCATION"
+    title "zsh" "$TITLE_LOCATION"
+    vcs_info
+    psvar=()
+    psvar[1]="$vcs_info_mgs_0_"
 }
 
 # preexec is called just before any command line is executed
