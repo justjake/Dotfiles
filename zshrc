@@ -95,3 +95,4 @@ source "$ZSH_FILES/aliases.zsh"
 # Functions
 ####
 source "$ZSH_FILES/functions.zsh"
+
