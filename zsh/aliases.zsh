@@ -44,3 +44,8 @@ setopt NO_ALL_EXPORT
 
 # rdesktop
 alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
+
+# SSH Hosts
+alias hal="ssh just.jake@hal.rescomp.berkeley.edu"
+alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000 -L 6667:irc.housing.berkeley.edu:6667"
+alias tonic="ssh justjake@tonic.teton-landis.org"

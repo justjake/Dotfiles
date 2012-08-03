@@ -1,17 +1,17 @@
+setopt ALL_EXPORT
 # Edit settings
 alias awesomerc="$EDITOR ~/.config/awesome/rc.lua"
 
 # Add rubygems to path
 PATH="$PATH:/var/lib/gems/1.8/bin"
+unset MANPATH
 MANPATH="`manpath`:/var/lib/gems/1.8/doc"
 # and use ruby 1.9, too
 PATH="$PATH:/var/lib/gems/1.9.1/bin"
+unset MANPATH
 MANPATH="`manpath`:/var/lib/gems/1.9.1/doc"
-# oh, and use ruby 1.9 as prefered ruby in login shells
 
-# SSH Hosts
-alias hal="ssh just.jake@hal.rescomp.berkeley.edu"
-alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000 -L 6667:irc.housing.berkeley.edu:6667"
+BROWSER="chromium-browser"
 
 # Locations
 alias xinit="cd /usr/share/xinit; ls"
@@ -47,3 +47,4 @@ alias derptest="python3.2 -m doctest"
 #RVM
 source "$HOME/.rvm/scripts/rvm"
 PATH="$PATH:$HOME"/.rvm/bin # Add RVM to PATH for scripting
+setopt no_ALL_EXPORT
