@@ -42,6 +42,11 @@ PS1="${PR_LIGHT_BLACK}[${PR_LIGHT_BLUE}%n${PR_LIGHT_BLACK}@${PR_RESET_COLOR}${PR
 RPS1="${PR_LIGHT_BLACK}(%D{%m-%d %H:%M}) [%?]${PR_RESET_COLOR}" # shows exit status of previous command
 
 ####
+# User Scripts Directory in Path
+####
+PATH="$HOME/bin:$PATH"
+
+####
 # History
 ####
 HISTFILE="$HOME/.zsh/cache/`hostname`.zhistory"
@@ -69,6 +74,7 @@ source "$ZSH_FILES/completion.zsh"
 setopt    extended_glob
 setopt    long_list_jobs
 
+
 ####
 # User Interface
 #### Options
@@ -95,4 +101,3 @@ source "$ZSH_FILES/aliases.zsh"
 # Functions
 ####
 source "$ZSH_FILES/functions.zsh"
-

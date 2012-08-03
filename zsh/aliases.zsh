@@ -40,7 +40,11 @@ alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
 # commands
 alias resource="source ~/.zshrc"
 alias sasswatch="sass --watch stylesheets/source:stylesheets"
-setopt NO_ALL_EXPORT
 
 # rdesktop
 alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
+
+# tmux config: https://github.com/adnichols/tmux_setup
+alias fixssh="source ~/bin/fixssh"
+
+setopt NO_ALL_EXPORT
