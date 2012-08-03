@@ -40,7 +40,6 @@ alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
 # commands
 alias resource="source ~/.zshrc"
 alias sasswatch="sass --watch stylesheets/source:stylesheets"
-setopt NO_ALL_EXPORT
 
 # rdesktop
 alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
@@ -49,3 +48,8 @@ alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
 alias hal="ssh just.jake@hal.rescomp.berkeley.edu"
 alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000 -L 6667:irc.housing.berkeley.edu:6667"
 alias tonic="ssh justjake@tonic.teton-landis.org"
+
+# tmux config: https://github.com/adnichols/tmux_setup
+alias fixssh="source ~/bin/fixssh"
+
+setopt NO_ALL_EXPORT

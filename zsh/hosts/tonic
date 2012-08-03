@@ -1,0 +1,13 @@
+# Tonic - Ubuntu 12.04 LTS
+## RVM
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# Virtualenv
+OLDPS1="$PS1"
+source "$HOME/env/python2.7.3/bin/activate"
+export PS1="$OLDPS1"
+
+create-post-now () {
+  DATE=$(date "+%Y-%b-%d")
+  nanoc create_item "blog/$DATE.md"
+}
