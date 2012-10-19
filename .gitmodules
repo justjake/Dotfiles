@@ -10,3 +10,6 @@
 [submodule "osx/iterm2-colors"]
     path = osx/iterm2-colors
     url = https://github.com/baskerville/iTerm-2-Color-Themes.git
+[submodule "janus/vim-less"]
+	path = janus/vim-less
+	url = https://github.com/groenewege/vim-less.git

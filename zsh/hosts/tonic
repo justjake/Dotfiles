@@ -11,3 +11,13 @@ create-post-now () {
   DATE=$(date "+%Y-%b-%d")
   nanoc create_item "blog/$DATE.md"
 }
+
+# Include programs installed in ~/bundles in path
+BUNDLES="$HOME/bundles"
+for bundle in "$BUNDLES"/*; do
+    if [[ -d "$bundle"/bin ]]; then
+        PATH="$PATH:$bundle/bin"
+    else
+        PATH="$PATH:$bundle"
+    fi
+done
