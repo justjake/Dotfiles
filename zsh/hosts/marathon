@@ -1,0 +1,25 @@
+setopt ALL_EXPORT
+BROWSER="google-chrome"
+
+# Include programs installed in ~/Bundles in PATH
+BUNDLES="$HOME/Bundles"
+for bundle in "$BUNDLES"/*; do
+    if [[ -d "$bundle"/bin ]]; then
+        PATH="$PATH:$bundle/bin"
+    else
+        PATH="$PATH:$bundle"
+    fi
+done
+# GUI stuff
+alias open="gnome-open"
+
+#RVM
+source "$HOME/.rvm/scripts/rvm"
+PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+#VIRTUALENV Wrapper
+WORKON_HOME="$HOME/.virtualenvs"
+source /etc/bash_completion.d/virtualenvwrapper
+
+
+setopt no_ALL_EXPORT
