@@ -28,6 +28,10 @@ function pwn_me {
     done
 }
 
+function this_script_dir {
+    echo "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+}
+
 # derp
 if [[ $PWN_ME = PLZ ]]; then
     most_useless_use_of_zsh

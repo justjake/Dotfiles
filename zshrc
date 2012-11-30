@@ -21,34 +21,13 @@ LC_CTYPE=C
 DOTFILES="$HOME/.dotfiles"
 ZSH_FILES="$DOTFILES/zsh"
 
-####
-# Colors and Prompt
-####
-# map colorterms to xterm-256color support
-if [[ $COLORTERM == "roxterm" || $COLORTERM == "gnome-terminal" ]]; then
-    TERM=xterm-256color
-fi
-
-autoload colors zsh/terminfo && colors
-for color in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-	eval PR_LIGHT_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
-	eval PR_$color='%{$fg[${(L)color}]%}'
-	(( count = $count + 1 ))
-done
-PR_RESET_COLOR="%{$reset_color%}"
-
-# prompt
-PS1="${PR_LIGHT_BLACK}[${PR_LIGHT_BLUE}%n${PR_LIGHT_BLACK}@${PR_RESET_COLOR}${PR_GREEN}%m${PR_LIGHT_BLACK}:${PR_LIGHT_GREEN}%2c${PR_LIGHT_BLACK}]${PR_RESET_COLOR}${PR_RED} %(!.#.$)${PR_RESET_COLOR} "
-RPS1="${PR_LIGHT_BLACK}(%D{%m-%d %H:%M}) [%?]${PR_RESET_COLOR}" # shows exit status of previous command
 
 ####
 # User Scripts Directory in Path
 ####
 PATH="$HOME/bin:$PATH"
 
-####
-# History
-####
+#### History Settings
 HISTFILE="$HOME/.zsh/cache/`hostname`.zhistory"
 HISTSIZE=130000
 SAVEHIST=100000
@@ -63,9 +42,7 @@ setopt    hist_ignore_space
 setopt NO_share_history
 
 
-####
-# Completion
-####
+#### Completion
 source "$ZSH_FILES/completion.zsh"
 
 ####
@@ -75,29 +52,14 @@ setopt    extended_glob
 setopt    long_list_jobs
 
 
-####
-# User Interface
-#### Options
-setopt NO_beep
-setopt    auto_pushd
-setopt    auto_cd
-setopt    pushd_ignore_dups
-#### Keybinds
-# bindkey -v # VI keybinds # are rather odd on the CLI
-bindkey ' ' magic-space    # also do history expansion on space
-bindkey "^I" expand-or-complete-with-dots
+#### Functions
+source "$ZSH_FILES/functions.zsh"
 
-####
-# Host-specific Settings
-####
-[[ -f "$ZSH_FILES/hosts/`hostname`" ]] && source "$ZSH_FILES/hosts/`hostname`"
+#### User Interface
+source "$ZSH_FILES/ui.zsh"
 
-####
-# Aliases
-####
+#### Aliases
 source "$ZSH_FILES/aliases.zsh"
 
-####
-# Functions
-####
-source "$ZSH_FILES/functions.zsh"
+#### Host Settings
+[[ -f "$ZSH_FILES/hosts/`hostname`" ]] && source "$ZSH_FILES/hosts/`hostname`"
