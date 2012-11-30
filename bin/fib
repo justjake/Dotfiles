@@ -1,0 +1,103 @@
+#!/usr/bin/env python
+"""Fibanocci calculator"""
+import sys
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description='Show the Fibanocci series number')
+
+    # method to use
+    parser.add_argument('-r', '--recursive', action='store_true',
+            help="Use a recursive method")
+    parser.add_argument('-i', '--iterative', action='store_true',
+            help="Use an iterative method")
+    parser.add_argument('--no-memoization', action="store_true",
+            help="Disable memoization for recursive functions")
+
+    parser.add_argument('-t', '--test', action="store_true",
+            help="Test to see if the recursive method and the iterative method yeild the same result")
+
+    # print each n to N?
+    parser.add_argument('-v', '--verbose', action='store_true',
+            help='Show each step of the calculation')
+
+    # N
+    parser.add_argument('sum_to', metavar='N', type=int, 
+            help="Show number N of the Fibanocci series")
+
+    args = parser.parse_args()
+
+    if args.test:
+        print test(args.sum_to, args.verbose)
+        return 0
+
+    if args.iterative or (not (args.iterative or args.recursive)):
+        v = iterative_fib(args.sum_to, args.verbose)
+        print v
+    if args.recursive:
+        if args.no_memoization:
+            print slow_recursive_fib(args.sum_to, args.verbose)
+        else:
+            print recursive_fib(args.sum_to, args.verbose)
+
+    return v
+
+
+def iterative_fib(n, verbose=False):
+    if n==1 or n==2:
+        p(verbose, n, 1)
+        return 1
+
+    v = 1; last_v = 1; k = 2
+
+    p(verbose, 1, 1)
+
+    while k < n:
+        p(verbose, k, v)
+        k += 1
+        v, last_v = v+last_v, v
+
+    return v
+
+
+
+def memoize(fn):
+    store = {}
+    def wrapped_fn(*args):
+        if args in store:
+            return store[args]
+        else:
+            res = fn(*args)
+            store[args] = res
+            return res
+    return wrapped_fn
+
+@memoize
+def recursive_fib(n, verbose=False):
+    if n==1 or n==2:
+        return p(verbose, n, 1)
+    return p(verbose, n, recursive_fib(n-1, verbose) + recursive_fib(n-2,
+        verbose))
+
+def slow_recursive_fib(n, verbose=False):
+    if n==1 or n==2:
+        return p(verbose, n, 1)
+    return p(verbose, n, slow_recursive_fib(n-1, verbose) + slow_recursive_fib(n-2,
+        verbose))
+
+def test(n, verbose=False):
+    if verbose:
+        for num in range(1, n):
+            test(num)
+    r, i = recursive_fib(n), iterative_fib(n)
+    print "fib({0}): r{1} == i{2} ? {3}".format(n, r, i, r == i)
+    return r == i
+
+@memoize
+def p(verbose, n, v):
+    if verbose:
+        print "Fib({0}) = {1}".format(n, v)
+    return v
+
+if __name__ == '__main__':
+    sys.exit(main())
