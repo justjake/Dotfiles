@@ -1,0 +1,15 @@
+
+[roxterm profile]
+always_show_tabs=0
+font=Monaco 7.5
+hide_menubar=1
+allow_bold=0
+scrollback_lines=9001
+sel_by_word=-A-Za-z0-9,./?%&#_
+color_term=gnome-terminal
+term=xterm-256color
+browser=
+mailer=
+command=
+title_string=%s
+win_title=%s

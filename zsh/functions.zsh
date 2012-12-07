@@ -1,6 +1,9 @@
 #!/usr/bin/env zsh
+
+DOTFILE_MODULES="$DOTFILES/modules"
+
 # ZSH Functions
-function most_useless_use_of_zsh {
+function fractal {
    local lines columns colour a b p q i pnew
    ((columns=COLUMNS-1, lines=LINES-1, colour=0))
    for ((b=-1.5; b<=1.5; b+=3.0/lines)) do
@@ -16,28 +19,18 @@ function most_useless_use_of_zsh {
     echo -n "\e[49m"
 }
 
-function pwn_me {
-    FUNCTION_LOC="/home/just.jake/.zsh/functions.zsh"
-    PWN_LOC="$HOME/why-you-should-use.zsh"
-    [[ ! -a "$PWN_LOC" ]] && cat "$FUNCTION_LOC" > "$PWN_LOC"
-    # assemble some string here or something
-    the_pwn="\n[[ -a \"$PWN_LOC\" ]] && which zsh >/dev/null && export PWN_ME=PLZ && zsh \"$PWN_LOC\""
-    for rc in $HOME/.bashrc $HOME/.zshrc
-    do
-         echo "$the_pwn"  >> $rc
-    done
-}
-
 function this_script_dir {
     echo "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 }
 
-# derp
-if [[ $PWN_ME = PLZ ]]; then
-    most_useless_use_of_zsh
-    echo "ZOMG ZSH ZO GOOD!"
-    echo "to remove this, find the line at the end of your .bashrc or .zshrc and remove it"
-    sleep 2
-    export PS1="`cat ~just.jake/.irssi/ascii/kbeckman`[9A[14C"
-    export RPS1=""
-fi
+function link-dotfile-module {
+    BUNDLE_DIR="$DOTFILE_MODULES/$1"
+    echo installing $BUNDLE_DIR
+    TARGET_LOC="$(expand-string "$(cat "$BUNDLE_DIR/.target")")"
+    cd $HOME
+    ln -s -v "$BUNDLE_DIR" "$TARGET_LOC"
+}
+
+function expand-string {
+    eval echo "$1"
+}
