@@ -26,7 +26,8 @@ alias l='ls -CF'
 alias prefix="cd $PREFIX"
 
 # edit settings
-alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME"
+[[ -f "$ZSH_FILES/hosts/$HOSTNAME.zsh" ]] && alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME.zsh"
+[[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] &&     alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME"
 alias globalsettings="$EDITOR ~/.zshrc"
 alias aliases="$EDITOR $ZSH_FILES/aliases.zsh"
 
