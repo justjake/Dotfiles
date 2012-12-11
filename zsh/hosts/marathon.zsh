@@ -7,18 +7,10 @@ M2_HOME="$HOME/Bundles/apache-maven-3.0.4"
 
 # Include programs installed in ~/Bundles in PATH
 BUNDLES="$HOME/Bundles"
-for bundle in "$BUNDLES"/*; do
-    if [[ -d "$bundle"/bin ]]; then
-        PATH="$bundle/bin:$PATH"
-    else
-        PATH="$bundle:$PATH"
-    fi
-done
+bundle-dir "$BUNDLES"
 
 # LLVM / EMSCRIPTEN / CLANG
 LLVM="$HOME/Bundles/clang+llvm-3.1-x86_64-linux-ubuntu_12.04/bin"
-
-
 
 # GUI stuff
 alias open="gnome-open"

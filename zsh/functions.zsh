@@ -19,6 +19,26 @@ function fractal {
     echo -n "\e[49m"
 }
 
+#### setup stuff
+
+# add all the bundles in a DIR to $PATH and $MANPATh
+# a bundle is a directory that contains bin and man, and maybe lib
+function bundle-dir {
+    local BUNDLES
+    BUNDLES="$1"
+    if [[ -d "$BUNDLES" ]]; then
+        for bundle in "$BUNDLES"/*; do
+            if [[ -d "$bundle"/bin ]]; then
+                PATH="$bundle/bin:$PATH"
+            else
+                PATH="$bundle:$PATH"
+            fi
+        done
+    else
+        echo "$BUNDLES does not exist"
+    fi
+}
+
 #### Utilities
 
 function this-script-dir {
