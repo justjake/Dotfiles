@@ -19,11 +19,21 @@ function fractal {
     echo -n "\e[49m"
 }
 
+#### Utilities
+
 function this-script-dir {
     echo "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 }
 
-function link-dotfile-module {
+function expand-string {
+    eval echo "$1"
+}
+
+#### dotfile modules 
+# folders that go someplace other than ~/ that have settings
+
+function dotfile-module-install {
+    local BUNDLE_DIR
     BUNDLE_DIR="$DOTFILE_MODULES/$1"
     echo installing $BUNDLE_DIR
     TARGET_LOC="$(expand-string "$(cat "$BUNDLE_DIR/.target")")"
@@ -31,6 +41,25 @@ function link-dotfile-module {
     ln -s -v "$BUNDLE_DIR" "$TARGET_LOC"
 }
 
-function expand-string {
-    eval echo "$1"
+function dotfile-module-list {
+    ls "$DOTFILE_MODULES"
 }
+
+function dotfile-module-show {
+    if [[ ! -d "$DOTFILE_MODULES/$1" ]] ; then
+        echo "Module $1 does not exist"
+    else
+        echo \
+"Dotfile Module:
+    $DOTFILE_MODULES/$1
+
+Link Location:
+    $(cat "$DOTFILE_MODULES/$1/.target")
+    $(expand-string "$(cat "$DOTFILE_MODULES/$1/.target")")
+
+Contents:"
+        ls -al "$DOTFILE_MODULES/$1"
+    fi
+}
+    
+
