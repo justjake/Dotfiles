@@ -1,4 +1,4 @@
-source "ubuntu.zsh"
+source "$ZSH_FILES/hosts/ubuntu.zsh"
 
 setopt ALL_EXPORT
 BROWSER="google-chrome"

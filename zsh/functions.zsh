@@ -19,7 +19,7 @@ function fractal {
     echo -n "\e[49m"
 }
 
-function this_script_dir {
+function this-script-dir {
     echo "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 }
 

@@ -63,3 +63,4 @@ source "$ZSH_FILES/aliases.zsh"
 
 #### Host Settings
 [[ -f "$ZSH_FILES/hosts/`hostname`" ]] && source "$ZSH_FILES/hosts/`hostname`"
+[[ -f "$ZSH_FILES/hosts/`hostname`.zsh" ]] && source "$ZSH_FILES/hosts/`hostname`.zsh"
