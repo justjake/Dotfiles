@@ -2,14 +2,14 @@
 
 # Window geometry
 padding.width: 3
-border.width: 1
+border.width: 3
 window.client.padding.width: 0
 window.client.padding.height: 0
 window.handle.width: 0
 
 #Menu geometry
 menu.border.width: 1
-menu.overlap: -5
+menu.overlap: 0
 
 # Border colors
 window.active.border.color: #262626
@@ -118,4 +118,5 @@ osd.unhilight.bg.color: #404040
 osd.unhilight.bg.colorTo: #505050
 
 osd.label.bg: Parentrelative
-osd.label.text.color: #9f9faf
+osd.label.text.color: #dcdccc
+
