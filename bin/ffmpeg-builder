@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-# Compile FFmpeg on Ubuntu
+# Compile FFmpeg on Ubuntu by following the compilation guide
 # https://ffmpeg.org/trac/ffmpeg/wiki/UbuntuCompilationGuide
+# (c) 2013 Jake Teton-Landis
 
 set -e
 
+MAKE_CMD="make -j2"  # TODO: CLI way to change this
+
+# if the user has PREFIX defined, use that as the base for our
+# sourcefile path
 if [ -z "$PREFIX" ]; then
     if [ $(id -u) -eq 0 ]; then
         PREFIX="/usr/local"
@@ -15,10 +20,9 @@ fi
 PACKAGE_GROUP_NAME="ffmpeg-and-friends"
 META_SOURCE_ROOT="$PREFIX/src/$PACKAGE_GROUP_NAME"
 
-MODE="$1"
-MAKE_CMD="make -j2"
 PACKAGES="yasm x264 fdk-aac libvpx ffmpeg"
 
+# CD and report at the same time
 return_to_root() {
     cd "$META_SOURCE_ROOT"
     echo "$1"
@@ -75,6 +79,9 @@ get-via-git() {
     git clone --depth 1 "$2"
 }
 
+# Each dependency that we want to build from source gets its own
+# {get,update,install,clean}_dependency functions
+# because they're called via string concatenation
 
 # YASM
 get_yasm() {
@@ -177,7 +184,7 @@ get_ffmpeg() {
     get-via-git "ffmpeg" "git://source.ffmpeg.org/ffmpeg"
 }
 
-updage_ffmpeg() {
+update_ffmpeg() {
     update-via-git-pull "ffmpeg"
 }
 
@@ -198,7 +205,6 @@ clean_ffmpeg() {
 }
 
 # Batch commands
-
 install-deps() {
     apt-get install autoconf automake build-essential checkinstall git libass-dev libfaac-dev \
         libgpac-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev librtmp-dev libspeex-dev \
