@@ -47,6 +47,9 @@ usage() {
 Build and install ffmpeg and friends from source. Uses checkinstall
 to manage system packages. Must be run as root to modify the system.
 
+Availible packages:
+    $PACKAGES
+
 Available commands:
 
 install-deps - installs dependencies via apt-get
@@ -152,7 +155,7 @@ install_fdk-aac() {
 }
 
 clean_fdk-aac() {
-    pkg_aciton cleaning fdk-aac
+    pkg_action cleaning fdk-aac
     make distclean
 }
 
