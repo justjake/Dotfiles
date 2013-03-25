@@ -8,6 +8,7 @@ M2_HOME="$HOME/Bundles/apache-maven-3.0.4"
 # Include programs installed in ~/Bundles in PATH
 BUNDLES="$HOME/Bundles"
 bundle-dir "$BUNDLES"
+bundle-dir "/opt"
 
 # LLVM / EMSCRIPTEN / CLANG
 LLVM="$HOME/Bundles/clang+llvm-3.1-x86_64-linux-ubuntu_12.04/bin"
@@ -43,5 +44,7 @@ setopt no_ALL_EXPORT
 
 #####
 # Aliases
+alias nomcopter="ssh justjake@nomcopter.com -p 484"
+alias hosing="ssh justjake@nomcopter.com -p 484" #TODO: run the net command from kevin's homedir
 
 #alias tmux because it won't 256 colors correclty

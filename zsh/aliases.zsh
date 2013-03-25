@@ -34,13 +34,14 @@ alias aliases="$EDITOR $ZSH_FILES/aliases.zsh"
 # logs
 alias deverror="tail -f ~/.dev-www10-httpd-error.log"
 
-# hosts
-alias star="ssh cs61a-zz@star.cs.berkeley.edu"
-alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
 
 # commands
 alias resource="source ~/.zshrc"
 alias sasswatch="sass --watch stylesheets/source:stylesheets"
+function middleman-dev {
+    x-www-browser "http://localhost:4567" &
+    middleman
+}
 
 # rdesktop
 alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
@@ -49,6 +50,8 @@ alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
 alias hal="ssh just.jake@hal.rescomp.berkeley.edu"
 alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000 -L 6667:irc.housing.berkeley.edu:6667"
 alias tonic="ssh justjake@tonic.teton-landis.org"
+alias star="ssh cs61a-zz@star.cs.berkeley.edu"
+alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
 
 # tmux config: https://github.com/adnichols/tmux_setup
 alias fixssh="source ~/bin/fixssh"

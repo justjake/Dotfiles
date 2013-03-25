@@ -13,3 +13,5 @@ mailer=
 command=
 title_string=%s
 win_title=%s
+audible_bell=0
+visible_bell=1

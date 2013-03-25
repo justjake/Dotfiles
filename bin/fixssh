@@ -1,4 +1,4 @@
-export SSH_CLIENT="98.248.144.91 5719 22"
-export SSH_TTY="/dev/pts/4"
-export SSH_AUTH_SOCK="/tmp/ssh-PmuuIpO17577/agent.17577"
-export SSH_CONNECTION="98.248.144.91 5719 66.175.218.75 22"
+export SSH_CLIENT=""
+export SSH_TTY=""
+export SSH_AUTH_SOCK="/tmp/keyring-Tgldu9/ssh"
+export SSH_CONNECTION=""
