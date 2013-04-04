@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # Download and extract dotfiles
 
 nogit() {
@@ -28,6 +28,8 @@ hasgit() {
 METHOD="nogit"
 which git > /dev/null && METHOD="hasgit"
 
+echo $METHOD
+
 # only execute if .dotfiles doesn't exist
 [ -a "$HOME/.dotfiles" ] && echo "~/.dotfiles already exists; aborting" && exit 1
 
@@ -35,4 +37,4 @@ which git > /dev/null && METHOD="hasgit"
 $METHOD
 
 # hand install over to install.sh
-$HOME/.dotfiles/jark/install.sh
+/usr/bin/bash $HOME/.dotfiles/jark/install.sh

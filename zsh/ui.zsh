@@ -1,11 +1,33 @@
 #!/usr/bin/env zsh
-####
-# Colors and Prompt
-####
-# map colorterms to xterm-256color support
-if [[ $COLORTERM == "roxterm" || $COLORTERM == "gnome-terminal" ]]; then
-    export TERM=xterm-256color
-fi
+
+
+#### Options
+setopt NO_beep
+setopt    auto_pushd
+setopt    auto_cd
+setopt    pushd_ignore_dups
+
+
+#### Keybinds
+# bindkey -v # VI keybinds # are rather odd on the CLI
+bindkey ' ' magic-space    # also do history expansion on space
+bindkey "^I" expand-or-complete-with-dots
+bindkey '^[[A' up-line-or-search   # does search if you've entered text
+bindkey '^[[B' down-line-or-search
+
+
+##### load and style support for version control systems
+autoload -Uz add-zsh-hook
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git hg
+zstyle ':vcs_info:*' actionformats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+zstyle ':vcs_info:*' formats       '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+
+
+##### Colors and Prompt
+
+prompt_opts=(cr percent subst)
 
 autoload colors zsh/terminfo && colors
 for color in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
@@ -15,13 +37,11 @@ for color in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
 done
 PR_RESET_COLOR="%{$reset_color%}"
 
-# prompt
-export PS1="${PR_LIGHT_BLACK}[${PR_LIGHT_BLUE}%n${PR_LIGHT_BLACK}@${PR_RESET_COLOR}${PR_GREEN}%m${PR_LIGHT_BLACK}:${PR_LIGHT_GREEN}%2c${PR_LIGHT_BLACK}]${PR_RESET_COLOR}${PR_RED} %(!.#.$)${PR_RESET_COLOR} "
-export RPS1="${PR_LIGHT_BLACK}(%D{%m-%d %H:%M}) [%?]${PR_RESET_COLOR}" # shows exit status of previous command
+export PROMPT='${PR_LIGHT_BLACK}[${PR_LIGHT_BLUE}%n${PR_LIGHT_BLACK}@${PR_RESET_COLOR}${PR_GREEN}%m${PR_LIGHT_BLACK}:${PR_LIGHT_GREEN}%2c${PR_LIGHT_BLACK}]${PR_RESET_COLOR}${PR_RED} %(!.#.$)${PR_RESET_COLOR} '
+export RPROMPT='${PR_LIGHT_BLACK}(%D{%m-%d %H:%M}) [%?] ${vcs_info_msg_0_}${PR_RESET_COLOR}' # shows exit status of previous command
 
-####
-# Title
-####
+
+#### Window Title
 title () {
   # escape '%' chars in $1, make nonprintables visible
   a=${(V)1//\%/\%\%}
@@ -45,11 +65,16 @@ title () {
 TITLE_LOCATION="[%m:%~]"
 
 # precmd is called just before the prompt is printed
-function precmd() {
-  title "zsh" "$TITLE_LOCATION"
+function jake-precmd {
+    title "zsh" "$TITLE_LOCATION"
+    vcs_info
 }
 
 # preexec is called just before any command line is executed
-function preexec() {
+function jake-preexec() {
   title "$1" "$TITLE_LOCATION"
 }
+
+#### Add ZSH pre-command hook
+add-zsh-hook precmd jake-precmd
+add-zsh-hook preexec jake-preexec

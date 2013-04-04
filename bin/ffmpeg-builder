@@ -1,0 +1,267 @@
+#!/usr/bin/env bash
+# Compile FFmpeg on Ubuntu by following the compilation guide
+# https://ffmpeg.org/trac/ffmpeg/wiki/UbuntuCompilationGuide
+# (c) 2013 Jake Teton-Landis
+
+set -e
+
+MAKE_CMD="make -j2"  # TODO: CLI way to change this
+
+# if the user has PREFIX defined, use that as the base for our
+# sourcefile path
+if [ -z "$PREFIX" ]; then
+    if [ $(id -u) -eq 0 ]; then
+        PREFIX="/usr/local"
+    else
+        PREFIX="$HOME"
+    fi
+fi
+
+PACKAGE_GROUP_NAME="ffmpeg-and-friends"
+META_SOURCE_ROOT="$PREFIX/src/$PACKAGE_GROUP_NAME"
+
+PACKAGES="yasm x264 fdk-aac libvpx ffmpeg"
+
+# CD and report at the same time
+return_to_root() {
+    cd "$META_SOURCE_ROOT"
+    echo "$1"
+}
+
+switch_to() {
+    cd "$1"
+    echo "entering $1"
+}
+
+pkg_action() {
+    local pkg="$2"
+    local verb="$1"
+    return_to_root "$verb $pkg"
+    switch_to "$pkg"
+}
+
+usage() {
+    local my_name="$(basename $0)"
+    echo "$my_name
+
+Build and install ffmpeg and friends from source. Uses checkinstall
+to manage system packages. Must be run as root to modify the system.
+
+Availible packages:
+    $PACKAGES
+
+Available commands:
+
+install-deps - installs dependencies via apt-get
+get-all      - establish sources in $META_SOURCE_ROOT
+install-all  - Build and checkinstall from current sources
+update-all   - update the sources and re-install
+remove-all   - Removes the checkinstall packages
+
+get PKG      - download the source for PKG
+install PKG  - Build and install PKG as a checkinstall package
+clean PKG    - make PKG's source directory clean
+update PKG   - update only the sources of PKG
+
+$my_name will build in \$PREFIX/src/$PACKAGE_GROUP_NAME
+\$PREFIX defualts to \$HOME for users, and /usr/local for system.
+"
+}
+
+update-via-git-pull() {
+    # $1 = package dir
+    return_to_root "updating $1"
+    switch_to "$1"
+    git pull
+}
+
+get-via-git() {
+    local name="$1"
+    local git_path="$2"
+    return_to_root "getting $1"
+    git clone --depth 1 "$2"
+}
+
+# Each dependency that we want to build from source gets its own
+# {get,update,install,clean}_dependency functions
+# because they're called via string concatenation
+
+# YASM
+get_yasm() {
+    return_to_root "getting YASM"
+    wget http://www.tortall.net/projects/yasm/releases/yasm-1.2.0.tar.gz
+    tar xzvf yasm-1.2.0.tar.gz
+    rm yasm-1.2.0.tar.gz
+}
+
+update_yasm() {
+    # nothing
+    return_to_root "Not updating YASM"
+}
+
+install_yasm() {
+    return_to_root "Installing YASM"
+    switch_to yasm-1.2.0
+    ./configure
+    $MAKE_CMD
+    checkinstall --pkgname=yasm --pkgversion="1.2.0" --backup=no \
+          --deldoc=yes --fstrans=no --default
+}
+
+clean_yasm() {
+    return_to_root "Not cleaning YASM: no need to re-install"
+}
+
+# x264
+get_x264() {
+    get-via-git x264 "git://git.videolan.org/x264.git"
+}
+
+update_x264() {
+    update-via-git-pull "x264"
+}
+
+install_x264() {
+    return_to_root "installing x264"
+    switch_to "x264"
+    ./configure --enable-static
+    $MAKE_CMD
+    checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | \
+        awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes \
+        --fstrans=no --default
+}
+
+clean_x264() {
+    pkg_action cleaning x264
+    make distclean
+}
+
+# fdk-aac - high quality AAC encoder
+get_fdk-aac() {
+    get-via-git "fdk-aac" "git://github.com/mstorsjo/fdk-aac.git"
+}
+
+update_fdk-aac() {
+    update-via-git-pull "fdk-aac"
+}
+
+install_fdk-aac() {
+    pkg_action installing fdk-aac
+    autoreconf -fiv
+    ./configure --disable-shared
+    $MAKE_CMD
+    checkinstall --pkgname=fdk-aac --pkgversion="$(date +%Y%m%d%H%M)-git" --backup=no \
+          --deldoc=yes --fstrans=no --default
+}
+
+clean_fdk-aac() {
+    pkg_action cleaning fdk-aac
+    make distclean
+}
+
+# lib VPX - i don't give a fuck, but I'm doing the guide
+get_libvpx() {
+    get-via-git "libvpx" "http://git.chromium.org/webm/libvpx.git"
+}
+
+update_libvpx() {
+    update-via-git-pull libvpx
+}
+
+install_libvpx() {
+    pkg_action installing libvpx
+    ./configure --disable-examples --disable-unit-tests
+    $MAKE_CMD
+    checkinstall --pkgname=libvpx --pkgversion="1:$(date +%Y%m%d%H%M)-git" --backup=no \
+          --deldoc=yes --fstrans=no --default
+}
+
+clean_libvpx() {
+    pkg_action cleaning libvpx
+    make clean
+}
+
+# The man of the hour
+# FFmpeg
+get_ffmpeg() {
+    get-via-git "ffmpeg" "git://source.ffmpeg.org/ffmpeg"
+}
+
+update_ffmpeg() {
+    update-via-git-pull "ffmpeg"
+}
+
+install_ffmpeg() {
+    pkg_action installing ffmpeg
+    ./configure --enable-gpl --enable-libass --enable-libfaac --enable-libfdk-aac --enable-libmp3lame \
+          --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libspeex --enable-librtmp --enable-libtheora \
+            --enable-libvorbis --enable-libvpx --enable-libx264 --enable-nonfree --enable-version3
+    $MAKE_CMD
+    checkinstall --pkgname=ffmpeg --pkgversion="7:$(date +%Y%m%d%H%M)-git" --backup=no \
+          --deldoc=yes --fstrans=no --default
+}
+
+
+clean_ffmpeg() {
+    pkg_action cleaning ffmpeg
+    make distclean
+}
+
+# Batch commands
+install-deps() {
+    apt-get install autoconf automake build-essential checkinstall git libass-dev libfaac-dev \
+        libgpac-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev librtmp-dev libspeex-dev \
+        libtheora-dev libtool libvorbis-dev pkg-config texi2html zlib1g-dev
+}
+
+get-all() {
+    local pkg
+    for pkg in $PACKAGES; do
+        get_$pkg
+    done
+}
+
+install-all() {
+    local pkg
+    for pkg in $PACKAGES; do
+        install_$pkg
+    done
+}
+
+update-all() {
+    local pkg
+    apt-get remove ffmpeg x264 libx264-dev libvpx-dev
+    for pkg in $PACKAGES; do
+        clean_$pkg
+        update_$pkg
+        install_$pkg
+    done
+}
+
+remove-all() {
+    apt-get remove $PACKAGES
+}
+
+
+### MAIN
+
+# usage
+if [ -z "$1" ] ; then
+    usage
+    echo "operating on $META_SOURCE_ROOT"
+    exit 1
+fi
+
+# take action!
+echo "operating on $META_SOURCE_ROOT"
+mkdir -p "$META_SOURCE_ROOT"
+
+if [ -z "$2" ] ; then
+    # just run the command
+    $1
+    exit 0
+else
+    $1_$2
+    exit 0
+fi
+

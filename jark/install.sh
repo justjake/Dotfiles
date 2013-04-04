@@ -1,62 +1,35 @@
-#!/usr/bin/env bash
-# Install dotfiles from ~/.dotfiles into $HOME
-# inspired by https://github.com/joshuaclayton/dotfiles/blob/master/Rakefile, but rewritten in
-# plain shell script because who knows if `hostname` has rake?
+#!/usr/bin/env zsh
+DOTFILES_DIR="$HOME/.dotfiles"
+cd "$DOTFILES_DIR"
 
-symlink () { # $1 -> target, $2 -> linklocation
-    [ -h "$2" ] && rm "$2"
-    [ -a "$2" ] && echo "Error: file exists: $2" && exit 1
-    echo "Symlinking $2 -> $1"
-    ln -s "$1" "$2"
-}
+# pull git submodules
+git submodule update --init --recursive
 
-target_path () { # $1 -> filename
-    echo ".$1"
-}
+# link basic files
+DOTFILES=(
+zshrc
+zsh
 
-install () {
-    echo "Installing"
-    cd "$HOME"
-    for dotfile in .dotfiles/*; do
-        symlink ".dotfiles/$dotfile" "`target_path $dotfile`"
-    done
-}
+gitconfig
+gitignore_global
 
-postinstall () {
-    which git > /dev/null
-    if [ -eq "$?" "0" ] ; then
-        postinstall_git
+hgrc
+
+bin
+tmux.conf
+screenrc
+
+vim
+vimrc.after
+gvimrc.after
+)
+
+cd "$HOME"
+for file in "${DOTFILES[@]}"; do
+    if [ ! -f "$HOME/${file}" ]; then
+        ln -s ".dotfiles/${file}" ".${file}"
+        echo "Linked .dotfiles/${file} -> ~/${file}"
     else
-        postinstall_nogit
+        echo "skipped because file exists: ~/${file}"
     fi
-    which rake > /dev/null
-    if [ -eq "$?" "0" ] ; then
-        postintall_rake
-    else
-        postinstall_norake
-    fi
-}
-
-postinstall_git() {
-    cd "$HOME/.dotfiles"
-    git submodule update --init --recursive
-}
-
-postinstall_nogit () {
-    echo "Git free system. Assuming submodules handled by github"
-}
-
-postinstall_rake () {
-    cd "$HOME/.vim"
-    rake
-}
-
-postinstall_norake () {
-    # Damn, we can't use Janus because Janus needs rake
-    # oh well, we just use the old .vimrc stuff I guess
-    cd "$HOME"
-    symlink ".dotfiles/.vim.nojanus" ".vim"
-    symlink ".dotfiles/.vimrc.nojanus" ".vimrc"
-}
-
-install
+done

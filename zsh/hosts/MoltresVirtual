@@ -1,13 +1,17 @@
-
+setopt ALL_EXPORT
 # Edit settings
 alias awesomerc="$EDITOR ~/.config/awesome/rc.lua"
 
 # Add rubygems to path
 PATH="$PATH:/var/lib/gems/1.8/bin"
+unset MANPATH
+MANPATH="`manpath`:/var/lib/gems/1.8/doc"
+# and use ruby 1.9, too
+PATH="$PATH:/var/lib/gems/1.9.1/bin"
+unset MANPATH
+MANPATH="`manpath`:/var/lib/gems/1.9.1/doc"
 
-# SSH Hosts
-alias hal="ssh just.jake@hal.rescomp.berkeley.edu"
-alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000"
+BROWSER="chromium-browser"
 
 # Locations
 alias xinit="cd /usr/share/xinit; ls"
@@ -20,7 +24,15 @@ hal="/remote/hal"
 reshome="$hal/home/just.jake"
 webtree="$reshome/src/webtree"
 
-
+# Include programs installed in ~/Programs in path
+BUNDLES="$HOME/Bundles"
+for bundle in "$BUNDLES"/*; do
+    if [[ -d "$bundle"/bin ]]; then
+        PATH="$PATH:$bundle/bin"
+    else
+        PATH="$PATH:$bundle"
+    fi
+done
 # GUI stuff
 alias open="gnome-open"
 
@@ -31,3 +43,8 @@ alias apache="sudo /etc/init.d/apache2"
 # CS61A python stuff
 alias pi="python3.2 -i"
 alias derptest="python3.2 -m doctest"
+
+#RVM
+source "$HOME/.rvm/scripts/rvm"
+PATH="$PATH:$HOME"/.rvm/bin # Add RVM to PATH for scripting
+setopt no_ALL_EXPORT

@@ -1,0 +1,15 @@
+# Tonic - Ubuntu 12.04 LTS
+## RVM
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# Virtualenv
+source "$HOME/env/python2.7.3/bin/activate"
+
+create-post-now () {
+  DATE=$(date "+%Y-%b-%d")
+  nanoc create_item "blog/$DATE.md"
+}
+
+# Include programs installed in ~/bundles in path
+BUNDLES="$HOME/bundles"
+bundles-dir "$BUNDLES"

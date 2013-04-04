@@ -23,27 +23,37 @@ alias la='ls -A'
 alias l='ls -CF'
 
 # directories
-webtree="$HOME/src/webtree"
-alias oldtree="clear; cd ~/src/webtree-legacy; ls"
 alias prefix="cd $PREFIX"
-alias templates="clear; cd ~/src/templates; ls"
-alias lib="clear; cd ~/src/lib/; ls"
 
 # edit settings
-alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME"
+[[ -f "$ZSH_FILES/hosts/$HOSTNAME.zsh" ]] && alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME.zsh"
+[[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] &&     alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME"
 alias globalsettings="$EDITOR ~/.zshrc"
 alias aliases="$EDITOR $ZSH_FILES/aliases.zsh"
 
 # logs
 alias deverror="tail -f ~/.dev-www10-httpd-error.log"
 
-# hosts
-alias star="ssh cs61a-zz@star.cs.berkeley.edu"
-alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
 
 # commands
 alias resource="source ~/.zshrc"
-setopt NO_ALL_EXPORT
+alias sasswatch="sass --watch stylesheets/source:stylesheets"
+function middleman-dev {
+    x-www-browser "http://localhost:4567" &
+    middleman
+}
 
 # rdesktop
 alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
+
+# SSH Hosts
+alias hal="ssh just.jake@hal.rescomp.berkeley.edu"
+alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000 -L 6667:irc.housing.berkeley.edu:6667"
+alias tonic="ssh justjake@tonic.teton-landis.org"
+alias star="ssh cs61a-zz@star.cs.berkeley.edu"
+alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
+
+# tmux config: https://github.com/adnichols/tmux_setup
+alias fixssh="source ~/bin/fixssh"
+
+setopt NO_ALL_EXPORT
