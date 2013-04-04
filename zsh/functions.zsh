@@ -23,16 +23,24 @@ function fractal {
 
 # add all the bundles in a DIR to $PATH and $MANPATh
 # a bundle is a directory that contains bin and man, and maybe lib
+
+function add-bundle-to-path {
+    local bundle
+    bundle="$1"
+    if [[ -d "$bundle/bin" ]]; then
+        PATH="$bundle/bin:$PATH"
+    else
+        PATH="$bundle:$PATH"
+    fi
+}
+
 function bundle-dir {
     local BUNDLES
+    local bundle
     BUNDLES="$1"
     if [[ -d "$BUNDLES" ]]; then
         for bundle in "$BUNDLES"/*; do
-            if [[ -d "$bundle"/bin ]]; then
-                PATH="$bundle/bin:$PATH"
-            else
-                PATH="$bundle:$PATH"
-            fi
+            add-bundle-to-path $bundle
         done
     else
         echo "$BUNDLES does not exist"

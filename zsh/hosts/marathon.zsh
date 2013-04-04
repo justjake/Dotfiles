@@ -5,10 +5,15 @@ BROWSER="google-chrome"
 JAVA_HOME="/usr/lib/jvm/jdk1.7.0"
 M2_HOME="$HOME/Bundles/apache-maven-3.0.4"
 
+# include JAVA stuff in PATH
+PATH="$JAVA_HOME/bin:$PATH"
+
 # Include programs installed in ~/Bundles in PATH
 BUNDLES="$HOME/Bundles"
 bundle-dir "$BUNDLES"
-bundle-dir "/opt"
+add-bundle-to-path "/opt/google"
+add-bundle-to-path "/opt/bro"
+PATH="$PATH:/opt/plan9/bin"
 
 # LLVM / EMSCRIPTEN / CLANG
 LLVM="$HOME/Bundles/clang+llvm-3.1-x86_64-linux-ubuntu_12.04/bin"
@@ -37,8 +42,11 @@ MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 
 # Locations
-win="/mnt/hgfs/WinHome"
-learnstreet="/mnt/hgfs/WinHome/Dropbox/External/New LS Files/Learn Street"
+win="/mnt/hgfs/winhome"
+learnstreet="$win/Dropbox/External/New LS Files/Learn Street"
+
+# PLAN9 UP IN THIS
+PLAN9="/opt/plan9"
 
 setopt no_ALL_EXPORT
 
