@@ -3,7 +3,7 @@ DOTFILES_DIR="$HOME/.dotfiles"
 cd "$DOTFILES_DIR"
 
 # pull git submodules
-git submodule update --init --recursive
+# git submodule update --init --recursive
 
 # link basic files
 DOTFILES=(
