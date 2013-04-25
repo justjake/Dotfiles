@@ -18,3 +18,6 @@ PATH="$PATH:$GOROOT/bin"
 source /usr/local/share/python/virtualenvwrapper.sh
 
 alias crashplan-tunnel="ssh -L 4200:localhost:4243 justjake@nomcopter.internal -p 484"
+
+# aw yiss
+use-utf8-clock
