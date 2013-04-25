@@ -52,6 +52,7 @@ alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000 -L 6667:irc.housing.b
 alias tonic="ssh justjake@tonic.teton-landis.org"
 alias star="ssh cs61a-zz@star.cs.berkeley.edu"
 alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
+alias nomcopter="ssh justjake@nomcopter.com -p 484"
 
 # tmux config: https://github.com/adnichols/tmux_setup
 alias fixssh="source ~/bin/fixssh"
