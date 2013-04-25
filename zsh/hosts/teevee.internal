@@ -1,0 +1,20 @@
+# Homebrew
+setopt ALL_EXPORT
+PATH="/usr/local/bin:$PATH"
+
+# RVM 
+source "$HOME/.rvm/scripts/rvm"
+PATH="$PATH:$HOME/.rvm/bin"
+
+# Virtualenv
+WORKON_HOME="$HOME/Library/VirtualEnvs"
+mkdir -p "$WORKON_HOME"
+setopt no_ALL_EXPORT
+
+# Go
+eval $(go env)
+PATH="$PATH:$GOROOT/bin"
+
+source /usr/local/share/python/virtualenvwrapper.sh
+
+alias crashplan-tunnel="ssh -L 4200:localhost:4243 justjake@nomcopter.internal -p 484"
