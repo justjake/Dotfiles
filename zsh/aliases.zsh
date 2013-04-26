@@ -34,7 +34,6 @@ alias aliases="$EDITOR $ZSH_FILES/aliases.zsh"
 # logs
 alias deverror="tail -f ~/.dev-www10-httpd-error.log"
 
-
 # commands
 alias resource="source ~/.zshrc"
 alias sasswatch="sass --watch stylesheets/source:stylesheets"
