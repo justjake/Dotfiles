@@ -23,16 +23,24 @@ function fractal {
 
 # add all the bundles in a DIR to $PATH and $MANPATh
 # a bundle is a directory that contains bin and man, and maybe lib
+
+function add-bundle-to-path {
+    local bundle
+    bundle="$1"
+    if [[ -d "$bundle/bin" ]]; then
+        PATH="$bundle/bin:$PATH"
+    else
+        PATH="$bundle:$PATH"
+    fi
+}
+
 function bundle-dir {
     local BUNDLES
+    local bundle
     BUNDLES="$1"
     if [[ -d "$BUNDLES" ]]; then
         for bundle in "$BUNDLES"/*; do
-            if [[ -d "$bundle"/bin ]]; then
-                PATH="$bundle/bin:$PATH"
-            else
-                PATH="$bundle:$PATH"
-            fi
+            add-bundle-to-path $bundle
         done
     else
         echo "$BUNDLES does not exist"
@@ -83,3 +91,18 @@ Contents:"
 }
     
 
+### install system tools things
+setup-go-with-vim () {
+    if [ -n "$GOROOT" ] ; then
+        # basic scripts
+        echo "linking VIM integration from $GOROOT/misc/vim into ~/.janus"
+        [ ! -e "$HOME/.janus/go-tools" ] && ln -s "$GOROOT/misc/vim" "$HOME/.janus/go-tools"
+
+        # autocomplete
+        echo "Installing gocode for autocomplete"
+        go get -u github.com/nsf/gocode
+        [ ! -e "$HOME/.janus/gocode" ] && ln -s "$GOROOT/src/pkg/github.com/nsf/gocode/vim" "$HOME/.janus/gocode"
+    else
+        echo "GOROOT is unset, cannot link vim tools"
+    fi
+}

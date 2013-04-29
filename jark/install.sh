@@ -3,7 +3,9 @@ DOTFILES_DIR="$HOME/.dotfiles"
 cd "$DOTFILES_DIR"
 
 # pull git submodules
-git submodule update --init --recursive
+if [[ $1 -eq "-r" ]] ; then
+    git submodule update --init --recursive
+fi
 
 # link basic files
 DOTFILES=(
@@ -20,6 +22,7 @@ tmux.conf
 screenrc
 
 vim
+janus
 vimrc.after
 gvimrc.after
 )

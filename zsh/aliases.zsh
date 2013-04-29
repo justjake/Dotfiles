@@ -34,7 +34,6 @@ alias aliases="$EDITOR $ZSH_FILES/aliases.zsh"
 # logs
 alias deverror="tail -f ~/.dev-www10-httpd-error.log"
 
-
 # commands
 alias resource="source ~/.zshrc"
 alias sasswatch="sass --watch stylesheets/source:stylesheets"
@@ -52,6 +51,7 @@ alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000 -L 6667:irc.housing.b
 alias tonic="ssh justjake@tonic.teton-landis.org"
 alias star="ssh cs61a-zz@star.cs.berkeley.edu"
 alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
+alias nomcopter="ssh justjake@nomcopter.com -p 484"
 
 ffmpeg-extract-audio() {
     local src="$1"

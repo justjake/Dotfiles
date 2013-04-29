@@ -1,4 +1,0 @@
-export SSH_CLIENT=""
-export SSH_TTY=""
-export SSH_AUTH_SOCK="/tmp/keyring-Tgldu9/ssh"
-export SSH_CONNECTION=""

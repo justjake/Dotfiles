@@ -1,2 +1,3 @@
 " gvim use monaco font
-set gfn=Monaco\ 7.5
+set gfn=Monaco:h10
+set noantialias
