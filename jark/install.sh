@@ -22,6 +22,7 @@ tmux.conf
 screenrc
 
 vim
+janus
 vimrc.after
 gvimrc.after
 )
