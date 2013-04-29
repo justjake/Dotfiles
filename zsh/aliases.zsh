@@ -53,6 +53,13 @@ alias tonic="ssh justjake@tonic.teton-landis.org"
 alias star="ssh cs61a-zz@star.cs.berkeley.edu"
 alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
 
+ffmpeg-extract-audio() {
+    local src="$1"
+    local dest="$2"
+    ffmpeg -i "$1" -acodec copy -vn "$2"
+}
+
+
 # tmux config: https://github.com/adnichols/tmux_setup
 alias fixssh="source ~/bin/fixssh"
 
