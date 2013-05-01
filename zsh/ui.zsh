@@ -10,6 +10,7 @@ setopt    pushd_ignore_dups
 
 #### Keybinds
 # bindkey -v # VI keybinds # are rather odd on the CLI
+bindkey -e  # I couldn't adapt to VI vs VIM things in bindkey -v
 bindkey ' ' magic-space    # also do history expansion on space
 bindkey "^I" expand-or-complete-with-dots
 bindkey '^[[A' up-line-or-search   # does search if you've entered text
