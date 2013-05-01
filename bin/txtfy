@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+
+# hal or irc?
+PFX="$(hostname | head -c 3)"
+
+if [[ $PFX -eq hal || $PFX -eq irc ]] ; then 
+    EXE="/home/just.jake/prefixes/$PFX/gopath/bin/resizer"
+else 
+    EXE="resizer"
+fi
+
+# defaults for resizer
+$EXE -ft txt -pxr 0.4 "$@"

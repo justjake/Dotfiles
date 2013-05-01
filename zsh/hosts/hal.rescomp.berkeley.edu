@@ -5,7 +5,7 @@ PATH="$PATH:/usr/local/rescomp/bin:/usr/local/rescomp/sbin"
 export PREFIX="$HOME/prefixes/hal"
 # Go nuts!
 export GOROOT="$PREFIX/go"
-export GOPATH="$HOME/src/go"
+export GOPATH="$PREFIX/gopath"
 PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 
 

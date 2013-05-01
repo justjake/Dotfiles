@@ -1,9 +1,18 @@
 # Grab screen EVERY TIME
 # bad idea
 # exec screen -DR
-PREFIX="$HOME/prefixes/irc"
+export PREFIX="$HOME/prefixes/irc"
 source "$PREFIX"/bin/activate
 alias stealthirssi="irssi --home=~/.stealthirssi"
+alias resume="screen -dr IRC"
+alias begin="screen -S IRC"
+
+
+
+# Go nuts!
+export GOROOT="$PREFIX/go"
+export GOPATH="$PREFIX/gopath"
+export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 
 getgif() {
     wget -O ~/public_html/gif/"$2".gif "$1"
