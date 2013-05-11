@@ -10,6 +10,7 @@ setopt    pushd_ignore_dups
 
 #### Keybinds
 # bindkey -v # VI keybinds # are rather odd on the CLI
+bindkey -e   # all hail our new emacs overlords
 bindkey ' ' magic-space    # also do history expansion on space
 bindkey "^I" expand-or-complete-with-dots
 bindkey '^[[A' up-line-or-search   # does search if you've entered text
@@ -140,7 +141,7 @@ title () {
     print -Pn "\ek$a\e\\"      # screen title (in ^A")
     print -Pn "\e_$2   \e\\"   # screen location
     ;;
-  xterm*|rxvt)
+  xterm*|rxvt*)
     print -Pn "$xtermtitle" # plain xterm title
     ;;
   esac
