@@ -22,6 +22,9 @@ set shiftwidth=4
 " Makefiles don't like spaces
 au FileType make set noexpandtab
 
+" 2-space indents for Coffeescript
+au FileType coffee set sw=2 ts=2
+
 " Fold Conf Files
 au FileType conf syn region confBraces start="{" end="}" transparent fold
 
@@ -33,7 +36,7 @@ set t_kD=[3~
 inoremap <silent> <C-g> <ESC>u:set paste<CR>.:set nopaste<CR>gi
 
 " Tab Navigation
-map <C-t> <ESC>:tabnew
+map <C-t> <ESC>:tabnew<CR>
 
 " Enable using the mouse to click to locations in the file!
 " This also means vim takes control of the scrollwheel intelligently.
