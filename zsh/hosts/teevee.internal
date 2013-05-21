@@ -1,6 +1,9 @@
 # Homebrew
 setopt ALL_EXPORT
 PATH="/usr/local/bin:$PATH"
+PKG_CONFIG_PATH="/opt/X11/lib/pkgconfig"
+XDG_CONFIG_HOME="$HOME/.config"
+USERWM="i3" # cool
 
 # RVM 
 source "$HOME/.rvm/scripts/rvm"
@@ -9,15 +12,20 @@ PATH="$PATH:$HOME/.rvm/bin"
 # Virtualenv
 WORKON_HOME="$HOME/Library/VirtualEnvs"
 mkdir -p "$WORKON_HOME"
-setopt no_ALL_EXPORT
 
 # Go
 eval $(go env)
-PATH="$PATH:$GOROOT/bin"
+export GOPATH="$HOME/src/go"
+PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
+
+# NPM packages in homedir
+# NPM_PACKAGES="$HOME/.npm-packages"
+PATH="$PATH:/usr/local/share/npm/bin"
+
+setopt no_ALL_EXPORT
 
 source /usr/local/share/python/virtualenvwrapper.sh
 
-alias crashplan-tunnel="ssh -L 4200:localhost:4243 justjake@nomcopter.internal -p 484"
-
 # aw yiss
-use-utf8-clock
+# although actually quite useless
+# use-utf8-clock
