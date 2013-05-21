@@ -47,12 +47,13 @@ function middleman-dev {
 alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
 
 # SSH Hosts
-alias hal="ssh just.jake@hal.rescomp.berkeley.edu"
-alias irc="ssh just.jake@irc.housing.berkeley.edu -D 50000 -L 6667:irc.housing.berkeley.edu:6667"
+alias hal="ssh jitl@hal.rescomp.berkeley.edu"
+alias irc="ssh jitl@irc.housing.berkeley.edu -D 50000 -L 6667:irc.housing.berkeley.edu:6667"
 alias tonic="ssh justjake@tonic.teton-landis.org"
 alias star="ssh cs61a-zz@star.cs.berkeley.edu"
 alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
 alias nomcopter="ssh justjake@nomcopter.com -p 484"
+alias stargate="ssh jitl@stargate.housing.berkeley.edu"
 
 ffmpeg-extract-audio() {
     local src="$1"

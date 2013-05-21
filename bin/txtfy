@@ -1,13 +1,36 @@
 #!/usr/bin/env zsh
+set -e # NO YOLO
 
-# hal or irc?
-PFX="$(hostname | head -c 3)"
+RESCOMP_PREFIXES="/home/jitl/prefixes"
 
-if [[ $PFX -eq hal || $PFX -eq irc ]] ; then 
-    EXE="/home/just.jake/prefixes/$PFX/gopath/bin/resizer"
-else 
-    EXE="resizer"
+# Print usage if you derp
+if [[ $#@ == 0 ]] ; then
+    echo "whelp."
 fi
 
-# defaults for resizer
-$EXE -ft txt -pxr 0.4 "$@"
+# handle rescomp stuff - different prefexes
+HN="$(hostname)"
+if [[ "$HN" == *'rescomp.berkeley.edu' || "$HN" == 'irc.housing.berkeley.edu' ]] ; then
+    
+    if [[ $(uname) == "Linux" ]] ; then
+        PFX="irc" # should work for the redhat workstations
+    else
+        PFX="hal" # hurr durr freebsd
+    fi 
+    # use specific one, for other rescommies
+    EXE="$RESCOMP_PREFIXES/$PFX/gopath/bin/resizer"
+else
+    EXE="resizer" # assume the user has it in path
+fi
+echo "using $EXE"
+
+last="$@[$#@]"
+if [[ "$last" == 'http://'* || "$last" == 'https://'* ]] ; then
+    # slice off the last
+    params=($@[1,$#@-1])
+    curl -s "$last" | $EXE -ft txt -pxr 0.4 "${params[@]}"
+else
+    # params are overwriteable
+    $EXE -ft txt -pxr 0.4 "$@"
+fi 
+

@@ -4,7 +4,7 @@
 ! -------------------------------------------------------------
 !urxvt*termName:  rxvt-256color
 urxvt*loginShell:         true
-!urxvt*scrollBar:         false
+urxvt*scrollBar:         false
 urxvt*secondaryScroll:    true
 urxvt*saveLines:         65535
 urxvt*cursorBlink:       false
@@ -26,8 +26,8 @@ urxvt*cutchars:        '"'()*<>[]{|}
 ! ------ Appearance -------------------------------------------
 ! urxvt*font:     -xos4-terminus-medium-*-*-*-12-*-*-*-*-*-iso8859-2
 ! urxvt*boldFont: -xos4-terminus-bold-*-*-*-12-*-*-*-*-*-iso8859-2
-URxvt.font: xft:monaco:size=10:antialias=false
-URxvt.boldFont: xft:monaco:size=10:antialias=false
+URxvt.font: xft:monaco:size=7.5:antialias=false
+URxvt.boldFont: xft:monaco:size=7.5:antialias=false
 
 
 !
@@ -39,7 +39,8 @@ urxvt*cursorColor: #7F7F7F
 !urxvt*transparent:true
 ! 
 ! Zenburn color-scheme
-urxvt*background:  #272728
+urxvt*background:  #3f3f3f
+!urxvt*background:  #272728
 urxvt*foreground:  #D9DAD8
 ! black + red
 !urxvt*color0:     #3f3f3f

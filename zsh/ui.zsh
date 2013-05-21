@@ -141,7 +141,7 @@ title () {
     print -Pn "\ek$a\e\\"      # screen title (in ^A")
     print -Pn "\e_$2   \e\\"   # screen location
     ;;
-  xterm*|rxvt)
+  xterm*|rxvt*)
     print -Pn "$xtermtitle" # plain xterm title
     ;;
   esac
