@@ -9,6 +9,9 @@
 # layout, use the i3-config-wizard
 #
 
+#### STARTUP
+exec ~/.i3/startup.sh
+
 # User settings
 
 # global super key - option/alt
