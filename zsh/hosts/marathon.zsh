@@ -1,7 +1,18 @@
 source "$ZSH_FILES/hosts/ubuntu.zsh"
 
 setopt ALL_EXPORT
+
+#### default apps
+TERMINAL="roxterm"
 BROWSER="google-chrome"
+
+
+# Golang!
+GOPATH="$HOME/go"
+eval $(go env)
+PATH="$PATH:$GOPATH/bin"
+
+## java config
 JAVA_HOME="/usr/lib/jvm/jdk1.7.0"
 M2_HOME="$HOME/Bundles/apache-maven-3.0.4"
 
