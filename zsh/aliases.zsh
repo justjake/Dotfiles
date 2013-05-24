@@ -57,4 +57,8 @@ alias stargate="ssh jitl@stargate.housing.berkeley.edu"
 # tmux config: https://github.com/adnichols/tmux_setup
 alias fixssh="source ~/bin/fixssh"
 
+for n in $(seq 15) ; do
+    alias dev$n="ssh dev-www$n.rescomp.berkeley.edu"
+done
+
 setopt NO_ALL_EXPORT
