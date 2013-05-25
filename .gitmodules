@@ -13,3 +13,9 @@
 [submodule "janus/vim-less"]
 	path = janus/vim-less
 	url = https://github.com/groenewege/vim-less.git
+[submodule "janus/twiki-syntax"]
+	path = janus/twiki-syntax
+	url = https://github.com/vim-scripts/TWiki-Syntax.git
+[submodule "lscolors/256"]
+	path = lscolors/256
+	url = https://github.com/trapd00r/LS_COLORS.git
