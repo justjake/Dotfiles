@@ -42,6 +42,14 @@ function middleman-dev {
     middleman
 }
 
+# Paths
+if [[ "$HOSTNAME" == *rescomp.berkeley.edu ]] ; then
+    export SVNCODE="https://svn.rescomp.berkeley.edu/code"
+    export SVNTMPL="https://svn.rescomp.berkeley.edu/marketing"
+    export CODE="/usr/code/jitl/"
+fi
+
+
 # rdesktop
 alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
 
