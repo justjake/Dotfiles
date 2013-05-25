@@ -1,0 +1,8 @@
+# fluxbox startup-script
+# is actually some sort of Xsession manager now
+# because F*CK THE GDM PO-LICE
+#
+# Just link $HOME/.xsession to something in 
+# ~/prefixes/workstation/xinits/??? to change
+export DISPLAY
+exec $HOME/.xsession-fluxbox

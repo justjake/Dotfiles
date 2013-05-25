@@ -42,6 +42,14 @@ function middleman-dev {
     middleman
 }
 
+# Paths
+if [[ "$HOSTNAME" == *rescomp.berkeley.edu ]] ; then
+    export SVNCODE="https://svn.rescomp.berkeley.edu/code"
+    export SVNTMPL="https://svn.rescomp.berkeley.edu/marketing"
+    export CODE="/usr/code/jitl/"
+fi
+
+
 # rdesktop
 alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
 
@@ -56,5 +64,9 @@ alias stargate="ssh jitl@stargate.housing.berkeley.edu"
 
 # tmux config: https://github.com/adnichols/tmux_setup
 alias fixssh="source ~/bin/fixssh"
+
+for n in $(seq 15) ; do
+    alias dev$n="ssh dev-www$n.rescomp.berkeley.edu"
+done
 
 setopt NO_ALL_EXPORT
