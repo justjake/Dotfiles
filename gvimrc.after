@@ -1,3 +1,10 @@
 " gvim use monaco font
 set gfn=Monaco:h10
+if has("gui_running")
+    if has("gui_gtk2")
+        set guifont=Monaco\ 7.5
+    elseif has("gui_win32")
+        set guifont=Consolas:h11:cANSI
+    endif
+endif
 set noantialias
