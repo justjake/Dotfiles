@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+# FB run with some options, yo
+
+exec fbrun -font monaco-7.5 -bg "black" -fg "ivory" -na "$@"
