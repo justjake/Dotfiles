@@ -26,7 +26,7 @@ alias l='ls -CF'
 alias prefix="cd $PREFIX"
 
 # edit settings
-[[ -f "$ZSH_FILES/hosts/$HOSTNAME.zsh" ]] && alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME.zsh"
+alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME.zsh"
 [[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] &&     alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME"
 alias globalsettings="$EDITOR ~/.zshrc"
 alias aliases="$EDITOR $ZSH_FILES/aliases.zsh"
@@ -48,6 +48,13 @@ if [[ "$HOSTNAME" == *rescomp.berkeley.edu ]] ; then
     export SVNTMPL="https://svn.rescomp.berkeley.edu/marketing"
     export CODE="/usr/code/jitl/"
 fi
+
+function tmux-shared () {
+    local socket_name="$1"
+    tmux -S /tmp/"$socket_name" new-session 
+    chmod 777 /tmp/"$socket_name"
+    tmux -S /tmp/"$socket_name" attach
+}
 
 
 # rdesktop
