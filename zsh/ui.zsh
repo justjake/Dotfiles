@@ -125,7 +125,9 @@ use-utf8-clock () {
 }
 
 #### LS Colors
-eval $(dircolors -b "$DOTFILES/lscolors/dircolors.zenburn.older")
+command-exists dircolors &&  eval $(dircolors  -b "$DOTFILES/lscolors/dircolors.zenburn.older")
+command-exists gdircolors && eval $(gdircolors -b "$DOTFILES/lscolors/dircolors.zenburn.older")
+
 
 
 #### Window Title
