@@ -243,6 +243,13 @@ statusbar = {
         barend = { priority = "100"; alignment = "right"; };
       };
     };
+    awl_2 = {
+      items = {
+        barstart = { priority = "100"; };
+        awl_2 = { };
+        barend = { priority = "100"; alignment = "right"; };
+      };
+    };
   };
 };
 settings = {
@@ -261,9 +268,11 @@ settings = {
     theme = "more_readable.theme";
     bell_beeps = "yes";
     beep_msg_level = "MSGS NOTICES DCC DCCMSGS HILIGHT";
+    autolog = "yes";
   };
 };
 hilights = ( { nick = "yes"; word = "yes"; } );
 ignores = (
   { level = "JOINS PARTS QUITS NICKS"; channels = ( "#tt" ); }
 );
+logs = { };
