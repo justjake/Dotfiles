@@ -19,6 +19,12 @@ function fractal {
     echo -n "\e[49m"
 }
 
+function use-office-workstation {
+    cd "$ZSH_FILES/hosts"
+    ln -s all-office-workstations.zsh $(hostname).zsh
+    popd
+}
+
 #### setup stuff
 
 # add all the bundles in a DIR to $PATH and $MANPATh
@@ -48,6 +54,10 @@ function bundle-dir {
 }
 
 #### Utilities
+
+function command-exists {
+    command -v "$1" >/dev/null 2>&1
+}
 
 function this-script-dir {
     echo "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

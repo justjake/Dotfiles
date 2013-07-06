@@ -26,10 +26,12 @@ OnRightGrip Move1 :StartResizing bottomright
 OnTitlebar Control Mouse1 :StartTabbing
 
 # double click on the titlebar to shade
-OnTitlebar Double Mouse1 :Minimize
+OnTitlebar Double Mouse1 :Shade
 
 # left click on the titlebar to move the window
 OnTitlebar Mouse1 :MacroCmd {Raise} {Focus} {ActivateTab}
+OnTab      Mouse1 :ActivateTab
+OnTitlebar Mouse1 :ActivateTab
 OnTitlebar Move1  :StartMoving
 
 # middle click on the titlebar to tab windows together
@@ -83,7 +85,14 @@ Mod4 9 :Tab 9
 Mod1 Return :Exec x-terminal-emulator
 
 # open a dialog to run programs
-Mod1 r :Exec my-fbrun
+Mod1 Shift r :Exec my-fbrun
+
+# lock screen
+Mod4 l :Exec gnome-screensaver-command -l
+
+# Menu management
+Mod4 m :ToggleCmd {RootMenu} {HideMenus}
+Mod4 Shift m :HideMenus
 
 # current window commands
 Mod1 Shift c :Close
