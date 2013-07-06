@@ -97,12 +97,12 @@ setup-go-with-vim () {
         # basic scripts
         echo "linking VIM integration from $GOROOT/misc/vim into ~/.janus"
         [ ! -e "$HOME/.janus/go-tools" ] && ln -s "$GOROOT/misc/vim" "$HOME/.janus/go-tools"
-
-        # autocomplete
-        echo "Installing gocode for autocomplete"
-        go get -u github.com/nsf/gocode
-        [ ! -e "$HOME/.janus/gocode" ] && ln -s "$GOROOT/src/pkg/github.com/nsf/gocode/vim" "$HOME/.janus/gocode"
     else
-        echo "GOROOT is unset, cannot link vim tools"
+        echo "Goroot unset, cannot link go-tools"
     fi
+
+    # autocomplete
+    echo "Installing gocode for autocomplete"
+    go get -u github.com/nsf/gocode
+    [ ! -e "$HOME/.janus/gocode" ] && ln -s "$GOROOT/src/pkg/github.com/nsf/gocode/vim" "$HOME/.janus/gocode"
 }
