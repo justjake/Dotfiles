@@ -6,11 +6,11 @@ setopt ALL_EXPORT
 TERMINAL="roxterm"
 BROWSER="google-chrome"
 
-
 # Golang!
+GOROOT="/usr/local/go"
 GOPATH="$HOME/go"
+PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
 eval $(go env)
-PATH="$PATH:$GOPATH/bin"
 
 ## java config
 JAVA_HOME="/usr/lib/jvm/jdk1.7.0"
@@ -65,5 +65,6 @@ setopt no_ALL_EXPORT
 # Aliases
 alias nomcopter="ssh justjake@nomcopter.com -p 484"
 alias hosing="ssh justjake@nomcopter.com -p 484" #TODO: run the net command from kevin's homedir
+alias stargate="ssh -i ~/.ssh/id_rsa.wopr jitl@stargate.housing.berkeley.edu"
 
 #alias tmux because it won't 256 colors correclty
