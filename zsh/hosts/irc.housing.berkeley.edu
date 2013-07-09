@@ -1,5 +1,5 @@
 # share config
-source "$ZSH/hosts/rhel-headless.zsh"
+source "$ZSH_FILES/hosts/rhel-headless.zsh"
 
 alias stealthirssi="irssi --home=~/.stealthirssi"
 alias resume="screen -dr IRC"
