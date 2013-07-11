@@ -3,7 +3,7 @@ set rtp+=$GOROOT/misc/vim
 
 " pretty UI with vim-airline, a nice statusline
 let g:airline_powerline_fonts=1
-leg g:airline_theme='badwolf'
+let g:airline_theme='badwolf'
 
 " Completion
 let g:SuperTabDefaultCompletionType = "context"
