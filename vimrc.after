@@ -2,8 +2,8 @@
 set rtp+=$GOROOT/misc/vim
 
 " pretty UI with vim-airline, a nice statusline
-let g:airline_powerline_fonts=1
 let g:airline_theme='badwolf'
+let g:airline_powerline_fonts=1
 
 " Completion
 let g:SuperTabDefaultCompletionType = "context"
@@ -28,6 +28,9 @@ au FileType make set noexpandtab
 
 " 2-space indents for Coffeescript
 au FileType coffee set sw=2 ts=2
+
+" fucking textwrap
+au FileType go set textwidth=0 wrapmargin=0
 
 " Fold Conf Files
 au FileType conf syn region confBraces start="{" end="}" transparent fold

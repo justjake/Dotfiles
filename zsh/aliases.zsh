@@ -89,5 +89,8 @@ alias devaccess='sudo /usr/bin/tail -f /var/log/httpd-access.log'
 #alias fixlogs='sudo /usr/local/etc/rc.d/syslog-ng restart'
 alias websync='sudo svn export --force $SVNTMPL/webtree/ /usr/local/www/rescomp/docs/'
 
+# what we do
+alias project="cd $PROJECT; ls; which git >/dev/null 2>&1 && git status"
+
 
 setopt NO_ALL_EXPORT
