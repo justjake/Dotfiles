@@ -1,0 +1,77 @@
+#!/usr/bin/env zsh
+####
+# Dotfiles/meta/install.sh
+# simple script to link my dotfiles into $HOME
+# @author Jake Teton-Landis <just.1.jake@gmail.com>
+#
+# Usage:
+# ~/.dotfiles/meta/install.sh [EXTRAS...]
+# where "extras" is any installation function defined here:
+#   - submodules: get all git submodules
+#   - ssh-config: link my ssh-config into ~/.ssh/config
+####
+
+# where the dotfiles git repo is checked out to
+DOTFILES_DIR="$HOME/.dotfiles"
+# list of files to link into homedir
+DOTFILES=(
+zshrc
+zsh
+
+gitconfig
+gitignore_global
+
+hgrc
+
+bin
+tmux.conf
+screenrc
+
+vim
+janus
+vimrc.after
+gvimrc.after
+)
+
+# hide command output
+alias -g no-output=">/dev/null 2>&1"
+
+# ssh
+function ssh-config () {
+    mkdir -p "$HOME/.ssh/"
+    ln -s "$DOTFILES_DIR/ssh_config" "$HOME/.ssh/config"
+    chmod 0600 "$DOTIFLES_DIR/ssh_config"
+}
+
+# git
+function submodules () {
+    if which git no-output; then 
+        pushd "$DOTFILES_DIR" no-output
+        git submodule update --init --recursive
+        popd no-output
+    else
+        echo "Cannot get submodules -- git not found"
+    fi
+}
+
+# link basic files
+function dotfiles () {
+    pushd "$HOME" no-output
+    for file in "${DOTFILES[@]}"; do
+        if [ ! -f "$HOME/${file}" ]; then
+            echo "Linked .dotfiles/${file} -> ~/${file}"
+            ln -s ".dotfiles/${file}" ".${file}"
+        else
+            echo "skipped because file exists: ~/${file}"
+        fi
+    done
+    popd no-output
+}
+
+# install basics only by default
+dotfiles
+
+# and whatever else the user requests
+for cmd in "$@"; do
+    $cmd
+done
