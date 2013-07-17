@@ -38,12 +38,13 @@ function add-bundle-to-path {
     else
         PATH="$bundle:$PATH"
     fi
+
+    [[ -d "$bundle/share/man" ]] && MANPATH="$MANPATH:$bundle/share/man"
 }
 
 function bundle-dir {
-    local BUNDLES
+    local BUNDLES="$1"
     local bundle
-    BUNDLES="$1"
     if [[ -d "$BUNDLES" ]]; then
         for bundle in "$BUNDLES"/*; do
             add-bundle-to-path $bundle
