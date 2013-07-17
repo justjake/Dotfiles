@@ -68,3 +68,5 @@ alias hosing="ssh justjake@nomcopter.com -p 484" #TODO: run the net command from
 alias stargate="ssh -i ~/.ssh/id_rsa.wopr jitl@stargate.housing.berkeley.edu"
 
 #alias tmux because it won't 256 colors correclty
+
+alias project="cd ~/go/src/github.com/justjake/mail; ls"
