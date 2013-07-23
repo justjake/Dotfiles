@@ -1,8 +1,9 @@
 #!/usr/bin/env zsh
-
 DOTFILE_MODULES="$DOTFILES/modules"
 
 # ZSH Functions
+alias -g no-output=">/dev/null 2>&1"
+
 function fractal {
    local lines columns colour a b p q i pnew
    ((columns=COLUMNS-1, lines=LINES-1, colour=0))
@@ -19,29 +20,6 @@ function fractal {
     echo -n "\e[49m"
 }
 
-function use-office-workstation {
-    cd "$ZSH_FILES/hosts"
-    ln -s all-office-workstations.zsh $(hostname).zsh
-    popd
-}
-
-#### setup stuff
-
-# add all the bundles in a DIR to $PATH and $MANPATh
-# a bundle is a directory that contains bin and man, and maybe lib
-
-function add-bundle-to-path {
-    local bundle
-    bundle="$1"
-    if [[ -d "$bundle/bin" ]]; then
-        PATH="$bundle/bin:$PATH"
-    else
-        PATH="$bundle:$PATH"
-    fi
-
-    [[ -d "$bundle/share/man" ]] && MANPATH="$MANPATH:$bundle/share/man"
-}
-
 function bundle-dir {
     local BUNDLES="$1"
     local bundle
@@ -54,10 +32,28 @@ function bundle-dir {
     fi
 }
 
+
+#### setup stuff
+# a bundle is a UNIX prefix
+# this prepends the bundle's directories to your various tool
+# load paths, so they take precedence over system versions
+
+function add-bundle-to-path {
+    local bundle="$1"
+    [[ -d "$bundle/bin" ]] && export PATH="$bundle/bin:$PATH"
+    [[ -d "$bundle/share/man" ]] && export MANPATH="$bundle/share/man:$MANPATH"
+    [[ -d "$bundle/lib" ]] && export LD_LIBRARY_PATH="$bundle/lib:$LD_LIBRARY_PATH"
+    [[ -d "$bundle/lib64" ]] && export LD_LIBRARY_PATH="$bundle/lib64:$LD_LIBRARY_PATH"
+    [[ -d "$bundle/lib/pkgconfig" ]] && export PKG_CONFIG_PATH="$bundle/lib/pkgconfig"
+
+    # add sub folders like "usr"
+    [[ -d "$bundle/usr" ]] && add-bundle-to-path "$bundle/usr"
+}
+
 #### Utilities
 
 function command-exists {
-    command -v "$1" >/dev/null 2>&1
+    command -v "$1" no-output
 }
 
 function this-script-dir {
@@ -67,6 +63,7 @@ function this-script-dir {
 function expand-string {
     eval echo "$1"
 }
+
 
 #### dotfile modules 
 # folders that go someplace other than ~/ that have settings
@@ -101,6 +98,7 @@ Contents:"
     fi
 }
     
+#### Configurators
 
 ### install system tools things
 setup-go-with-vim () {
@@ -116,4 +114,11 @@ setup-go-with-vim () {
     else
         echo "GOROOT is unset, cannot link vim tools"
     fi
+}
+
+# use office client setup for the current host
+use-office-client () {
+    pushd "$ZSH_FILES/hosts/" no-output
+    ln -s "all-office-workstations.zsh" "`hostname`.zsh"
+    popd no-output
 }
