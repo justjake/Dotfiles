@@ -13,11 +13,11 @@ the things in a list into your homedir. You should at least let it link
 `zshrc` and `zsh` because if you don't, what's the point?
 
     $ git clone https://github.com/justjake/Dotfiles ~/.dotfiles
-    $ vim ~/.dotfiles/jark/install.sh
+    $ vim ~/.dotfiles/meta/install.sh
 
 ... you make your changes to what you want linked ...
 
-    $ zsh ~/.dotfiles/jark/install.sh
+    $ zsh ~/.dotfiles/meta/install.sh [submodules] [ssh-config]
 
 ## Configuration
 
