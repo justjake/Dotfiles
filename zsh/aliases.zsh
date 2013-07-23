@@ -1,7 +1,6 @@
 ###
 # aliases
 ###
-setopt ALL_EXPORT
 # ls differs in FreeBSD and Linux
 if [[ FreeBSD == $(uname) || Darwin == $(uname) ]] ; then
         alias ls='ls -G'
@@ -13,23 +12,26 @@ fi
 alias mutt="mutt -y"
 
 # colored commands
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+local grep_options="--color=auto --exclude-dir='.svn'"
+for grep_type in grep fgrep egrep ; do
+    alias $grep_type="$grep_type $grep_options"
+done
 
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# directories
-alias prefix="cd $PREFIX"
+# directories, single-quoted for dynamic variables
+alias prefix='cd $PREFIX; ls'
+alias project='cd $PROJECT; ls; which git >/dev/null 2>&1 && git status'
 
 # edit settings
 alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME.zsh"
-[[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] &&     alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME"
-alias globalsettings="$EDITOR ~/.zshrc"
+[[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] && alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME"
+alias settings="$EDITOR ~/.zshrc"
 alias aliases="$EDITOR $ZSH_FILES/aliases.zsh"
+alias vimrc="$EDITOR $DOTFILES/vimrc.after"
 
 # commands
 alias resource="source ~/.zshrc"
@@ -53,24 +55,32 @@ function tmux-shared () {
     tmux -S /tmp/"$socket_name" attach
 }
 
-goproj="$GOPATH/src/github.com/justjake/j3"
-
 # rdesktop
 alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
 
-# SSH Hosts
-alias hal="ssh jitl@hal.rescomp.berkeley.edu"
-alias irc="ssh jitl@irc.housing.berkeley.edu -D 50000 -L 6667:irc.housing.berkeley.edu:6667"
-alias tonic="ssh justjake@tonic.teton-landis.org"
-alias star="ssh cs61a-zz@star.cs.berkeley.edu"
-alias fstar="sftp cs61a-zz@star.cs.berkeley.edu"
-alias nomcopter="ssh justjake@nomcopter.com -p 484"
-alias stargate="ssh jitl@stargate.housing.berkeley.edu"
-alias stargate="ssh -A -i ~/.ssh/id_rsa jitl@stargate.housing.berkeley.edu"
+#### SSH 
+
+alias unlock="ssh-add ~/.ssh/id_rsa.wopr"
+
+typeset -A ssh_hosts
+ssh_hosts=(
+# rescomp
+hal         "hal.rescomp.berkeley.edu"
+irc         "irc.housing.berkeley.edu"
+architect   "thearchitect.rescomp.berkeley.edu"
+devbox      "dev-www14.rescomp.berkeley.edu"
+
+# personal
+tonic       "tonic.teton-landis.org"
+nomcopter   "nomcopter.com"
+)
+for short in ${(k)ssh_hosts}; do
+    alias $short="ssh $ssh_hosts[$short]"
+done
+
 
 # tmux config: https://github.com/adnichols/tmux_setup
 alias fixssh="source ~/bin/fixssh"
-
 
 #### Rescomp Dev
 for n in {1..15} ; do
@@ -89,8 +99,3 @@ alias devaccess='sudo /usr/bin/tail -f /var/log/httpd-access.log'
 #alias fixlogs='sudo /usr/local/etc/rc.d/syslog-ng restart'
 alias websync='sudo svn export --force $SVNTMPL/webtree/ /usr/local/www/rescomp/docs/'
 
-# what we do
-alias project="cd $PROJECT; ls; which git >/dev/null 2>&1 && git status"
-
-
-setopt NO_ALL_EXPORT
