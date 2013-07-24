@@ -17,3 +17,5 @@
 	br = branch
 [core]
 	excludesfile = ~/.dotfiles/gitignore_global
+[github]
+	user = justjake
