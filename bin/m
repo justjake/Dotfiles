@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-USAGE = """usage: %prog EXPRESSION
-       %prog -i
+USEAGE = """usage: %prog [-v|--verbose] <expression>
+       %prog [-i|--interative] [ <expression> ]
+       %prog -h|--help
 
 `m` performs quick math calculations by evaluating its command-line
 argments as a single python expression. It also helpfully imports
@@ -9,16 +10,34 @@ everything from `math` so you can easily preform complex calculations."""
 # TODO: replace all python with 2.7 so we can use argparse
 from optparse import OptionParser
 
+import sys
 import code
 from math import *
 
 def parse_args():
     """Retrieve the command-line options"""
-    parser = OptionParser(usage=USAGE)
+    parser = OptionParser(usage=USEAGE)
     parser.add_option("-i", "--interactive", default=False,
             action="store_true",
             help="Enter an interactive interpreter")
+    parser.add_option("-v", "--verbose", default=False,
+            action="store_true",
+            help="Print stack traces")
     return (parser.parse_args()) + (parser,)
+
+def codefy(args):
+    """Convert a sequence into a code string."""
+    return " ".join(args)
+
+def run_verbose(args):
+    eval(codefy(args))
+    sys.exit(0)
+
+def run(args):
+    try:
+        run_verbose(args)
+    except:
+        sys.exit(1)
 
 def main():
     options, args, parser = parse_args()
@@ -28,11 +47,21 @@ def main():
 
     if options.interactive:
         # enter a python prompt
-        code.InteractiveConsole(locals=globals()).interact()
-        return
+        console = code.InteractiveConsole(locals=globals())
 
-    # evaluate and print
-    print eval(" ".join(args))
+        if len(args) > 0:
+            console.push(codefy(args))
+
+        console.interact("")
+        sys.exit(0)
+
+    # don't catch exceptions
+    if options.verbose:
+        run_verbose(args)
+
+    # catch exceptions but exit 1 on error
+    run(args)
+
 
 if __name__ == "__main__":
     main()
