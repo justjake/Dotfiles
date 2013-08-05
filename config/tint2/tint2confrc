@@ -1,0 +1,7 @@
+#---------------------------------------------
+# TINT2CONF CONFIG FILE
+default_theme = /home/justjake/.config/tint2/zenburn_small.tint2rc
+cmd_property = /usr/bin/env python /usr/bin/tintwizard.py
+width = 1092
+height = 645
+
