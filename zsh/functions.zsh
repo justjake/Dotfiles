@@ -50,6 +50,38 @@ function add-bundle-to-path {
     [[ -d "$bundle/usr" ]] && add-bundle-to-path "$bundle/usr"
 }
 
+# svn
+
+# merge a python package to release
+function svn-merge-to-release {
+    # params
+    local pkg="$1"
+    local rmt="https://svn.rescomp.berkeley.edu/marketing/python/branches/STABLE/$pkg"
+
+    # local vars
+    local my_local_path="/usr/code/$USER/marketing/python/branches"
+
+    # get logs from stable
+    svn log -l 5 "$rmt"
+
+    # read in rev number
+    echo "which rev number for a -c merge?"
+    echo -n "R: "
+    read rev
+
+    pushd "$my_local_path/RELEASE/$pkg"
+    # dry merge
+    svn merge --dry-run -c "$rev" "$rmt" .
+
+    # wet merge ... we wait at the user password field the second time
+    svn merge -c "$rev" "$rmt" .
+
+    popd
+}
+
+
+
+
 #### Utilities
 
 function command-exists {
