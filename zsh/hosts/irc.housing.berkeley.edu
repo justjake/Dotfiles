@@ -5,6 +5,8 @@ alias stealthirssi="irssi --home=~/.stealthirssi"
 alias resume="screen -dr IRC"
 alias begin="screen -S IRC"
 
+add-bundle-to-path "$PREFIX/bundles/sqlite3"
+
 getgif() {
     wget -O ~/public_html/gif/"$2".gif "$1"
 }

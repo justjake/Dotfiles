@@ -44,7 +44,8 @@ function add-bundle-to-path {
     [[ -d "$bundle/share/man" ]] && export MANPATH="$bundle/share/man:$MANPATH"
     [[ -d "$bundle/lib" ]] && export LD_LIBRARY_PATH="$bundle/lib:$LD_LIBRARY_PATH"
     [[ -d "$bundle/lib64" ]] && export LD_LIBRARY_PATH="$bundle/lib64:$LD_LIBRARY_PATH"
-    [[ -d "$bundle/lib/pkgconfig" ]] && export PKG_CONFIG_PATH="$bundle/lib/pkgconfig"
+    [[ -d "$bundle/lib/pkgconfig" ]] && export PKG_CONFIG_PATH="$bundle/lib/pkgconfig:$PKG_CONFIG_PATH"
+    [[ -d "$bundle/include" ]] && export C_INCLUDE_PATH="$bundle/include:$C_INCLUDE_PATH"
 
     # add sub folders like "usr"
     [[ -d "$bundle/usr" ]] && add-bundle-to-path "$bundle/usr"

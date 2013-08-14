@@ -28,6 +28,7 @@ au FileType make set noexpandtab
 
 " 2-space indents for Coffeescript
 au FileType coffee set sw=2 ts=2
+au FileType ruby set sw=2 ts=2
 
 " fucking textwrap
 au FileType go set textwidth=0 wrapmargin=0

@@ -1,6 +1,7 @@
 # Include standard prefix
 PREFIX="$HOME/prefixes/workstation"
-add-bundle-to-path "$PREFIX"
+# add-bundle-to-path "$PREFIX/derp" #glibc 2
+# add-bundle-to-path "$PREFIX"
 
 # Go
 export GOROOT="$PREFIX/go"
@@ -15,6 +16,7 @@ export PATH
 
 # Aliases
 alias tbird="thunderbird & disown"
+alias open="gnome-open"
 
 # deal with Gnome Terminal being silly
 if [[ $COLORTERM == "gnome-terminal" ]] ; then
