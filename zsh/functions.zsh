@@ -53,13 +53,10 @@ function add-bundle-to-path {
 # svn
 
 # merge a python package to release
-function svn-merge-to-release {
-    # params
-    local pkg="$1"
-    local rmt="https://svn.rescomp.berkeley.edu/marketing/python/branches/STABLE/$pkg"
 
-    # local vars
-    local my_local_path="/usr/code/$USER/marketing/python/branches"
+function svn-guided-merge {
+    local rmt="$1"
+    local my_local_path="$2"
 
     # get logs from stable
     svn log -l 5 "$rmt"
@@ -69,7 +66,7 @@ function svn-merge-to-release {
     echo -n "R: "
     read rev
 
-    pushd "$my_local_path/RELEASE/$pkg"
+    pushd "$my_local_path"
     # dry merge
     svn merge --dry-run -c "$rev" "$rmt" .
 
@@ -79,6 +76,51 @@ function svn-merge-to-release {
     popd
 }
 
+export SVN_REMOTE_ROOT="https://svn.rescomp.berkeley.edu/code/python"
+export SVN_LOCAL_ROOT="/usr/code/$USER/python"
+
+function usage-correct {
+    # first item is number of items needed in call
+    # secord item is a usage string that will be printed
+    # remainint items should be the args that were passed to the 
+    # parent function
+    local needed_args="$1"
+    local help_text="$2"
+    (( args_count = ${#@} - 2 ))
+
+    if [ $args_count < $needed_args ] ; then
+        echo "$help_text"
+        return 1
+    fi
+
+    return 0
+}
+
+function svn-merge-stable-release {
+    # params
+    local pkg="$1"
+    local rmt="$SNV_REMOTE_ROOT/branches/STABLE/$pkg"
+    local full_local_pkg="$SVN_LOCAL_ROOT/branches/RELEASE/$pkg"
+
+    svn-guided-merge "$rmt" "$full_local_pkg"
+}
+
+function svn-merge-release-stable {
+    # params
+    local pkg="$1"
+    local rmt="$SVN_REMOTE_ROOT/branches/RELEASE/$pkg"
+    local full_local_pkg="$SVN_LOCAL_ROOT/branches/STABLE/$pkg"
+
+    svn-guided-merge "$rmt" "$full_local_pkg"
+}
+
+function svn-merge-stable-trunk {
+    local pkg="$1"
+    local rmt="$SVN_REMOTE_ROOT/branches/STABLE/$pkg"
+    local full_local_pkg="$SVN_LOCAL_ROOT/trunk/$pkg"
+
+    svn-guided-merge "$rmt" "$full_local_pkg"
+}
 
 
 
