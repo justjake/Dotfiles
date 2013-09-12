@@ -7,8 +7,10 @@
 # Usage:
 # ~/.dotfiles/meta/install.sh [EXTRAS...]
 # where "extras" is any installation function defined here:
-#   - submodules: get all git submodules
-#   - ssh-config: link my ssh-config into ~/.ssh/config
+#   - dotfiles:       the base dotfiles
+#   - submodules:     get all git submodules
+#   - ssh-config:     link my ssh-config into ~/.ssh/config
+#   - desktop-config: links in XDG_DESKTOP settings in ~/.config
 ####
 
 # where the dotfiles git repo is checked out to
@@ -54,6 +56,23 @@ function submodules () {
     fi
 }
 
+# desktop config
+function desktop-config () {
+    local desktop_config_dir="$HOME/.dotfiles/config"
+    mkdir -p "$HOME/.config"
+
+    pushd "$HOME" no-output
+    for file in "$desktop_config_dir"/* ; do
+        if [ ! -f "$HOME/.config/${file}" ]; then
+            echo "Linked .dotfiles/config/${file} -> ~/.config/${file}"
+            ln -s ".dotfiles/config/${file}" ".config/${file}"
+        else
+            echo "skipped because file exists: ~/.config/${file}"
+        fi
+    done
+    popd
+}
+
 # link basic files
 function dotfiles () {
     pushd "$HOME" no-output
@@ -68,8 +87,18 @@ function dotfiles () {
     popd no-output
 }
 
-# install basics only by default
-dotfiles
+# make sure we param ok?
+if [ -z "$*" ]; then 
+    echo "$0 - error.
+Usage:
+~/.dotfiles/meta/install.sh [MODULES...]
+where 'extras' is any installation function defined here:
+  - dotfiles:       the base dotfiles
+  - submodules:     get all git submodules
+  - ssh-config:     link my ssh-config into ~/.ssh/config
+  - desktop-config: links in XDG_DESKTOP settings in ~/.config"
+    exit 1
+fi
 
 # and whatever else the user requests
 for cmd in "$@"; do

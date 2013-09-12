@@ -58,7 +58,6 @@ source "$ZSH_FILES/functions.zsh"
 #### User Interface
 source "$ZSH_FILES/ui.zsh"
 
-
 #### Host Settings
 [ -f "$ZSH_FILES/hosts/`hostname`" ]     && source "$ZSH_FILES/hosts/`hostname`"
 [ -f "$ZSH_FILES/hosts/`hostname`.zsh" ] && source "$ZSH_FILES/hosts/`hostname`.zsh"

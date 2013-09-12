@@ -6,13 +6,13 @@ if [[ FreeBSD == $(uname) || Darwin == $(uname) ]] ; then
         alias ls='ls -G'
 else
         alias ls='ls --color'
+        grep_options="--color=auto --exclude-dir='.svn'"
 fi
 
 # Show only the defined mailboxes when you open mutt
 alias mutt="mutt -y"
 
 # colored commands
-local grep_options="--color=auto --exclude-dir='.svn'"
 for grep_type in grep fgrep egrep ; do
     alias $grep_type="$grep_type $grep_options"
 done
