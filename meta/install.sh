@@ -62,10 +62,11 @@ function desktop-config () {
     mkdir -p "$HOME/.config"
 
     pushd "$HOME" no-output
-    for file in "$desktop_config_dir"/* ; do
+    for file_fullname in "$desktop_config_dir"/* ; do
+	local file="$(basename "$file_fullname")"
         if [ ! -f "$HOME/.config/${file}" ]; then
             echo "Linked .dotfiles/config/${file} -> ~/.config/${file}"
-            ln -s ".dotfiles/config/${file}" ".config/${file}"
+            ln -s "$file_fullname" ".config/${file}"
         else
             echo "skipped because file exists: ~/.config/${file}"
         fi
