@@ -1,7 +1,8 @@
 ###
 # aliases
 ###
-# ls differs in FreeBSD and Linux
+
+# ls and grep differs in FreeBSD and Linux
 if [[ FreeBSD == $(uname) || Darwin == $(uname) ]] ; then
         alias ls='ls -G'
 else
