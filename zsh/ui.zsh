@@ -124,6 +124,10 @@ use-utf8-clock () {
     export RPROMPT='$(analog-clock-time)  ${PR_LIGHT_BLACK}(%D{%m-%d %H:%M}) [%?] ${vcs_info_msg_0_}${PR_RESET_COLOR}' # shows exit status of previous command
 }
 
+#### LS Colors
+command-exists dircolors &&  eval $(dircolors  -b "$DOTFILES/lscolors/dircolors.zenburn.older")
+command-exists gdircolors && eval $(gdircolors -b "$DOTFILES/lscolors/dircolors.zenburn.older")
+
 
 
 #### Window Title

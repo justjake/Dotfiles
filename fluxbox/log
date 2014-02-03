@@ -1,0 +1,32 @@
+------------------------------------------
+Log File: /home/jitl/.fluxbox/log
+Fluxbox version: 1.1.1
+Compiled: Jul  1 2010 18:52:11
+Compiler: GCC
+Compiler version: 4.4.4 20100525 (Red Hat 4.4.4-5)
+
+Defaults:
+    menu: /usr/share/fluxbox/menu
+   style: /usr/share/fluxbox/styles/bloe
+    keys: /usr/share/fluxbox/keys
+    init: /usr/share/fluxbox/init
+     nls: /usr/share/fluxbox/nls
+
+Compiled options (- => disabled): 
+-DEBUG
+EWMH
+GNOME
+IMLIB2
+NLS
+REMEMBER
+RENDER
+SHAPE
+SLIT
+TOOLBAR
+XFT
+XINERAMA
+XMB
+XPM
+
+------------------------------------------
+Warning: unbalanced [encoding] tags

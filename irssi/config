@@ -4,8 +4,8 @@ servers = (
     address = "irc.housing.berkeley.edu";
     chatnet = "rescomp";
     port = "6667";
-  }
-  {
+  },
+  { 
     address = "irc.freenode.net";
     chatnet = "freenode";
     port = "6667";
@@ -20,9 +20,7 @@ chatnets = {
     max_whois = "4";
     max_query_chans = "5";
   };
-  freenode = {
-    type = "IRC";
-  };
+  freenode = { type = "IRC"; };
   IRCnet = {
     type = "IRC";
     max_kicks = "4";
@@ -59,19 +57,18 @@ chatnets = {
 };
 
 channels = (
+  { name = "#code"; chatnet = "rescomp"; autojoin = "Yes"; },
+  { name = "#sysadmin"; chatnet = "rescomp"; autojoin = "Yes"; },
+  { name = "#prog-priv"; chatnet = "rescomp"; autojoin = "Yes"; },
+  #this doesn't work :(
+  { name = "#helpdesk"; chatnet = "rescomp"; autojoin = "Yes"; },
+  { name = "#us"; chatnet = "rescomp"; autojoin = "Yes"; },
   { name = "#general"; chatnet = "rescomp"; autojoin = "Yes"; },
   { name = "#marketing"; chatnet = "rescomp"; autojoin = "Yes"; },
-  { name = "#code"; chatnet = "rescomp"; autojoin = "Yes"; },
-  { name = "#prog-priv"; chatnet = "rescomp"; autojoin = "Yes"; },
   { name = "#rssp-gaming"; chatnet = "rescomp"; autojoin = "Yes"; },
-  { name = "#us"; chatnet = "rescomp"; autojoin = "Yes"; },
-  { name = "#prog-priv"; chatnet = "rescomp"; autojoin = "Yes"; },
-  { name = "#us"; chatnet = "rescomp"; autojoin = "Yes"; },
-  { name = "#helpdesk"; chatnet = "rescomp"; autojoin = "Yes"; },
-  { name = "#justjake"; chatnet = "rescomp"; autojoin = "Yes"; }
 
-  { name = "#berke1337"; chatnet = "freenode"; autojoin = "Yes"; }
-  
+  { name = "#berke1337"; chatnet = "freenode"; autojoin = "Yes"; },
+
 );
 
 aliases = {
@@ -253,20 +250,13 @@ statusbar = {
         barend = { priority = "100"; alignment = "right"; };
       };
     };
-    awl_3 = {
-      items = {
-        barstart = { priority = "100"; };
-        awl_3 = { };
-        barend = { priority = "100"; alignment = "right"; };
-      };
-    };
   };
 };
 settings = {
   core = {
     real_name = "Jake Teton-Landis";
-    user_name = "just.jake";
-    nick = "justjake";
+    user_name = "jitl";
+    nick = "jitl";
     timestamp_format = "%H:%M:%S";
   };
   "fe-text" = { actlist_sort = "refnum"; };
@@ -278,9 +268,11 @@ settings = {
     theme = "more_readable.theme";
     bell_beeps = "yes";
     beep_msg_level = "MSGS NOTICES DCC DCCMSGS HILIGHT";
+    autolog = "yes";
   };
 };
 hilights = ( { nick = "yes"; word = "yes"; } );
 ignores = (
   { level = "JOINS PARTS QUITS NICKS"; channels = ( "#tt" ); }
 );
+logs = { };

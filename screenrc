@@ -12,5 +12,9 @@ hardstatus alwayslastline "%{=b}%{G} %{b}%w %=%{kG}%C%A  %D, %M/%d/%Y "
 vbell_msg " --- DA HERRO !!! --- "
 bell_msg " Bell in GNU screen window %n "
 
+attrcolor b ".I"
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+#defbce "on"
+
 # Scrollback
 defscrollback 10000

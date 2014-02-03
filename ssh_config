@@ -1,0 +1,24 @@
+# Rescomp Hosts
+Host *.rescomp.berkeley.edu *.housing.berkeley.edu
+    User jitl
+    IdentityFile ~/.ssh/id_rsa.wopr
+
+Host stargate stargate.housing.berkeley.edu
+    ForwardAgent yes
+
+# Bastion rescomp hosts
+Host dev-www*.rescomp.berkeley.edu architect devbox dev4
+    ProxyCommand ssh stargate.housing.berkeley.edu nc %h %p
+    ForwardAgent yes
+
+# rescomp-only settings for public hosts
+Host github
+    Hostname github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa.hal
+
+# Other hosts
+Host nomcopter
+    Hostname nomcopter.com
+    User justjake
+    Port 484

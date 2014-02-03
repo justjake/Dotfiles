@@ -1,18 +1,11 @@
-# Grab screen EVERY TIME
-# bad idea
-# exec screen -DR
-export PREFIX="$HOME/prefixes/irc"
-source "$PREFIX"/bin/activate
+# share config
+source "$ZSH_FILES/hosts/rhel-headless.zsh"
+
 alias stealthirssi="irssi --home=~/.stealthirssi"
 alias resume="screen -dr IRC"
 alias begin="screen -S IRC"
 
-
-
-# Go nuts!
-export GOROOT="$PREFIX/go"
-export GOPATH="$PREFIX/gopath"
-export PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
+add-bundle-to-path "$PREFIX/bundles/sqlite3"
 
 getgif() {
     wget -O ~/public_html/gif/"$2".gif "$1"

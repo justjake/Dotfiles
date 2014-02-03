@@ -1,7 +1,18 @@
 source "$ZSH_FILES/hosts/ubuntu.zsh"
 
 setopt ALL_EXPORT
+
+#### default apps
+TERMINAL="roxterm"
 BROWSER="google-chrome"
+
+# Golang!
+GOROOT="/usr/local/go"
+GOPATH="$HOME/go"
+PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
+eval $(go env)
+
+## java config
 JAVA_HOME="/usr/lib/jvm/jdk1.7.0"
 M2_HOME="$HOME/Bundles/apache-maven-3.0.4"
 
@@ -54,5 +65,8 @@ setopt no_ALL_EXPORT
 # Aliases
 alias nomcopter="ssh justjake@nomcopter.com -p 484"
 alias hosing="ssh justjake@nomcopter.com -p 484" #TODO: run the net command from kevin's homedir
+alias stargate="ssh -i ~/.ssh/id_rsa.wopr jitl@stargate.housing.berkeley.edu"
 
 #alias tmux because it won't 256 colors correclty
+
+alias project="cd ~/go/src/github.com/justjake/mail; ls"

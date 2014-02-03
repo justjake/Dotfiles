@@ -1,0 +1,83 @@
+# Global default settings
+# using monaco-7 so that terminals and content look a little different
+
+# Background
+# the background wallpaper is a lighter color (relative to zenburn in general)
+# because if you're staring at a dark display all day, opening a web browser
+# will really hurt. Hence, we keep a nice bright color to cauterize the eyes
+# Do not use your computer in a dark room. It's bad for you.
+background:                             flat
+background.color:                       #cccccc
+
+###############################################################################
+# Window configuration
+window.font:                            monaco-7
+window.bevelWidht:                      0
+window.borderWidth:                     3
+window.justify:                         center
+window.title.height:                    13
+
+# button glyphs
+# window.close.pixmap:                    close.xbm.xpm
+# window.iconify.pixmap:                  iconify.xbm.xpm
+# window.maximize.pixmap:                 max.xbm.xpm
+
+# texture styles
+window.label.focus:                     Flat
+window.label.unfocus:                   Flat
+
+#### Focused State
+# backgrounds
+window.focus.borderColor:               #262626
+window.label.focus.color:               #262626
+window.button.focus.color:              #262626
+# foregrounds
+window.label.focus.textColor:           #dcdccc
+window.button.focus.picColor:           #dcdccc
+
+#### Unfocused State
+# backgrounds
+window.unfocus.borderColor:             #333333
+window.label.unfocus.color:             #333333
+window.button.unfocus.color:            #333333
+# foregrounds
+window.label.unfocus.textColor:         #888888
+window.button.unfocus.picColor:         #888888
+# tabs
+window*borderColor:                     #333333
+
+#### Pressed State
+window.button.pressed.color:            #262626
+
+
+
+###############################################################################
+# Toolbar Configuration
+toolbar.height:                         18
+toolbar.borderWidth:                    0
+toolbar.bevelWidth:                     4
+
+toolbar*color:                          #262626
+toolbar*borderColor:                    #262626
+toolbar*borderWidth:                    0
+toolbar.button.borderWidth:             0
+
+# fonts
+toolbar*font:                           monaco-7.5
+toolbar*.focused.textColor:             #dcdccc
+toolbar*textColor:                      #888888
+toolbar*justify:                        center
+
+toolbar.iconbar*justify:                left
+
+###############################################################################
+# Menu Configuration
+menu*font:                              monaco-7.5
+menu.borderWidth:                       1
+menu*bevelWidth:                        5
+menu.title.color:                       #262626
+menu.borderColor:                       #262626
+menu.hilite.color:                      #333333
+
+menu*textColor:                         #dcdccc
+menu.frame.color:                       #3f3f3f
