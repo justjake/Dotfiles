@@ -1,6 +1,28 @@
 module Pathfinder
     # All personal functions go in Pathfinder::RC
     module RC
+
+        # Save DC for assassination.
+        # To attempt to assassinate a target, the ninja must first study her 
+        # target for 1 round as a standard action. On the following round, if 
+        # the ninja makes a sneak attack against the target and the target is 
+        # denied its Dexterity bonus to AC, the sneak attack has the 
+        # additional effect of possibly killing the target. This attempt 
+        # automatically fails if the target recognizes the ninja as an enemy. 
+        # If the sneak attack is successful and the target of this attack 
+        # fails a Fortitude save, it dies. The DC of this save is equal to 
+        # 10 + 1/2 the ninja’s level + the ninja’s Charisma modifier.
+        def assassinate
+            10 + level / 2 + charisma.modifier
+        end
+
+
+        # Full-round action.
+        # Melee attack, automatically hits+crits
+        # Add sneak attack damage
+        # 
+        # If the target survives, make
+        # FORT DC10 + Damage dealth or die]
         def coup_de_grace(dag_dice = 2)
             print %Q[Full-round action.
 Melee attack, automatically hits+crits

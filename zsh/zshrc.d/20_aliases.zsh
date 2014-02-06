@@ -1,7 +1,8 @@
 ###
 # aliases
 ###
-# ls differs in FreeBSD and Linux
+
+# ls and grep differs in FreeBSD and Linux
 if [[ FreeBSD == $(uname) || Darwin == $(uname) ]] ; then
         alias ls='ls -G'
 else
@@ -21,6 +22,7 @@ done
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias LS='ls'
 
 # directories, single-quoted for dynamic variables
 alias prefix='cd $PREFIX; ls'
@@ -77,6 +79,13 @@ nomcopter   "nomcopter.com"
 for short in ${(k)ssh_hosts}; do
     alias $short="ssh $ssh_hosts[$short]"
 done
+
+
+ffmpeg-extract-audio() {
+    local src="$1"
+    local dest="$2"
+    ffmpeg -i "$1" -acodec copy -vn "$2"
+}
 
 
 # tmux config: https://github.com/adnichols/tmux_setup
