@@ -22,3 +22,7 @@ Host nomcopter
     Hostname nomcopter.com
     User justjake
     Port 484
+
+Host teevee teevee.internal
+    Hostname teevee.internal
+    User jitl
