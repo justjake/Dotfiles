@@ -9,6 +9,11 @@ servers = (
     address = "irc.freenode.net";
     chatnet = "freenode";
     port = "6667";
+  },
+  {
+    address = "irc.caffinatedcode.com";
+    channet = "alumni";
+    port = "61667";
   }
 );
 
@@ -53,19 +58,24 @@ chatnets = {
     max_whois = "30";
   };
 
+
   SILC = { type = "SILC"; };
 };
 
 channels = (
   { name = "#code"; chatnet = "rescomp"; autojoin = "Yes"; },
-  { name = "#sysadmin"; chatnet = "rescomp"; autojoin = "Yes"; },
   { name = "#prog-priv"; chatnet = "rescomp"; autojoin = "Yes"; },
+  { name = "#sysadmin"; chatnet = "rescomp"; autojoin = "Yes"; },
   #this doesn't work :(
   { name = "#helpdesk"; chatnet = "rescomp"; autojoin = "Yes"; },
   { name = "#us"; chatnet = "rescomp"; autojoin = "Yes"; },
-  { name = "#general"; chatnet = "rescomp"; autojoin = "Yes"; },
   { name = "#marketing"; chatnet = "rescomp"; autojoin = "Yes"; },
-  { name = "#rssp-gaming"; chatnet = "rescomp"; autojoin = "Yes"; },
+
+  { name = "#general"; chatnet = "rescomp"; autojoin = "Yes"; },
+  { name = "#gaming"; chatnet = "rescomp"; autojoin = "Yes"; },
+
+  { name = "#cs70"; chatnet = "rescomp"; autojoin = "Yes"; },
+  { name = "#cs61c"; chatnet = "rescomp"; autojoin = "Yes"; },
 
   { name = "#berke1337"; chatnet = "freenode"; autojoin = "Yes"; },
 
@@ -236,20 +246,6 @@ statusbar = {
         barend = { priority = "100"; alignment = "right"; };
       };
     };
-    awl_1 = {
-      items = {
-        barstart = { priority = "100"; };
-        awl_1 = { };
-        barend = { priority = "100"; alignment = "right"; };
-      };
-    };
-    awl_2 = {
-      items = {
-        barstart = { priority = "100"; };
-        awl_2 = { };
-        barend = { priority = "100"; alignment = "right"; };
-      };
-    };
   };
 };
 settings = {
@@ -268,11 +264,10 @@ settings = {
     theme = "more_readable.theme";
     bell_beeps = "yes";
     beep_msg_level = "MSGS NOTICES DCC DCCMSGS HILIGHT";
-    autolog = "yes";
   };
 };
 hilights = ( { nick = "yes"; word = "yes"; } );
 ignores = (
-  { level = "JOINS PARTS QUITS NICKS"; channels = ( "#tt" ); }
+  { level = "JOINS PARTS QUITS NICKS"; channels = ( "#tt" ); },
+  { mask = "kedo"; level = "NOTICES JOINS PARTS"; }
 );
-logs = { };
