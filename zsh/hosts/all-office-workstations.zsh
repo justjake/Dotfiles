@@ -1,3 +1,6 @@
+# include RHEL stuff
+# add-bundle-to-path "$HOME/prefixes/rhel-headless"
+
 # Include standard prefix
 PREFIX="$HOME/prefixes/workstation"
 # add-bundle-to-path "$PREFIX/derp" #glibc 2
