@@ -13,6 +13,8 @@
 #   - desktop-config: links in XDG_DESKTOP settings in ~/.config
 ####
 
+set -e
+
 # where the dotfiles git repo is checked out to
 DOTFILES_DIR="$HOME/.dotfiles"
 # list of files to link into homedir
