@@ -41,27 +41,25 @@ setopt    hist_ignore_space
 # annoying when different terminals do different tasks
 setopt NO_share_history
 
-
-#### Completion
-source "$ZSH_FILES/completion.zsh"
-
 ####
 # Misc Options
 ####
 setopt    extended_glob
 setopt    long_list_jobs
 
-
-#### Functions
-source "$ZSH_FILES/functions.zsh"
-
-#### User Interface
-source "$ZSH_FILES/ui.zsh"
+####
+# Zshrc.d - most other config
+# 00 - 09: functions
+# 10 - 19: UI. title, prompt, keybindings, etc
+# 20 - 29: Aliases.
+# 99     : jokes and deprecated
+####
+for config in "$ZSH_FILES/zshrc.d"/* ; do
+    # echo "loading $config"
+    source "$config"
+done
+# source "$ZSH_FILES"/zshrc.d/*
 
 #### Host Settings
-[ -f "$ZSH_FILES/hosts/`hostname`" ]     && source "$ZSH_FILES/hosts/`hostname`"
-[ -f "$ZSH_FILES/hosts/`hostname`.zsh" ] && source "$ZSH_FILES/hosts/`hostname`.zsh"
-
-
-#### Aliases
-source "$ZSH_FILES/aliases.zsh"
+[[ -f "$ZSH_FILES/hosts/`hostname`" ]] && source "$ZSH_FILES/hosts/`hostname`"
+[[ -f "$ZSH_FILES/hosts/`hostname`.zsh" ]] && source "$ZSH_FILES/hosts/`hostname`.zsh"

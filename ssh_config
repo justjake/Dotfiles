@@ -3,13 +3,16 @@ Host *.rescomp.berkeley.edu *.housing.berkeley.edu
     User jitl
     IdentityFile ~/.ssh/id_rsa.wopr
 
-Host stargate stargate.housing.berkeley.edu
+Host stargate stargate.housing.berkeley.edu cardiff
     ForwardAgent yes
+    ControlPath ~/.ssh/controlmasters/%r@%h:%p
+    ControlMaster auto
 
 # Bastion rescomp hosts
-Host dev-www*.rescomp.berkeley.edu architect devbox dev4
+Host dev-* architect devbox dev4 dev
     ProxyCommand ssh stargate.housing.berkeley.edu nc %h %p
     ForwardAgent yes
+    DynamicForward 9001
 
 # rescomp-only settings for public hosts
 Host github
@@ -22,3 +25,7 @@ Host nomcopter
     Hostname nomcopter.com
     User justjake
     Port 484
+
+Host teevee teevee.internal
+    Hostname teevee.internal
+    User jitl

@@ -25,3 +25,6 @@
 [submodule "janus/YouCompleteMe"]
 	path = janus/YouCompleteMe
 	url = https://github.com/Valloric/YouCompleteMe.git
+[submodule "janus/vim-tmux-navigator"]
+	path = janus/vim-tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator
