@@ -1,5 +1,7 @@
+export CODE="/usr/code/jitl"
+
 # Python devbox
-export WORKON_HOME="$HOME/virtualenvs"
+export WORKON_HOME="$CODE/virtualenvs"
 source $(which virtualenvwrapper.sh)
 
 # Golang
@@ -10,7 +12,7 @@ eval "$(go env)"
 
 # personal preference
 # PROJECT="$HOME/gopath/src/github.com/justjake/mail"
-PROJECT="/usr/code/jitl/"
+PROJECT="$CODE"
 
 ### Prefix!
 PREFIX="$HOME/prefix"
@@ -29,5 +31,6 @@ export RBENV_ROOT="$HOME/prefixes/rhel-headless/rbenv"
 export PATH="$RBENV_ROOT/bin:$PATH"
 eval "$(rbenv init -)"
 
-
 which bug-helper.sh no-output && source "$(which bug-helper.sh)"
+
+bundle-dir "$HOME/bundles"
