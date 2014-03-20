@@ -20,6 +20,11 @@ Host github
     User git
     IdentityFile ~/.ssh/id_rsa.hal
 
+Host resgit
+    Hostname git.rescomp.berkeley.edu
+    User gitolite3
+    IdentityFile ~/.ssh/id_rsa_git
+
 # Other hosts
 Host nomcopter
     Hostname nomcopter.com
