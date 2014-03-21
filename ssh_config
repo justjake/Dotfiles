@@ -20,10 +20,14 @@ Host dev-* architect devbox dev4 dev
     DynamicForward 9001
 
 # rescomp-only settings for public hosts
-Host github
+Host resgithub
     Hostname github.com
     User git
     IdentityFile ~/.ssh/id_rsa.hal
+
+host github
+    Hostname github.com
+    User git
 
 # Other hosts
 Host nomcopter nomcopter.com
@@ -34,3 +38,24 @@ Host nomcopter nomcopter.com
 Host teevee teevee.internal
     Hostname teevee.internal
     User jitl
+
+# BERKE1337 cluster
+Host berke1337
+    Hostname 10.254.24.6
+    User jitl
+    ProxyCommand ssh cs61b nc %h %p
+    DynamicForward 9002
+    LocalForward 5900 localhost:5904
+# the above for VNC sometimes
+
+Host bastion
+    Hostname 10.254.24.6
+    Port 2222
+    ProxyCommand ssh cs61b nc %h %p
+    DynamicForward 9003
+    User user
+
+# CS
+Host cs61b
+    Hostname hive4.cs.berkeley.edu
+    User cs61b-hg
