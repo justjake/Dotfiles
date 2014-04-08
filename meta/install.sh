@@ -13,6 +13,8 @@
 #   - desktop-config: links in XDG_DESKTOP settings in ~/.config
 ####
 
+set -e
+
 # where the dotfiles git repo is checked out to
 DOTFILES_DIR="$HOME/.dotfiles"
 # list of files to link into homedir
@@ -42,7 +44,7 @@ alias -g no-output=">/dev/null 2>&1"
 function ssh-config () {
     mkdir -p "$HOME/.ssh/"
     ln -s "$DOTFILES_DIR/ssh_config" "$HOME/.ssh/config"
-    chmod 0600 "$DOTIFLES_DIR/ssh_config"
+    chmod 0600 "$DOTFILES_DIR/ssh_config"
 }
 
 # git

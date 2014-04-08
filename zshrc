@@ -11,7 +11,8 @@ TZ="America/Los_Angeles"
 HOSTNAME="`hostname`"
 PAGER='less'
 EDITOR='vim'
-SVN_EDITOR="$EDITOR"
+# set SVN_EDITOR only if unset
+[ -z "$SVN_EDITOR" ] && SVN_EDITOR="$EDITOR"
 VISUAL="$EDITOR"
 #LANGUAGE=
 LC_ALL='en_US.UTF-8'
@@ -30,6 +31,7 @@ HISTFILE="$HOME/.zsh/cache/`hostname`.zhistory"
 HISTSIZE=130000
 SAVEHIST=100000
 setopt NO_ALL_EXPORT
+
 setopt    hist_ignore_dups
 setopt NO_hist_verify # enable to review `sudo !!` before executing
 setopt    inc_append_history
