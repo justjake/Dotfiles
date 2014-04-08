@@ -9,10 +9,13 @@ Host stargate stargate.housing.berkeley.edu cardiff
     ControlMaster auto
 
 # Bastion rescomp hosts
-Host dev-* architect devbox dev4 dev
+Host dev-* architect pythondev
     ProxyCommand ssh stargate.housing.berkeley.edu nc %h %p
     ForwardAgent yes
     DynamicForward 9001
+
+Host pythondev
+    Hostname dev-www14.rescomp.berkeley.edu
 
 # rescomp-only settings for public hosts
 Host github
@@ -21,7 +24,8 @@ Host github
     IdentityFile ~/.ssh/id_rsa.hal
 
 # Other hosts
-Host nomcopter
+Host nomcopter nomcopter.com
     Hostname nomcopter.com
     User justjake
     Port 484
+
