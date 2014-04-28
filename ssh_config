@@ -1,4 +1,9 @@
 # Rescomp Hosts
+
+Host irc irc.housing.berkeley.edu
+    User jitl
+    DynamicForward 9001
+
 Host *.rescomp.berkeley.edu *.housing.berkeley.edu
     User jitl
     IdentityFile ~/.ssh/id_rsa.wopr
@@ -9,19 +14,31 @@ Host stargate stargate.housing.berkeley.edu cardiff
     ControlMaster auto
 
 # Bastion rescomp hosts
-Host dev-* architect devbox dev4 dev
+Host dev-* architect pythondev
     ProxyCommand ssh stargate.housing.berkeley.edu nc %h %p
     ForwardAgent yes
     DynamicForward 9001
 
+Host pythondev
+    Hostname dev-www14.rescomp.berkeley.edu
+
 # rescomp-only settings for public hosts
-Host github
+Host resgithub
     Hostname github.com
     User git
     IdentityFile ~/.ssh/id_rsa.hal
 
+host github
+    Hostname github.com
+    User git
+
+Host resgit
+    Hostname git.rescomp.berkeley.edu
+    User gitolite3
+    IdentityFile ~/.ssh/id_rsa_git
+
 # Other hosts
-Host nomcopter
+Host nomcopter nomcopter.com
     Hostname nomcopter.com
     User justjake
     Port 484
@@ -29,3 +46,24 @@ Host nomcopter
 Host teevee teevee.internal
     Hostname teevee.internal
     User jitl
+
+# BERKE1337 cluster
+Host berke1337
+    Hostname 10.254.24.6
+    User jitl
+    ProxyCommand ssh cs61b nc %h %p
+    DynamicForward 9002
+    LocalForward 5900 localhost:5904
+# the above for VNC sometimes
+
+Host bastion
+    Hostname 10.254.24.6
+    Port 2222
+    ProxyCommand ssh cs61b nc %h %p
+    DynamicForward 9003
+    User user
+
+# CS
+Host cs61b
+    Hostname hive4.cs.berkeley.edu
+    User cs61b-hg
