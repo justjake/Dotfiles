@@ -103,6 +103,9 @@ set suffixes+=.info,.out,.o,.lo,.bak,~,.swp,.o,.info,.log
 
 set viminfo='20,\"500
 
+set backupdir=~/.vim/_backup
+set dir=~/.vim/_temp,/var/tmp,/tmp
+
 scriptencoding utf-8
 
 
