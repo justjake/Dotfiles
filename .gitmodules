@@ -1,30 +1,9 @@
-[submodule "vim"]
-	path = vim
-	url = https://github.com/carlhuda/janus.git
-[submodule "janus/vim-colors-solarized"]
-	path = janus/vim-colors-solarized
-	url = https://github.com/altercation/vim-colors-solarized.git
-[submodule "janus/zencoding-vim"]
-	path = janus/zencoding-vim
-	url = https://github.com/mattn/zencoding-vim.git
 [submodule "osx/iterm2-colors"]
     path = osx/iterm2-colors
     url = https://github.com/baskerville/iTerm-2-Color-Themes.git
-[submodule "janus/vim-less"]
-	path = janus/vim-less
-	url = https://github.com/groenewege/vim-less.git
-[submodule "janus/twiki-syntax"]
-	path = janus/twiki-syntax
-	url = https://github.com/vim-scripts/TWiki-Syntax.git
 [submodule "lscolors/256"]
 	path = lscolors/256
 	url = https://github.com/trapd00r/LS_COLORS.git
-[submodule "janus/vim-airline"]
-	path = janus/vim-airline
-	url = https://github.com/bling/vim-airline.git
-[submodule "janus/YouCompleteMe"]
-	path = janus/YouCompleteMe
-	url = https://github.com/Valloric/YouCompleteMe.git
-[submodule "janus/vim-tmux-navigator"]
-	path = janus/vim-tmux-navigator
-	url = https://github.com/christoomey/vim-tmux-navigator
+[submodule "vim/bundle/Vundle.vim"]
+	path = vim/bundle/Vundle.vim
+	url = https://github.com/gmarik/Vundle.vim
