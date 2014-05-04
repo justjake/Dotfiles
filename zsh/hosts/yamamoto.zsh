@@ -1,4 +1,4 @@
-JAVA_HOME="$HOME/bundles/jdk1.8.0_05"
+JAVA_HOME="$HOME/bundles/java-latest"
 
 # system virtualenv package
 WORKON_HOME=~/virtualenv
