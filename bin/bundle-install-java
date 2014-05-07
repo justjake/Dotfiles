@@ -1,0 +1,66 @@
+#!/usr/bin/env zsh
+# Installs Java into your ~/bundles/javas folder, and then symlinks
+# it to java-latest
+
+set -e
+
+BUNDLES_DIR="$HOME/bundles"
+DOWNLOAD_DIR="$HOME/Downlaods"
+
+
+source ~jitl/.zsh/zshrc.d/00_functions.zsh
+
+function download-java() {
+    mkdir -v -p "$DOWNLOAD_DIR"
+    echo "Downloading $1"
+    local uri="$1"
+    wget -v --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+        -O "$DOWNLOAD_DIR/java-download.tar.gz" "$uri"
+}
+
+function extract-java() {
+    # put it in ~/bundles/javas
+    mkdir -p "$BUNDLES_DIR/javas"
+    pushd "$BUNDLES_DIR/javas" no-output
+    tar -vzxf "$DOWNLOAD_DIR/java-download.tar.gz"
+    popd no-output
+}
+
+function link-java() {
+    # symlink the java into ~/bundles
+    if [[ -a "$BUNDLES_DIR/java-latest" ]]; then
+        rm -v "$BUNDLES_DIR/java-latest"
+    fi
+
+    pushd "$BUNDLES_DIR" no-output
+    local lastest
+
+    for file in javas/*; do
+        latest="$file"
+    done
+
+    ln -vs "$latest" java-latest
+
+    popd no-output
+}
+
+function main() {
+    URI="$1"
+
+    if [[ -z "$URI" ]]; then
+        echo "No java tarball URL provided"
+        echo "defaulting to JDK 1.8u5"
+        URI="http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jdk-8u5-linux-x64.tar.gz"
+    fi
+
+    download-java "$URI"
+    extract-java
+    link-java
+}
+
+# execute main if we're not being sourced
+echo "${BASH_SOURCE[0]}"
+echo "${0}"
+echo "${(%):-%N}"
+
+[[ "${(%):-%N}" != "${0}" ]] || main "$@"
