@@ -30,3 +30,6 @@ bundle-dir () {
         echo "$BUNDLES does not exist"
     fi
 }
+
+DEFAULT_BUNDLES="$HOME/bundles"
+[ -d "$DEFAULT_BUNDLES" ] && bundle-dir "$DEFAULT_BUNDLES"

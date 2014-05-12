@@ -1,3 +1,6 @@
 .DS_Store
 zsh/cache/*
 bin/fixssh
+vim/bundle/*
+vim/_temp/*
+vim/_backup/*

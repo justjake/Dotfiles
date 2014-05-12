@@ -17,6 +17,7 @@ set -e
 
 # where the dotfiles git repo is checked out to
 DOTFILES_DIR="$HOME/.dotfiles"
+BUNDLES_DIR="$HOME/bundles"
 # list of files to link into homedir
 DOTFILES=(
 zshrc
@@ -32,9 +33,7 @@ tmux.conf
 screenrc
 
 vim
-janus
-vimrc.after
-gvimrc.after
+vimrc
 )
 
 # hide command output
@@ -49,7 +48,7 @@ function ssh-config () {
 
 # git
 function submodules () {
-    if which git no-output; then 
+    if which git no-output; then
         pushd "$DOTFILES_DIR" no-output
         git submodule update --init --recursive
         popd no-output
@@ -81,17 +80,25 @@ function dotfiles () {
     pushd "$HOME" no-output
     for file in "${DOTFILES[@]}"; do
         if [ ! -f "$HOME/${file}" ]; then
-            echo "Linked .dotfiles/${file} -> ~/${file}"
+            echo "Linked .dotfiles/${file} -> ~/.${file}"
             ln -s ".dotfiles/${file}" ".${file}"
         else
-            echo "skipped because file exists: ~/${file}"
+            echo "skipped because file exists: ~/.${file}"
         fi
     done
+
+    # bundles dir is defaulty sourced in zshrc.d/02_bundles.zsh
+    mkdir -p -v "$BUNDLES_DIR"
+
     popd no-output
 }
 
+function brew () {
+    git clone "https://github.com/Homebrew/linuxbrew" "$BUNDLES_DIR/linuxbrew"
+}
+
 # make sure we param ok?
-if [ -z "$*" ]; then 
+if [ -z "$*" ]; then
     echo "$0 - error.
 Usage:
 ~/.dotfiles/meta/install.sh [MODULES...]
@@ -99,7 +106,8 @@ where 'extras' is any installation function defined here:
   - dotfiles:       the base dotfiles
   - submodules:     get all git submodules
   - ssh-config:     link my ssh-config into ~/.ssh/config
-  - desktop-config: links in XDG_DESKTOP settings in ~/.config"
+  - desktop-config: links in XDG_DESKTOP settings in ~/.config
+  - brew:           install linuxhomebrew"
     exit 1
 fi
 
