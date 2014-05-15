@@ -23,6 +23,11 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+# ack-grep --> ack
+if which ack-grep no-output; then
+    alias ack=ack-grep
+fi
+
 # Settings shortcuts
 typeset -A settings_files
 settings_files=(
