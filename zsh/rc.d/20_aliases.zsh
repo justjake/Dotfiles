@@ -34,8 +34,11 @@ settings_files=(
 zshrc           "~/.zshrc"
 hostsettings    "$ZSH_FILES/hosts/$HOSTNAME.zsh"
 aliases         "$ZSH_FILES/rc.d/20_aliases.zsh"
-vimrc           "~/.vimrc"
 zshall          "$ZSH_FILES"
+
+# non-zsh
+vimrc           "~/.vimrc"
+sshconfig       "~/.ssh/config"
 )
 for short in ${(k)settings_files}; do
     alias $short="$EDITOR $settings_files[$short]"
