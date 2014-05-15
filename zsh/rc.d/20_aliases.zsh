@@ -24,11 +24,18 @@ alias la='ls -A'
 alias l='ls -CF'
 
 # Settings shortcuts
-alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME.zsh"
+typeset -A settings_files
+settings_files=(
+zshrc           "~/.zshrc"
+hostsettings    "$ZSH_FILES/hosts/$HOSTNAME.zsh"
+aliases         "$ZSH_FILES/rc.d/20_aliases.zsh"
+vimrc           "~/.vimrc"
+zshall          "$ZSH_FILES"
+)
+for short in ${(k)settings_files}; do
+    alias $short="$EDITOR $settings_files[$short]"
+done
 [[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] && alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME"
-alias settings="$EDITOR ~/.zshrc"
-alias settings_all="$EDITOR $ZSH_FILES"
-alias vimrc="$EDITOR $DOTFILES/vimrc.after"
 alias resource="source ~/.zshrc"
 
 
@@ -48,7 +55,7 @@ devbox      "dev-www14.rescomp.berkeley.edu"
 
 # personal
 tonic       "tonic.teton-landis.org"
-nomcopter   "nomcopter.com"
+armada      "armada.systems"
 )
 for short in ${(k)ssh_hosts}; do
     alias $short="ssh $ssh_hosts[$short]"

@@ -54,7 +54,7 @@ setopt    long_list_jobs
 # 20 - 29: Aliases.
 # 99     : jokes and deprecated
 ####
-for config in "$ZSH_FILES/zshrc.d"/* ; do
+for config in "$ZSH_FILES/rc.d"/* ; do
     # echo "loading $config"
     source "$config"
 done
