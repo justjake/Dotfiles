@@ -29,10 +29,9 @@ Plugin 'tacahiroy/ctrlp-funky'           " find functions in ctrl-p
 Plugin 'scrooloose/nerdtree'             " files pane
 Plugin 'jistr/vim-nerdtree-tabs'         " NerdTree in all tabs
 Plugin 'bling/vim-airline'               " nifty vim statusline
-Plugin 'edkolev/tmuxline.vim'            " vim statusline also in tmux
 Plugin 'taglist.vim'                     " nerdtree but for tags, unconfigured
 Plugin 'xterm-color-table.vim'               " :XTermColorTable
-
+"Plugin 'edkolev/tmuxline.vim'            " vim statusline also in tmux, breaks things
 
 " Editor features
 Plugin 'scrooloose/syntastic'            " syntax/error checker
@@ -64,7 +63,16 @@ filetype plugin indent on
 "                               Plugin Settings
 " =============================================================================
 
-let g:nerdtree_tabs_open_on_console_startup=1
+" only open tree on big editor terms
+if &columns > 110
+    let g:nerdtree_tabs_open_on_console_startup=1
+endif
+
+" when creating/switching buffers
+set switchbuf=usetab,newtab
+noremap <C-S-h> :tabprevious<CR>
+noremap <C-S-l> :tabnext<CR>
+
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme='badwolf'
@@ -200,6 +208,8 @@ if has("spell")
   autocmd BufRead,BufNewFile *.dox  set spell
   autocmd Filetype mail             set spell
   autocmd Filetype tex              set spell
+  autocmd Filetype md               set spell
+  autocmd Filetype markdown         set spell
 endif
 
 au BufNewFile,BufRead *.hn setf yacc
