@@ -21,6 +21,7 @@ Host dev-* architect pythondev
 
 Host pythondev
     Hostname dev-www14.rescomp.berkeley.edu
+    DynamicForward 9002
 
 # rescomp-only settings for public hosts
 Host resgithub
@@ -62,6 +63,9 @@ Host bastion
     ProxyCommand ssh cs61b nc %h %p
     DynamicForward 9003
     User user
+
+Host armada armada.systems
+    User justjake
 
 # CS
 Host cs61b

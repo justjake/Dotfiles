@@ -1,5 +1,5 @@
 # include RHEL stuff
-# add-bundle-to-path "$HOME/prefixes/rhel-headless"
+add-bundle-to-path "$HOME/prefixes/rhel-headless/bundles/vim"
 
 # deal with Gnome Terminal being silly
 if [[ $COLORTERM == "gnome-terminal" ]] ; then
@@ -29,7 +29,7 @@ export JAVA_HOME="$PREFIX/bundles/jdk1.7.0_51"
 # Aliases
 alias tbird="thunderbird & disown"
 alias open="gnome-open"
-alias dev-mount="sshfs dev-www14.rescomp.berkeley.edu:/usr/code/jitl $HOME/mnt/devbox"
+alias dev-mount="sshfs dev-www9.rescomp.berkeley.edu:/usr/code/jitl $HOME/mnt/devbox"
 alias dev-unmount="fusermount -u $HOME/mnt/devbox"
 
 develop () {

@@ -16,7 +16,7 @@ PROJECT="$CODE"
 
 ### Prefix!
 PREFIX="$OLD_HOME/prefix"
-# bundle-dir "$PREFIX/bundles"
+bundle-dir "$PREFIX/bundles"
 # bin stuff - front of path
 export PATH="$PREFIX/bin:$PATH"
 # lib stuff
