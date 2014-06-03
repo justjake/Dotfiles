@@ -30,6 +30,9 @@ Plugin 'scrooloose/nerdtree'             " files pane
 Plugin 'jistr/vim-nerdtree-tabs'         " NerdTree in all tabs
 Plugin 'bling/vim-airline'               " nifty vim statusline
 Plugin 'edkolev/tmuxline.vim'            " vim statusline also in tmux
+Plugin 'taglist.vim'                     " nerdtree but for tags, unconfigured
+Plugin 'xterm-color-table.vim'               " :XTermColorTable
+
 
 " Editor features
 Plugin 'scrooloose/syntastic'            " syntax/error checker
@@ -50,6 +53,8 @@ Plugin 'jakar/vim-json'                  " ft .json
 Plugin 'kchmck/vim-coffee-script'        " ft .coffee
 Plugin 'groenewege/vim-less'             " ft .less
 Plugin 'tfnico/vim-gradle'               " ft .gradle
+Plugin 'cakebaker/scss-syntax.vim'       " ft .scss, .sass
+Plugin 'ap/vim-css-color'                " nicer colors in css-likes
 
 " Needs to be executed after Vundle.
 call vundle#end()
@@ -71,6 +76,10 @@ let g:ctrlp_funky_syntax_highlight = 1 " and syntax hilight ;)
 nnoremap <C-F> :CtrlPFunky<Cr>
 nnoremap <C-G> :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
 
+" Tag list on right side
+let Tlist_Use_Right_Window = 1
+nnoremap <C-C> :TlistToggle<Cr>
+
 
 " let g:EasyMotion_leader_key = '<Leader>'
 "
@@ -82,6 +91,11 @@ nnoremap <C-G> :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
 " " insert mode
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+" settings for nerdcommenter Ctrl-/ to comment
+vmap <C-_> <plug>NERDCommenterToggle
+nmap <C-_> <plug>NERDCommenterToggle
+imap <C-_> <plug>NERDCommenterInsert
 
 
 " =============================================================================
@@ -105,7 +119,8 @@ set mouse=a             " Enables mouse usage (all modes)
 set magic               " Improves default search
 set autoread            " Prompt to reread a file if it changes
 set wrap                " Wraps long lines
-set scrolloff=5         " Always shows five lines of vertical context around the cursor
+set scrolloff=5         " Always shows five lines of vertical context around 
+                        " the cursor
 
 " Low priority for these files in tab-completion.
 set suffixes+=.aux,.bbl,.blg,.dvi,.log,.pdf,.fdb_latexmk
@@ -136,7 +151,7 @@ set shiftwidth=4        " Tab indention
 " t0  = do not indent a function's return type declaration.
 " (0  = line up with next non-white character after unclosed parentheses...
 " W4  = ...but not if the last character in the line is an open parenthesis.
-set cinoptions=e-s,g0,t0,(0,W4
+" set cinoptions=e-s,g0,t0,(0,W4
 
 " =============================================================================
 "                               Custom Functions
@@ -196,6 +211,9 @@ au FileType make set noexpandtab
 au FileType coffee set sw=2 ts=2
 au FileType ruby set sw=2 ts=2
 au FileType java set sw=2 ts=2
+au FileType html set sw=2 ts=2
+au FileType javascript set sw=2 ts=2
+au FileType js set sw=2 ts=2
 
 " fucking textwrap in go? get out
 au FileType go set textwidth=0 wrapmargin=0
@@ -223,8 +241,13 @@ if version >= 600
     set foldmethod=marker
 endif
 
+
 "let g:zenburn_high_Contrast=1
 colors zenburn
+
+" Colorcolumn - show 80 chars
+set colorcolumn=80
+highlight ColorColumn ctermbg=238 guibg=238
 
 " GVim Settings
 
