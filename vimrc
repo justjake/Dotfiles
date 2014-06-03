@@ -25,10 +25,11 @@ Plugin 'mattn/emmet-vim'                 " zencoding motions: <c-y>,
 
 " Widgets
 Plugin 'kien/ctrlp.vim'                  " fuzzy file opener
+Plugin 'tacahiroy/ctrlp-funky'           " find functions in ctrl-p
 Plugin 'scrooloose/nerdtree'             " files pane
 Plugin 'jistr/vim-nerdtree-tabs'         " NerdTree in all tabs
 Plugin 'bling/vim-airline'               " nifty vim statusline
-Plugin 'edkolev/tmuxline.vim'            " vim statusline also in tmux
+"Plugin 'edkolev/tmuxline.vim'            " vim statusline also in tmux, breaks things
 
 " Editor features
 Plugin 'scrooloose/syntastic'            " syntax/error checker
@@ -40,13 +41,15 @@ Plugin 'flazz/vim-colorschemes'          " nice colors
 
 " filetypes
 Plugin 'vim-scripts/TWiki-Syntax'        " twiki, for vimperator mostly
-Plugin 'tpope/vim-git'                   " ft git, gitcommit, gitconfig, gitrebase, gitsendemail
+Plugin 'tpope/vim-git'                   " ft git, gitcommit, gitconfig, gitrebase, etc
+Plugin 'pangloss/vim-javascript'         " ft .js
 Plugin 'tpope/vim-haml'                  " ft .haml
 Plugin 'tpope/vim-markdown'              " ft .md, .markdown
 Plugin 'justinmk/vim-syntax-extra'       " ft .h, .c, bison, flex
 Plugin 'jakar/vim-json'                  " ft .json
 Plugin 'kchmck/vim-coffee-script'        " ft .coffee
 Plugin 'groenewege/vim-less'             " ft .less
+Plugin 'tfnico/vim-gradle'               " ft .gradle
 
 " Needs to be executed after Vundle.
 call vundle#end()
@@ -56,22 +59,38 @@ filetype plugin indent on
 "                               Plugin Settings
 " =============================================================================
 
-let g:nerdtree_tabs_open_on_console_startup=1
+" only open tree on big editor terms
+if &columns > 110
+    let g:nerdtree_tabs_open_on_console_startup=1
+endif
+
+" when creating/switching buffers
+set switchbuf=usetab,newtab
+noremap <C-S-h> :tabprevious<CR>
+noremap <C-S-l> :tabnext<CR>
+
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme='badwolf'
 let g:airline_powerline_fonts=1
+
+" enable ctrlp-funky
+let g:ctrlp_extensions = ['funky']
+let g:ctrlp_funky_syntax_highlight = 1 " and syntax hilight ;)
+nnoremap <C-F> :CtrlPFunky<Cr>
+nnoremap <C-G> :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+
 
 " let g:EasyMotion_leader_key = '<Leader>'
 "
 " Completion
 " let g:SuperTabDefaultCompletionType = "context"
 " let g:SuperTabClosePreviewOnPopupClose = 1
-" " If you prefer the Omni-Completion tip window to close when a selection is
-" " " made, these lines close it on movement in insert mode or when leaving
-" " " insert mode
-" autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-" autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+" If you prefer the Omni-Completion tip window to close when a selection is
+" " made, these lines close it on movement in insert mode or when leaving
+" " insert mode
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 
 " =============================================================================
@@ -175,6 +194,8 @@ if has("spell")
   autocmd BufRead,BufNewFile *.dox  set spell
   autocmd Filetype mail             set spell
   autocmd Filetype tex              set spell
+  autocmd Filetype md               set spell
+  autocmd Filetype markdown         set spell
 endif
 
 au BufNewFile,BufRead *.hn setf yacc
