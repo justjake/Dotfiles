@@ -8,19 +8,18 @@ Host *.rescomp.berkeley.edu *.housing.berkeley.edu
     User jitl
     IdentityFile ~/.ssh/id_rsa.wopr
 
-Host stargate stargate.housing.berkeley.edu cardiff
-    ForwardAgent yes
-    ControlPath ~/.ssh/controlmasters/%r@%h:%p
-    ControlMaster auto
 
-# Bastion rescomp hosts
+Host stargate.housing.berkeley.edu cardiff.rescomp.berkeley.edu
+    DynamicForward 9001
+
+## Bastion rescomp hosts
 Host dev-* architect pythondev
     ProxyCommand ssh stargate.housing.berkeley.edu nc %h %p
     ForwardAgent yes
-    DynamicForward 9001
 
 Host pythondev
     Hostname dev-www14.rescomp.berkeley.edu
+    DynamicForward 9002
 
 # rescomp-only settings for public hosts
 Host resgithub
@@ -43,6 +42,10 @@ Host nomcopter nomcopter.com
     User justjake
     Port 484
 
+Host armada armada.systems
+    Hostname armada.systems
+    User justjake
+
 Host teevee teevee.internal
     Hostname teevee.internal
     User jitl
@@ -51,17 +54,19 @@ Host teevee teevee.internal
 Host berke1337
     Hostname 10.254.24.6
     User jitl
-    ProxyCommand ssh cs61b nc %h %p
+    ProxyCommand ssh irc nc %h %p
     DynamicForward 9002
-    LocalForward 5900 localhost:5904
 # the above for VNC sometimes
 
 Host bastion
     Hostname 10.254.24.6
     Port 2222
-    ProxyCommand ssh cs61b nc %h %p
+    ProxyCommand ssh irc nc %h %p
     DynamicForward 9003
     User user
+
+Host armada armada.systems
+    User justjake
 
 # CS
 Host cs61b

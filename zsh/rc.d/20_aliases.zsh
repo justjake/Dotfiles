@@ -50,8 +50,12 @@ alias resource="source ~/.zshrc"
 # rdesktop
 alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
 
-#### SSH 
-alias unlock="ssh-add ~/.ssh/id_rsa.wopr"
+#### SSH
+alias unlock="
+    ssh-add ~/.ssh/id_rsa.wopr
+    ssh -N stargate.housing.berkeley.edu
+"
+
 
 typeset -A ssh_hosts
 ssh_hosts=(
