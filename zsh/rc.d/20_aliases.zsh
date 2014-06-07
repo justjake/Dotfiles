@@ -19,7 +19,7 @@ for grep_type in grep fgrep egrep ; do
 done
 
 # some more ls aliases
-alias ll='ls -alF'
+alias ll='ls -alFh'
 alias la='ls -A'
 alias l='ls -CF'
 
@@ -60,6 +60,7 @@ hal         "hal.rescomp.berkeley.edu"
 irc         "irc.housing.berkeley.edu"
 architect   "thearchitect.rescomp.berkeley.edu"
 devbox      "dev-www14.rescomp.berkeley.edu"
+stargate    "stargate.housing.berkeley.edu"
 
 # personal
 tonic       "tonic.teton-landis.org"
