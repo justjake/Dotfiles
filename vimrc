@@ -54,6 +54,7 @@ Plugin 'groenewege/vim-less'             " ft .less
 Plugin 'tfnico/vim-gradle'               " ft .gradle
 Plugin 'cakebaker/scss-syntax.vim'       " ft .scss, .sass
 Plugin 'ap/vim-css-color'                " nicer colors in css-likes
+Plugin 'rodjek/vim-puppet'               " ft .pp
 
 " Needs to be executed after Vundle.
 call vundle#end()

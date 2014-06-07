@@ -22,7 +22,7 @@ add-bundle-to-path () {
 bundle-dir () {
     local BUNDLES="$1"
     local bundle
-    if [[ -d "$BUNDLES" ]]; then
+    if [ -d "$BUNDLES" ]; then
         for bundle in "$BUNDLES"/*; do
             add-bundle-to-path $bundle
         done
