@@ -50,6 +50,7 @@ Plugin 'jakar/vim-json'                  " ft .json
 Plugin 'kchmck/vim-coffee-script'        " ft .coffee
 Plugin 'groenewege/vim-less'             " ft .less
 Plugin 'tfnico/vim-gradle'               " ft .gradle
+Plugin 'rodjek/vim-puppet'               " ft .pp
 
 " Needs to be executed after Vundle.
 call vundle#end()
