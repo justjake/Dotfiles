@@ -55,6 +55,7 @@ Plugin 'tfnico/vim-gradle'               " ft .gradle
 Plugin 'cakebaker/scss-syntax.vim'       " ft .scss, .sass
 Plugin 'ap/vim-css-color'                " nicer colors in css-likes
 Plugin 'rodjek/vim-puppet'               " ft .pp
+Plugin 'ekalinin/Dockerfile.vim'         " ft Dockerfile
 
 " Needs to be executed after Vundle.
 call vundle#end()
@@ -254,7 +255,8 @@ endif
 
 
 "let g:zenburn_high_Contrast=1
-colors zenburn
+" don't complain if we don't have the schemes -- it's obv
+silent! colors zenburn
 
 " Colorcolumn - show 80 chars
 set colorcolumn=80
