@@ -54,14 +54,14 @@ Host teevee teevee.internal
 Host berke1337
     Hostname 10.254.24.6
     User jitl
-    ProxyCommand ssh irc nc %h %p
+    ProxyCommand ssh irc.housing.berkeley.edu nc %h %p
     DynamicForward 9002
 # the above for VNC sometimes
 
 Host bastion
     Hostname 10.254.24.6
     Port 2222
-    ProxyCommand ssh irc nc %h %p
+    ProxyCommand ssh irc.housing.berkeley.edu nc %h %p
     DynamicForward 9003
     User user
 
