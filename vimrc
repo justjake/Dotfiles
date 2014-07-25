@@ -151,8 +151,8 @@ set formatoptions=tcrqn " See :h 'fo-table for a detailed explanation.
 set nojoinspaces        " Don't insert two spaces when joining after [.?!].
 set copyindent          " Copy the structure of existing indentation
 set expandtab           " Expand tabs to spaces.
-set tabstop=4           " number of spaces for a <Tab>.
-set shiftwidth=4        " Tab indention
+set tabstop=2           " number of spaces for a <Tab>.
+set shiftwidth=2        " Tab indention
 "set textwidth=79        " Text width
 
 " Indentation Tweaks.
@@ -219,19 +219,29 @@ au BufNewFile,BufRead *.hn setf yacc
 " Makefiles don't like spaces
 au FileType make set noexpandtab
 
-" 2-space indents for some languages
-au FileType coffee set sw=2 ts=2
-au FileType ruby set sw=2 ts=2
-au FileType java set sw=2 ts=2
-au FileType html set sw=2 ts=2
-au FileType javascript set sw=2 ts=2
-au FileType js set sw=2 ts=2
-
 " fucking textwrap in go? get out
 au FileType go set textwidth=0 wrapmargin=0
 
 " Fold Conf Files
 au FileType conf syn region confBraces start="{" end="}" transparent fold
+
+" OCaml + Merlin
+if executable('ocamlmerlin') && has('python')
+    let s:ocamlmerlin = substitute(system('opam config var share'), '\n$', '', '''') . "/ocamlmerlin"
+    execute "set rtp+=".s:ocamlmerlin."/vim"
+    execute "set rtp+=".s:ocamlmerlin."/vimbufsync"
+
+    " syntax checking online
+    let g:syntastic_ocaml_checkers = ['merlin']
+endif
+
+if executable('opam')
+    let g:ocp_indent_vimfile = system("opam config var share")
+    let g:ocp_indent_vimfile = substitute(g:ocp_indent_vimfile, '[\r\n]*$', '', '')
+    let g:ocp_indent_vimfile = g:ocp_indent_vimfile . "/vim/syntax/ocp-indent.vim"
+
+    autocmd FileType ocaml exec ":source " . g:ocp_indent_vimfile
+endif
 
 
 " =============================================================================
