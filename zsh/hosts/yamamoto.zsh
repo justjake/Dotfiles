@@ -11,3 +11,6 @@ if [[ $TERM = "screen-256color" ]]; then
     cd ~/src/squidwork
     workon zeromq
 fi
+
+# OPAM configuration
+. /home/jitl/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
