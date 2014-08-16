@@ -38,4 +38,9 @@ if [ $SHELL = /bin/zsh ] || [ $SHELL = /bin/bash ] ; then
 fi
 
 DEFAULT_BUNDLES="$HOME/bundles"
-[ -d "$DEFAULT_BUNDLES" ] && bundle_dir "$DEFAULT_BUNDLES"
+local bundlecount
+if [ -d "$DEFAULT_BUNDLES" ]; then
+    local bundlecount=$(find "$DEFAULT_BUNDLES" -maxdepth 1 -type d | wc -l)
+    # source the bundledir only if there are things in it
+    [ $bundlecount -gt 2 ] && bundle-dir "$DEFAULT_BUNDLES"
+fi

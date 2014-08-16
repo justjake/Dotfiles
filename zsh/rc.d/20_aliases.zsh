@@ -21,9 +21,14 @@ for grep_type in grep fgrep egrep ; do
 done
 
 # some more ls aliases
-alias ll='ls -alF'
+alias ll='ls -alFh'
 alias la='ls -A'
 alias l='ls -CF'
+
+# ack-grep --> ack
+if which ack-grep no-output; then
+    alias ack=ack-grep
+fi
 
 # Settings shortcuts
 typeset -A settings_files
