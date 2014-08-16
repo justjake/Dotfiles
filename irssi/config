@@ -1,19 +1,35 @@
 servers = (
-  { address = "localhost"; chatnet = "rescomp"; port = "6667"; },
+  {
+    address = "localhost";
+    chatnet = "rescomp";
+    port = "6667";
+    autoconnect = "yes";
+  },
   {
     address = "irc.housing.berkeley.edu";
     chatnet = "rescomp";
     port = "6667";
   },
-  { 
+  {
     address = "irc.freenode.net";
     chatnet = "freenode";
     port = "6667";
+    autoconnect = "yes";
   },
   {
     address = "irc.caffinatedcode.com";
     channet = "alumni";
     port = "61667";
+    autoconnect = "yes";
+  },
+  {
+    address = "rescomp.irc.slack.com";
+    chatnet = "slack";
+    port = "6667";
+    autoconnect = "yes";
+    use_ssl = "yes";
+    nick = "jitl";
+    password = "FILL ME IN BRO";
   }
 );
 
@@ -60,6 +76,7 @@ chatnets = {
 
 
   SILC = { type = "SILC"; };
+  slack = { type = "IRC"; };
 };
 
 channels = (
@@ -129,6 +146,7 @@ aliases = {
   ATAG = "WINDOW SERVER";
   AME = "foreach channel /me $-; foreach query /me $T $-";
   ASAY = "foreach channel /eval msg $$C $$-; foreach query /eval msg $$T $$-";
+  SHRUG = "say ¯|_(ツ)_|¯";
 };
 
 statusbar = {
