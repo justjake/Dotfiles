@@ -29,8 +29,6 @@ export JAVA_HOME="$PREFIX/bundles/jdk1.7.0_51"
 # Aliases
 alias tbird="thunderbird & disown"
 alias open="gnome-open"
-alias dev-mount="sshfs dev-www9.rescomp.berkeley.edu:/usr/code/jitl $HOME/mnt/devbox"
-alias dev-unmount="fusermount -u $HOME/mnt/devbox"
 
 develop () {
     dev-mount
@@ -52,3 +50,6 @@ rev-app () {
         $EDITOR "$dest"
     done
 }
+
+alias idea="idea.sh & disown"
+alias unmirror="xrandr --auto --output DVI-0 --right-of DisplayPort-0"

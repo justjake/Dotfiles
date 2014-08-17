@@ -2,6 +2,8 @@
 # aliases
 ###
 
+alias sudo='sudo -E'
+
 # ls and grep differs in FreeBSD and Linux
 if [[ FreeBSD == $(uname) || Darwin == $(uname) ]] ; then
         alias ls='ls -G'
@@ -56,6 +58,10 @@ alias unlock="
     ssh -N stargate.housing.berkeley.edu
 "
 
+### Rescomp Dev hosts
+for n in {1..15} ; do
+    alias dev$n="ssh dev-www$n.rescomp.berkeley.edu"
+done
 
 typeset -A ssh_hosts
 ssh_hosts=(
@@ -65,6 +71,9 @@ irc         "irc.housing.berkeley.edu"
 architect   "thearchitect.rescomp.berkeley.edu"
 devbox      "dev-www14.rescomp.berkeley.edu"
 stargate    "stargate.housing.berkeley.edu"
+pitfall     "pitfall.rescomp.berkeley.edu"
+test-db     "test-db.rescomp.berkeley.edu"
+dev9        "dev9-forward"
 
 # personal
 tonic       "tonic.teton-landis.org"
@@ -74,13 +83,11 @@ for short in ${(k)ssh_hosts}; do
     alias $short="ssh $ssh_hosts[$short]"
 done
 
-### Rescomp Dev hosts
-for n in {1..15} ; do
-    alias dev$n="ssh dev-www$n.rescomp.berkeley.edu"
-done
 
 # tmux config: https://github.com/adnichols/tmux_setup
 alias fixssh="source ~/bin/fixssh"
+alias httpdlog="sudo tail -f /var/log/httpd-*"
+alias path='readlink -e'
 
 # aliasing for "op" to open files in GUI
 # last in list we hit will be the alias

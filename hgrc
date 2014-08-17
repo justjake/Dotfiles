@@ -4,9 +4,16 @@ ignore = ~/.hgignore
 
 [extensions]
 color = 
+bookmarks = 
 
 [color]
 mode = auto
 
 [trusted]
 users = root
+
+[bookmarks]
+# see http://mercurial.selenic.com/wiki/BookmarksExtension#Configuration
+# makes only the current bookmark update with commit, so heads are more
+# like git branches
+track.current = True
