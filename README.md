@@ -1,4 +1,4 @@
-# Jake Teton-Landis's Dotfiles
+# [@jitl](https://twitter.com/@jitl)'s Dotfiles
 
 Because I need them somewhere.
 
@@ -16,6 +16,17 @@ Print out the list of installable configurations:
 I usually install like this:
 
     $ zsh ~/.dotfiles/meta/install.sh submodules dotfiles ssh-config
+
+## Things to Change
+
+There are a few files that have my usernames and email in them. You should
+switch them out with your own before you make git commits or something.
+
+* `gitconfig`
+* `hgrc`
+* `irssi/config`
+* `signature`
+* `ssh_config`
 
 ## Zsh
 
