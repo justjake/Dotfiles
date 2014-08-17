@@ -81,3 +81,10 @@ done
 
 # tmux config: https://github.com/adnichols/tmux_setup
 alias fixssh="source ~/bin/fixssh"
+
+# aliasing for "op" to open files in GUI
+# last in list we hit will be the alias
+OPEN_PREFS_ORDER=(gnome-open kde-open xfce-open xdg-open)
+for cmd in $OPEN_PREFS_ORDER; do
+  which $cmd no-output && alias open=$cmd
+done
