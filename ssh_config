@@ -1,9 +1,5 @@
 # Rescomp Hosts
 
-Host irc irc.housing.berkeley.edu
-    User jitl
-    DynamicForward 9001
-
 Host *.rescomp.berkeley.edu *.housing.berkeley.edu
     User jitl
     IdentityFile ~/.ssh/id_rsa.wopr

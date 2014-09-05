@@ -88,3 +88,10 @@ done
 alias fixssh="source ~/bin/fixssh"
 alias httpdlog="sudo tail -f /var/log/httpd-*"
 alias path='readlink -e'
+
+# aliasing for "op" to open files in GUI
+# last in list we hit will be the alias
+OPEN_PREFS_ORDER=(gnome-open kde-open xfce-open xdg-open)
+for cmd in $OPEN_PREFS_ORDER; do
+  which $cmd no-output && alias open=$cmd
+done
