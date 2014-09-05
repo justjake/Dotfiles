@@ -197,6 +197,10 @@ nnoremap QQ :qa<CR>
 
 " Toggle paste mode.
 set pastetoggle=<F12>
+
+" Disable Ex mode because there's no reason for it to exist
+map Q <Nop>
+
 "
 " =============================================================================
 "                                Filetype Stuff
@@ -221,6 +225,8 @@ au FileType make set noexpandtab
 
 " fucking textwrap in go? get out
 au FileType go set textwidth=0 wrapmargin=0
+
+au FileType python set ts=4 sw=4
 
 " Fold Conf Files
 au FileType conf syn region confBraces start="{" end="}" transparent fold
