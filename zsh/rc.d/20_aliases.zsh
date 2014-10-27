@@ -81,3 +81,10 @@ done
 
 # tmux config: https://github.com/adnichols/tmux_setup
 alias fixssh="source ~/bin/fixssh"
+# alias pydoc="pythom -m pydoc"
+
+altify () {
+    local name="$1"
+    mv "$name".png alt/
+    cp "/mnt/storage/To Import/cards/${name}-alt.png" "./$name.png"
+}
