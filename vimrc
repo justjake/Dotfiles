@@ -56,6 +56,7 @@ Plugin 'cakebaker/scss-syntax.vim'       " ft .scss, .sass
 Plugin 'ap/vim-css-color'                " nicer colors in css-likes
 Plugin 'rodjek/vim-puppet'               " ft .pp
 Plugin 'ekalinin/Dockerfile.vim'         " ft Dockerfile
+Plugin 'mxw/vim-jsx'
 
 " Needs to be executed after Vundle.
 call vundle#end()
@@ -274,9 +275,9 @@ endif
 " don't complain if we don't have the schemes -- it's obv
 silent! colors zenburn
 
-" Colorcolumn - show 80 chars
-set colorcolumn=80
-highlight ColorColumn ctermbg=238 guibg=238
+" Colorcolumn - show 100 chars (we Airbnb now)
+set colorcolumn=100
+highlight ColorColumn ctermbg=238
 
 " GVim Settings
 
