@@ -29,7 +29,7 @@ Plugin 'tacahiroy/ctrlp-funky'           " find functions in ctrl-p
 Plugin 'scrooloose/nerdtree'             " files pane
 Plugin 'jistr/vim-nerdtree-tabs'         " NerdTree in all tabs
 Plugin 'bling/vim-airline'               " nifty vim statusline
-Plugin 'taglist.vim'                     " nerdtree but for tags, unconfigured
+"Plugin 'taglist.vim'                     " nerdtree but for tags, unconfigured
 Plugin 'xterm-color-table.vim'               " :XTermColorTable
 "Plugin 'edkolev/tmuxline.vim'            " vim statusline also in tmux, breaks things
 
@@ -40,6 +40,7 @@ Plugin 'chrisbra/Recover.vim'            " show diff when recovering file
 Plugin 'tpope/vim-endwise'               " adds block-end keywords when opening blocks
 Plugin 'Valloric/YouCompleteMe'          " advanced completions, requires cmake and gc++
 Plugin 'flazz/vim-colorschemes'          " nice colors
+"Plugin 'davidhalter/jedi-vim'            " python ide
 
 " filetypes
 Plugin 'vim-scripts/TWiki-Syntax'        " twiki, for vimperator mostly
@@ -55,6 +56,8 @@ Plugin 'tfnico/vim-gradle'               " ft .gradle
 Plugin 'cakebaker/scss-syntax.vim'       " ft .scss, .sass
 Plugin 'ap/vim-css-color'                " nicer colors in css-likes
 Plugin 'rodjek/vim-puppet'               " ft .pp
+Plugin 'slim-template/vim-slim.git'      " ft .slim
+Plugin 'mtscout6/vim-cjsx'               " ft .cjsx (coffeescript react stuff)
 Plugin 'ekalinin/Dockerfile.vim'         " ft Dockerfile
 Plugin 'mxw/vim-jsx'
 
@@ -107,6 +110,7 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 vmap <C-_> <plug>NERDCommenterToggle
 nmap <C-_> <plug>NERDCommenterToggle
 imap <C-_> <plug>NERDCommenterInsert
+
 
 
 " =============================================================================
@@ -299,3 +303,7 @@ set guioptions-=T  "remove toolbar
 set guioptions-=r  "remove right-hand scroll bar
 set guioptions-=L  "remove left-hand scroll bar
 
+" pep8 can fuck off
+let g:syntastic_python_checkers=['flake8']
+let g:syntastic_python_checker_args='--ignore=E501,E225,E302,E251'
+let g:syntastic_quiet_messages = { "type": "style" }
