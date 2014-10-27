@@ -58,7 +58,7 @@ Plugin 'ap/vim-css-color'                " nicer colors in css-likes
 Plugin 'rodjek/vim-puppet'               " ft .pp
 Plugin 'slim-template/vim-slim.git'      " ft .slim
 Plugin 'mtscout6/vim-cjsx'               " ft .cjsx (coffeescript react stuff)
-
+Plugin 'ekalinin/Dockerfile.vim'         " ft Dockerfile
 
 " Needs to be executed after Vundle.
 call vundle#end()
@@ -155,8 +155,8 @@ set formatoptions=tcrqn " See :h 'fo-table for a detailed explanation.
 set nojoinspaces        " Don't insert two spaces when joining after [.?!].
 set copyindent          " Copy the structure of existing indentation
 set expandtab           " Expand tabs to spaces.
-set tabstop=4           " number of spaces for a <Tab>.
-set shiftwidth=4        " Tab indention
+set tabstop=2           " number of spaces for a <Tab>.
+set shiftwidth=2        " Tab indention
 "set textwidth=79        " Text width
 
 " Indentation Tweaks.
@@ -201,6 +201,10 @@ nnoremap QQ :qa<CR>
 
 " Toggle paste mode.
 set pastetoggle=<F12>
+
+" Disable Ex mode because there's no reason for it to exist
+map Q <Nop>
+
 "
 " =============================================================================
 "                                Filetype Stuff
@@ -223,19 +227,31 @@ au BufNewFile,BufRead *.hn setf yacc
 " Makefiles don't like spaces
 au FileType make set noexpandtab
 
-" 2-space indents for some languages
-au FileType coffee set sw=2 ts=2
-au FileType ruby set sw=2 ts=2
-au FileType java set sw=2 ts=2
-au FileType html set sw=2 ts=2
-au FileType javascript set sw=2 ts=2
-au FileType js set sw=2 ts=2
-
 " fucking textwrap in go? get out
 au FileType go set textwidth=0 wrapmargin=0
 
+au FileType python set ts=4 sw=4
+
 " Fold Conf Files
 au FileType conf syn region confBraces start="{" end="}" transparent fold
+
+" OCaml + Merlin
+if executable('ocamlmerlin') && has('python')
+    let s:ocamlmerlin = substitute(system('opam config var share'), '\n$', '', '''') . "/ocamlmerlin"
+    execute "set rtp+=".s:ocamlmerlin."/vim"
+    execute "set rtp+=".s:ocamlmerlin."/vimbufsync"
+
+    " syntax checking online
+    let g:syntastic_ocaml_checkers = ['merlin']
+endif
+
+if executable('opam')
+    let g:ocp_indent_vimfile = system("opam config var share")
+    let g:ocp_indent_vimfile = substitute(g:ocp_indent_vimfile, '[\r\n]*$', '', '')
+    let g:ocp_indent_vimfile = g:ocp_indent_vimfile . "/vim/syntax/ocp-indent.vim"
+
+    autocmd FileType ocaml exec ":source " . g:ocp_indent_vimfile
+endif
 
 
 " =============================================================================
@@ -259,7 +275,8 @@ endif
 
 
 "let g:zenburn_high_Contrast=1
-colors zenburn
+" don't complain if we don't have the schemes -- it's obv
+silent! colors zenburn
 
 " Colorcolumn - show 80 chars
 set colorcolumn=80

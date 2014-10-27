@@ -1,10 +1,13 @@
 ### Aliases for rescomp machines
 
-if [[ "$HOSTNAME" == *rescomp.berkeley.edu ]] ; then
+if [[ $(hostname -f) == *rescomp.berkeley.edu || \
+    $(hostname -f) == *it.housing.berkeley.edu ]] ; then
     ### Paths
     export SVNCODE="https://svn.rescomp.berkeley.edu/code"
     export SVNTMPL="https://svn.rescomp.berkeley.edu/marketing"
-    export CODE="/usr/code/jitl/"
+    export CODE="/usr/code/jitl"
+    export webtree="/usr/local/www/rescomp/docs"
+    export phplib="/usr/local/rescomp/lib/php"
 
     ### PostgreSQL Database Access
     alias devdb='psql -h test-db -p 5433 rescomp'
@@ -23,4 +26,28 @@ if [[ "$HOSTNAME" == *rescomp.berkeley.edu ]] ; then
 
     ### Webtree sync
     alias websync='sudo svn export --force $SVNTMPL/webtree/ /usr/local/www/rescomp/docs/'
+
+    # directories
+    typeset -A NAMED_DIRS
+
+    NAMED_DIRS=(
+        wsgi    /usr/local/etc/rssp/django
+        vhosts  /etc/httpd/conf.d/vhosts
+        scunc   /usr/code/jitl/git/scunc
+        httpd   /usr/local/etc/apache22/Includes
+    )
+
+    for key in ${(k)NAMED_DIRS}
+    do
+        if [[ -d ${NAMED_DIRS[$key]} ]]; then
+            export $key=${NAMED_DIRS[$key]}
+        else
+            unset "NAMED_DIRS[$key]"
+        fi
+    done
+
+    alias rescompsettings="$EDITOR ~/.zsh/rc.d/21_rescomp.zsh"
+    alias dev-mount="sshfs dev-www9.rescomp.berkeley.edu:/usr/code/jitl $HOME/mnt/devbox"
+    alias dev-unmount="fusermount -u $HOME/mnt/devbox"
+    alias slack="/opt/google/chrome/google-chrome --profile-directory=Default --app-id=jeogkiiogjbmhklcnbgkdcjoioegiknm"
 fi

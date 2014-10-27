@@ -39,10 +39,30 @@ vimrc
 # hide command output
 alias -g no-output=">/dev/null 2>&1"
 
+# same semantics as ln -s
+# creates a new symlink at $2 that points to $1
+# if $2 exists, then it is backed up using mv
+function link-into-place () {
+    local src="$1"
+    local dst="$2"
+
+    if [[ -e "$dst" ]]; then
+        # file exists, move it out of the way by timestamp
+        local ts=$(date +%Y-%m-%d.%H:%M:%S)
+        local backup="$dst.bak-${ts}"
+
+        echo "target $dst: Moving existing file '$dst' to '$backup'"
+        mv "$dst" "$backup"
+    fi
+
+    echo "target $dst: Linking '$src' --> '$dst'"
+    ln -s "$src" "$dst"
+}
+
 # ssh
 function ssh-config () {
     mkdir -p "$HOME/.ssh/"
-    ln -s "$DOTFILES_DIR/ssh_config" "$HOME/.ssh/config"
+    link-into-place "$DOTFILES_DIR/ssh_config" "$HOME/.ssh/config"
     chmod 0600 "$DOTFILES_DIR/ssh_config"
 }
 
@@ -65,26 +85,23 @@ function desktop-config () {
     pushd "$HOME" no-output
     for file_fullname in "$desktop_config_dir"/* ; do
 	local file="$(basename "$file_fullname")"
-        if [ ! -f "$HOME/.config/${file}" ]; then
+        if [ ! -e "$HOME/.config/${file}" ]; then
             echo "Linked .dotfiles/config/${file} -> ~/.config/${file}"
             ln -s "$file_fullname" ".config/${file}"
         else
-            echo "skipped because file exists: ~/.config/${file}"
+            echo "skipped because path exists: ~/.config/${file}"
         fi
     done
     popd
 }
 
+
+
 # link basic files
 function dotfiles () {
     pushd "$HOME" no-output
     for file in "${DOTFILES[@]}"; do
-        if [ ! -f "$HOME/${file}" ]; then
-            echo "Linked .dotfiles/${file} -> ~/.${file}"
-            ln -s ".dotfiles/${file}" ".${file}"
-        else
-            echo "skipped because file exists: ~/.${file}"
-        fi
+        link-into-place ".dotfiles/${file}" ".${file}"
     done
 
     # bundles dir is defaulty sourced in zshrc.d/02_bundles.zsh
@@ -101,8 +118,8 @@ function brew () {
 if [ -z "$*" ]; then
     echo "$0 - error.
 Usage:
-~/.dotfiles/meta/install.sh [MODULES...]
-where 'extras' is any installation function defined here:
+~/.dotfiles/meta/install.sh [MODULE...]
+where 'MODULE' is any installation function defined here:
   - dotfiles:       the base dotfiles
   - submodules:     get all git submodules
   - ssh-config:     link my ssh-config into ~/.ssh/config

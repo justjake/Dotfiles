@@ -8,7 +8,7 @@ setopt ALL_EXPORT
 
 MANSECT=1:1p:8:2:3:3p:4:5:6:7:9:0p:n:l:o
 TZ="America/Los_Angeles"
-HOSTNAME="`hostname`"
+HOSTNAME="$(hostname -f)"
 PAGER='less'
 EDITOR='vim'
 # set SVN_EDITOR only if unset
@@ -46,6 +46,11 @@ setopt NO_share_history
 ####
 setopt    extended_glob
 setopt    long_list_jobs
+
+# deal with Gnome Terminal being silly
+if [[ $COLORTERM == "gnome-terminal" ]] ; then
+    export TERM="xterm-256color"
+fi
 
 ####
 # Zshrc.d - most other config
