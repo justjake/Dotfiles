@@ -107,7 +107,12 @@ function dotfiles () {
     # bundles dir is defaulty sourced in zshrc.d/02_bundles.zsh
     mkdir -p -v "$BUNDLES_DIR"
 
+    # link in node bundles on sytems with JS support
+    link-into-place ".dotfiles/dotfiles-node" "$BUNDLES_DIR/"
     popd no-output
+}
+
+function js () {
 }
 
 function brew () {
