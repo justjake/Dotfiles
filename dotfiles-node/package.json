@@ -1,6 +1,6 @@
 {
   "name": "dotfiles-node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Javascript-related dotfiles",
   "main": "index.js",
   "scripts": {
@@ -9,9 +9,9 @@
   "author": "Jake Teton-Landis",
   "license": "ISC",
   "dependencies": {
-    "coffee-script": "^1.9.1",
-    "nesh": "^1.5.1",
-    "shelljs": "^0.4.0",
-    "wintersmith": "^2.1.0"
+    "coffee-script": "*",
+    "nesh": "*",
+    "shelljs": "*",
+    "wintersmith2": "^2.1.4-dev"
   }
 }

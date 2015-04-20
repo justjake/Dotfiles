@@ -4,3 +4,4 @@ bin/fixssh
 vim/bundle/*
 vim/_temp/*
 vim/_backup/*
+npm-debug.log
