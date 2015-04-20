@@ -50,15 +50,18 @@ Plugin 'tpope/vim-haml'                  " ft .haml
 Plugin 'tpope/vim-markdown'              " ft .md, .markdown
 Plugin 'justinmk/vim-syntax-extra'       " ft .h, .c, bison, flex
 Plugin 'jakar/vim-json'                  " ft .json
-Plugin 'kchmck/vim-coffee-script'        " ft .coffee
-Plugin 'groenewege/vim-less'             " ft .less
 Plugin 'tfnico/vim-gradle'               " ft .gradle
 Plugin 'cakebaker/scss-syntax.vim'       " ft .scss, .sass
 Plugin 'ap/vim-css-color'                " nicer colors in css-likes
 Plugin 'rodjek/vim-puppet'               " ft .pp
+Plugin 'ekalinin/Dockerfile.vim'         " ft Dockerfile
+
+" js hipster filetypes. seperate because you just gotta see it man
+Plugin 'kchmck/vim-coffee-script'        " ft .coffee
+Plugin 'groenewege/vim-less'             " ft .less
 Plugin 'slim-template/vim-slim.git'      " ft .slim
 Plugin 'mtscout6/vim-cjsx'               " ft .cjsx (coffeescript react stuff)
-Plugin 'ekalinin/Dockerfile.vim'         " ft Dockerfile
+Plugin 'digitaltoad/vim-jade'            " ft .jade
 
 " Needs to be executed after Vundle.
 call vundle#end()
