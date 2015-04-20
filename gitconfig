@@ -27,3 +27,5 @@
 	excludesfile = ~/.dotfiles/gitignore_global
 [github]
 	user = justjake
+[push]
+	default = simple
