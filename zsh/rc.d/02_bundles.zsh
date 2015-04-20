@@ -40,7 +40,7 @@ fi
 DEFAULT_BUNDLES="$HOME/bundles"
 local bundlecount
 if [ -d "$DEFAULT_BUNDLES" ]; then
-    local bundlecount=$(find "$DEFAULT_BUNDLES" -maxdepth 1 -type d | wc -l)
-    # source the bundledir only if there are things in it
-    [ $bundlecount -gt 2 ] && bundle-dir "$DEFAULT_BUNDLES"
+  if [ -n "$(ls -A "$DEFAULT_BUNDLES")" ]; then
+    bundle_dir "$DEFAULT_BUNDLES" && echo "installed bundles in $DEFAULT_BUNDLES"
+  fi
 fi
