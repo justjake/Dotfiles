@@ -62,7 +62,6 @@ Plugin 'groenewege/vim-less'             " ft .less
 Plugin 'slim-template/vim-slim.git'      " ft .slim
 Plugin 'mtscout6/vim-cjsx'               " ft .cjsx (coffeescript react stuff)
 Plugin 'digitaltoad/vim-jade'            " ft .jade
-Plugin 'ekalinin/Dockerfile.vim'         " ft Dockerfile
 Plugin 'mxw/vim-jsx'
 
 " Needs to be executed after Vundle.
