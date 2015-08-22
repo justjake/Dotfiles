@@ -54,7 +54,6 @@ Plugin 'tfnico/vim-gradle'               " ft .gradle
 Plugin 'cakebaker/scss-syntax.vim'       " ft .scss, .sass
 Plugin 'ap/vim-css-color'                " nicer colors in css-likes
 Plugin 'rodjek/vim-puppet'               " ft .pp
-Plugin 'ekalinin/Dockerfile.vim'         " ft Dockerfile
 
 " js hipster filetypes. seperate because you just gotta see it man
 Plugin 'kchmck/vim-coffee-script'        " ft .coffee
