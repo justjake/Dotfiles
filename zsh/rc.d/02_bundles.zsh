@@ -14,6 +14,9 @@ add_bundle_to_path () {
 
     # add sub folders like "usr"
     [ -d "$bundle/usr" ] && add_bundle_to_path "$bundle/usr"
+
+    # source bundle config if it exists
+    [ -f "$bundle/bundle.rc" ] && . "$bundle/bundle.rc"
 }
 
 # I like to use ~/bundles to store my personal software in
@@ -24,7 +27,7 @@ bundle_dir () {
     local bundle
     if [ -d "$BUNDLES" ]; then
         for bundle in "$BUNDLES"/*; do
-            add_bundle_to_path $bundle
+            add_bundle_to_path "$bundle"
         done
     else
         echo "$BUNDLES does not exist"
@@ -38,7 +41,6 @@ if [ $SHELL = /bin/zsh ] || [ $SHELL = /bin/bash ] ; then
 fi
 
 DEFAULT_BUNDLES="$HOME/bundles"
-local bundlecount
 if [ -d "$DEFAULT_BUNDLES" ]; then
   if [ -n "$(ls -A "$DEFAULT_BUNDLES")" ]; then
     bundle_dir "$DEFAULT_BUNDLES" && echo "installed bundles in $DEFAULT_BUNDLES"
