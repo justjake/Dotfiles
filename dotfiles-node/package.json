@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "coffee-script": "*",
+    "n": "^2.0.2",
     "nesh": "*",
+    "npm": "^2.14.0",
     "shelljs": "*",
     "wintersmith2": "^2.1.4-dev"
   }
