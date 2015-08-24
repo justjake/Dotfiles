@@ -34,3 +34,6 @@ tramp
 
 ### SASS
 .sass-cache
+
+### python
+*.pyc

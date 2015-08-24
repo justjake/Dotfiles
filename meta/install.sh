@@ -56,7 +56,7 @@ function link-into-place () {
     fi
 
     echo "target $dst: Linking '$src' --> '$dst'"
-    ln -s "$src" "$dst"
+    ln -sv "$src" "$dst"
 }
 
 # ssh

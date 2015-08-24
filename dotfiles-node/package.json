@@ -9,7 +9,13 @@
   "author": "Jake Teton-Landis",
   "license": "ISC",
   "dependencies": {
+    "babel-eslint": "^3.0.1",
+    "bower": "1.4.1",
     "coffee-script": "*",
+    "concat-stream": "^1.4.8",
+    "csv-parse": "^0.1.1",
+    "eslint": "^0.21.0",
+    "eslint-plugin-react": "2.3.0",
     "n": "^2.0.2",
     "nesh": "*",
     "npm": "^2.14.0",

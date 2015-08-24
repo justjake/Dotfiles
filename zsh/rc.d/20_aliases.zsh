@@ -78,6 +78,10 @@ dev9        "dev9-forward"
 # personal
 tonic       "tonic.teton-landis.org"
 armada      "armada.systems"
+
+# airbnb
+rc1        "rc1.musta.ch"
+rc1-next   "rc1-next.musta.ch"
 )
 for short in ${(k)ssh_hosts}; do
     alias $short="ssh $ssh_hosts[$short]"
@@ -102,3 +106,19 @@ OPEN_PREFS_ORDER=(gnome-open kde-open xfce-open xdg-open)
 for cmd in $OPEN_PREFS_ORDER; do
   which $cmd no-output && alias open=$cmd
 done
+
+# count the uglified-gzipped-kb of files
+# Usage:
+#   min-gzip-fsize foo.js bar.js
+#   curl http://example.com/some.js | min-gzip-fsize
+min-gzip-fsize () {
+  if [[ $# -gt 0  ]]; then
+    cat "$@" | uglifyjs -m | gzip | wc -c | ruby -e 'printf "%.2fkb\n", gets.strip.to_f / 1024.0'
+  else
+    uglifyjs -m | gzip | wc -c | ruby -e 'printf "%.2fkb\n", gets.strip.to_f / 1024.0'
+  fi
+}
+
+psf () {
+  ps aux | egrep "^USER|$1"
+}

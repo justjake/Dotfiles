@@ -1,7 +1,7 @@
 # git config
 [user]
 	name = Jake Teton-Landis
-	email = just.1.jake@gmail.com
+	email = jake.tl@airbnb.com
 [color]
 	diff = auto
 	status = auto
@@ -27,5 +27,7 @@
 	excludesfile = ~/.dotfiles/gitignore_global
 [github]
 	user = justjake
+[rerere]
+	enabled = 1
 [push]
 	default = current

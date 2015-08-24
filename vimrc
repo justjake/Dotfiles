@@ -1,7 +1,8 @@
 " =============================================================================
-
+"
                                set nocompatible
-
+"                             jake teton-landis
+"
 " =============================================================================
 "                                    Vundle
 " =============================================================================
@@ -41,6 +42,7 @@ Plugin 'tpope/vim-endwise'               " adds block-end keywords when opening 
 Plugin 'Valloric/YouCompleteMe'          " advanced completions, requires cmake and gc++
 Plugin 'flazz/vim-colorschemes'          " nice colors
 "Plugin 'davidhalter/jedi-vim'            " python ide
+Plugin 'jiangmiao/auto-pairs'            " textmate like auto pairs.
 
 " filetypes
 Plugin 'vim-scripts/TWiki-Syntax'        " twiki, for vimperator mostly
@@ -54,6 +56,7 @@ Plugin 'tfnico/vim-gradle'               " ft .gradle
 Plugin 'cakebaker/scss-syntax.vim'       " ft .scss, .sass
 Plugin 'ap/vim-css-color'                " nicer colors in css-likes
 Plugin 'rodjek/vim-puppet'               " ft .pp
+Plugin 'ekalinin/Dockerfile.vim'         " ft Dockerfile
 
 " js hipster filetypes. seperate because you just gotta see it man
 Plugin 'kchmck/vim-coffee-script'        " ft .coffee
@@ -61,7 +64,8 @@ Plugin 'groenewege/vim-less'             " ft .less
 Plugin 'slim-template/vim-slim.git'      " ft .slim
 Plugin 'mtscout6/vim-cjsx'               " ft .cjsx (coffeescript react stuff)
 Plugin 'digitaltoad/vim-jade'            " ft .jade
-Plugin 'mxw/vim-jsx'
+Plugin 'mxw/vim-jsx'                     " ft .jsx (normal react stuff)
+Plugin 'marijnh/tern_for_vim'            " actual Javascript autocompletion
 
 " Needs to be executed after Vundle.
 call vundle#end()
@@ -92,6 +96,9 @@ let g:ctrlp_funky_syntax_highlight = 1 " and syntax hilight ;)
 nnoremap <C-F> :CtrlPFunky<Cr>
 nnoremap <C-G> :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
 
+" ctrl-p needs more depth for Airbnb!
+let g:ctrlp_max_depth = 50
+
 " Tag list on right side
 let Tlist_Use_Right_Window = 1
 nnoremap <C-C> :TlistToggle<Cr>
@@ -108,10 +115,34 @@ nnoremap <C-C> :TlistToggle<Cr>
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
-" settings for nerdcommenter Ctrl-/ to comment
+ "settings for nerdcommenter Ctrl-/ to comment
 vmap <C-_> <plug>NERDCommenterToggle
 nmap <C-_> <plug>NERDCommenterToggle
 imap <C-_> <plug>NERDCommenterInsert
+
+" Use the Silver Searcher for Ctrl-P & friends
+" from http://robots.thoughtbot.com/faster-grepping-in-vim
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+
+" bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+" bind \ (backward slash) to grep shortcut
+command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+nnoremap \ :Ag<SPACE>
+
+" strip trailing whitespace
+autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+
 
 
 
@@ -136,7 +167,7 @@ set mouse=a             " Enables mouse usage (all modes)
 set magic               " Improves default search
 set autoread            " Prompt to reread a file if it changes
 set wrap                " Wraps long lines
-set scrolloff=5         " Always shows five lines of vertical context around 
+set scrolloff=5         " Always shows five lines of vertical context around
                         " the cursor
 
 " Low priority for these files in tab-completion.
@@ -179,6 +210,12 @@ set shiftwidth=2        " Tab indention
 " =============================================================================
 
 let mapleader=","
+
+" press ,n to go to next occurance character under cursor
+:nnoremap <leader>n xhp/<C-R>-<CR>
+
+" press ,f to find current file in NERDTree
+:nnoremap <leader>f :NERDTreeFind<CR>
 
 :command NT NERDTreeTabsToggle
 map <F2> :NERDTreeToggle<CR>
@@ -233,7 +270,7 @@ au FileType make set noexpandtab
 " fucking textwrap in go? get out
 au FileType go set textwidth=0 wrapmargin=0
 
-au FileType python set ts=4 sw=4
+au FileType python set ts=2 sw=2
 
 " Fold Conf Files
 au FileType conf syn region confBraces start="{" end="}" transparent fold
@@ -256,6 +293,12 @@ if executable('opam')
     autocmd FileType ocaml exec ":source " . g:ocp_indent_vimfile
 endif
 
+" Add HTML tag closers in the suitable files
+"au Filetype FILETYPE let b:AutoPairs = {"(": ")"}
+au FileType jsx let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '<':'>'}
+au FileType erb let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '<':'>'}
+au FileType html let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '<':'>'}
+au FileType xml let b:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '<':'>'}
 
 " =============================================================================
 "                                   Styling

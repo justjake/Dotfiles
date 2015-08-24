@@ -1,0 +1,72 @@
+#!/usr/bin/env node
+const parse = require('csv-parse');
+const fs = require('fs');
+const concat = require('concat-stream');
+
+const input = process.argv[2] ? fs.createReadStream(process.argv[2]) :
+                                process.stdin;
+
+input.on('error', console.error.bind(console, 'error'));
+
+function parseThenPrint(csvText) {
+  parse(csvText, function(err, parsedRows) {
+
+    // temporary things
+    try {
+      const header = parsedRows[0];
+      const body = parsedRows.slice(1);
+
+      const results = body.map(function(row) {
+        var obj = {};
+
+        for (var i=0; i<header.length; i++) {
+          obj[header[i]] = row[i];
+        }
+
+        return obj;
+      });
+
+      const reduced = {};
+      var prevRow = {};
+      results.forEach(function(row) {
+        // patch each field with the value from the prev row if it is falsy
+        Object.keys(row).forEach(function(key) {
+          row[key] = row[key] || prevRow[key];
+        });
+
+        // now we can groupBy filename
+        var byFile = reduced[row.file_name] || [];
+
+        byFile.push({
+          translationKey: translationKey(row),
+          translationDefault: row.text_string_name,
+          x: Number(row.top_left_x),
+          y: Number(row.top_left_y),
+          width: Number(row.width),
+          height: Number(row.height),
+        });
+
+        reduced[row.file_name] = byFile;
+        prevRow = row;
+      });
+
+      output(reduced);
+    } catch (err) {
+      console.error(err);
+      output(parsedRows);
+    }
+
+  });
+}
+
+function output(data) {
+  console.log(JSON.stringify(data, null, '  '));
+}
+
+function translationKey(row) {
+  var step = row.file_name.split('.')[0];
+  var text = row.text_string_name;
+  return ['calsync.walkthru', step, text].join('.');
+}
+
+input.pipe(concat(parseThenPrint));

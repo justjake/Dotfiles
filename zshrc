@@ -28,8 +28,8 @@ PATH="$HOME/bin:$PATH"
 
 #### History Settings
 HISTFILE="$HOME/.zsh/cache/`hostname`.zhistory"
-HISTSIZE=130000
-SAVEHIST=100000
+HISTSIZE=1300000
+SAVEHIST=1000000
 setopt NO_ALL_EXPORT
 
 setopt    hist_ignore_dups
@@ -66,5 +66,6 @@ done
 # source "$ZSH_FILES"/zshrc.d/*
 
 #### Host Settings
-[[ -f "$ZSH_FILES/hosts/`hostname`" ]] && source "$ZSH_FILES/hosts/`hostname`"
-[[ -f "$ZSH_FILES/hosts/`hostname`.zsh" ]] && source "$ZSH_FILES/hosts/`hostname`.zsh"
+[[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] && source "$ZSH_FILES/hosts/$HOSTNAME"
+[[ -f "$ZSH_FILES/hosts/$HOSTNAME.zsh" ]] && source "$ZSH_FILES/hosts/$HOSTNAME.zsh"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
