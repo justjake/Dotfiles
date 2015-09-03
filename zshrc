@@ -27,7 +27,9 @@ ZSH_FILES="$DOTFILES/zsh"
 PATH="$HOME/bin:$PATH"
 
 #### History Settings
-HISTFILE="$HOME/.zsh/cache/`hostname`.zhistory"
+# Sorting by year and month makes it easier to grep a time period and means you dont't have a zillion files in one dir
+# - @michaelhoffman
+HISTFILE="${ZSH_FILES}/history/$(date -u +%Y/%m/%d.%H.%M.%S)_${HOSTNAME}_$$"
 HISTSIZE=1300000
 SAVEHIST=1000000
 setopt NO_ALL_EXPORT
