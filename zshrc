@@ -27,7 +27,7 @@ ZSH_FILES="$DOTFILES/zsh"
 PATH="$HOME/bin:$PATH"
 
 #### History Settings
-HISTFILE="$HOME/.zsh/cache/`hostname`.zhistory"
+HISTFILE="$ZSH_FILES/cache/global.zhistory"
 HISTSIZE=1300000
 SAVEHIST=1000000
 setopt NO_ALL_EXPORT
