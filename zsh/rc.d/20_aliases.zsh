@@ -122,3 +122,5 @@ min-gzip-fsize () {
 psf () {
   ps aux | egrep "^USER|$1"
 }
+
+alias ezj="sudo ezjail-admin"
