@@ -34,6 +34,9 @@ screenrc
 
 vim
 vimrc
+
+tmux.conf
+tmux
 )
 
 # hide command output
