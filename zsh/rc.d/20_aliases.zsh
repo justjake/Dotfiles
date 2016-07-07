@@ -39,7 +39,8 @@ aliases         "$ZSH_FILES/rc.d/20_aliases.zsh"
 zshall          "$ZSH_FILES"
 
 # non-zsh
-vimrc           "~/.vimrc"
+vimrc           "~/.dotfiles/vimrc"
+nvimrc          "~/.dotfiles/config/nvim/init.vim"
 sshconfig       "~/.ssh/config"
 )
 for short in ${(k)settings_files}; do
