@@ -17,6 +17,7 @@ Plugin 'gmarik/Vundle.vim'               " this whole deal
 Plugin 'godlygeek/tabular'               " :Tabular align tabs
 Plugin 'tpope/vim-fugitive'              " :Gstatus, :Gedit, :Gdiff, :Glog, etc
 Plugin 'DamienCassou/textlint'           " :TextLint or <leader>tl. see :help quickfix
+Plugin 'dkprice/vim-easygrep'            " :Replace [target] [replacement] - global search/replace
 
 " Motions
 Plugin 'scrooloose/nerdcommenter'        " leader c{c,u} to comment/uncomment
@@ -42,7 +43,8 @@ Plugin 'tpope/vim-endwise'               " adds block-end keywords when opening 
 Plugin 'Valloric/YouCompleteMe'          " advanced completions, requires cmake and gc++
 Plugin 'flazz/vim-colorschemes'          " nice colors
 "Plugin 'davidhalter/jedi-vim'            " python ide
-Plugin 'jiangmiao/auto-pairs'            " textmate like auto pairs.
+Plugin 'jiangmiao/auto-pairs'            " textmate like auto pairs. it sucks
+Plugin 'fatih/vim-go'                    " golang ide
 
 " filetypes
 Plugin 'vim-scripts/TWiki-Syntax'        " twiki, for vimperator mostly
@@ -66,6 +68,7 @@ Plugin 'mtscout6/vim-cjsx'               " ft .cjsx (coffeescript react stuff)
 Plugin 'digitaltoad/vim-jade'            " ft .jade
 Plugin 'mxw/vim-jsx'                     " ft .jsx (normal react stuff)
 Plugin 'marijnh/tern_for_vim'            " actual Javascript autocompletion
+Plugin 'GutenYe/json5.vim'               " json with ES5 features like unquoted keys and trailing ,
 
 " Needs to be executed after Vundle.
 call vundle#end()
@@ -268,7 +271,7 @@ au BufNewFile,BufRead *.hn setf yacc
 au FileType make set noexpandtab
 
 " fucking textwrap in go? get out
-au FileType go set textwidth=0 wrapmargin=0
+au FileType go set textwidth=0 wrapmargin=0 ts=4 sw=4
 
 au FileType python set ts=2 sw=2
 
