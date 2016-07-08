@@ -38,6 +38,7 @@ values."
      tmux
      ruby-on-rails
      react
+     typescript
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -57,6 +58,7 @@ This function is called at the very startup of Spacemacs initialization
 before layers configuration.
 You should not put any user code in there besides modifying the variable
 values."
+  (global-unset-key (kbd "C-h"))
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
@@ -324,7 +326,23 @@ layers configuration. You are free to put any user code."
    web-mode-markup-indent-offset 2
    web-mode-css-indent-offset 2
    web-mode-code-indent-offset 2
-   web-mode-attr-indent-offset 2)
+   web-mode-attr-indent-offset 2
+   ;; fug
+   js-indent-level 2
+   standard-indent 2
+   json-reformat:indent-width 2
+   typescript-indent-level 2
+   ruby-indent-level 2
+   indent-tabs-mode nil
+   )
+
+  ;; support jsx in .js files better
+  ;; (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+  (setq web-mode-content-types-alist
+        '(("jsx" . "\\.js[x]?\\'")))
+  ;; bark
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode))
+
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; NeoTree - the tree dingus
@@ -358,6 +376,9 @@ layers configuration. You are free to put any user code."
       (neotree-find)))
 
   (setq flycheck-javascript-eslint-executable "eslint-project-relative")
+  (set-face-attribute 'evil-search-highlight-persist-highlight-face nil
+                      :foreground "brightwhite"
+                      :background "brightblack")
 
   ;; ok -- now for the really audacious - keep the NeoTree open and the left-most
   ;; window, even after abusing splits

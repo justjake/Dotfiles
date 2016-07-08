@@ -14,3 +14,8 @@ function fractal {
     done
     echo -n "\e[49m"
 }
+
+# can use these if imgderp exists
+for gif in celeryman flarhgunnstow tayne hat-wobble ; do
+  alias $gif="imgderp -animate -invert -w \$(tput cols) ${DOTFILES}/meta/${gif}.gif"
+done

@@ -79,6 +79,7 @@ dev9        "dev9-forward"
 # personal
 tonic       "tonic.teton-landis.org"
 armada      "armada.systems"
+cc          "jitl@cc.internal"
 
 # airbnb
 rc1        "rc1.musta.ch"
@@ -124,4 +125,25 @@ psf () {
   ps aux | egrep "^USER|$1"
 }
 
+e () {
+  if [[ `is-e-running` == stopped ]]; then
+    emacs --daemon
+  fi
+  emacsclient "$@"
+}
+
+is-e-running () {
+  emacsclient -e '(ignore)' > /dev/null 2>&1
+  local success="$?"
+  if [[ $success == 0 ]]; then
+    echo running
+  else
+    echo stopped
+  fi
+}
+
+alias e-quit="emacsclient -e '(kill-emacs)'"
+alias e-daemon="emacs --daemon"
+alias scrab="scrabble-solver"
+alias ruboshit="bundle exec rubocop --auto-correct"
 alias ezj="sudo ezjail-admin"
