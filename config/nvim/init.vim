@@ -15,19 +15,30 @@
 "             written for...
 "             os version:   FreeBSD 10.2-RELEASE-p18 (jailed)
 "             nvim version: NVIM v0.1.5-560-ga535868 (make CMAKE_BUILD_TYPE=RelWithDebInfo)
+"
+" TODOs:
+" - unite seems cool, conf here: https://github.com/Xuyuanp/vimrc/blob/master/vundles/unite.vim
+" - should probably do syntastic at some point, but flycheck in emacs left a
+"   bad taste in my mouth
+" - should restrict vim commit width to 60 or whatever to make Github pretty
 
 " auto-install plugin manager
 if !filereadable(expand('~/.config/nvim/autoload/plug.vim'))
   !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 endif
 
+" auto-patch terminfo so that ctrl-h works
+silent !sh ~/.config/nvim/patch-terminfo-for-vim-tmux-navigator.sh
+
 " plugins {{{
 call plug#begin('~/.config/nvim/plug')
 
 " visual widgets
 Plug 'scrooloose/nerdtree' | Plug 'jistr/vim-nerdtree-tabs' " file browsing sidebar thing
+Plug 'Xuyuanp/nerdtree-git-plugin' 
   " TODO: figure out why &columns gives 80 on startup
   let g:nerdtree_tabs_open_on_console_startup=1             
+
 
 Plug 'kien/ctrlp.vim'                  " fuzzy file opener
   " search files + buffers + MRU
@@ -58,6 +69,11 @@ Plug 'racer-rust/vim-racer'            " needs `cargo install racer` and RUST_SR
 
 " visual style
 Plug 'jnurmine/Zenburn'                " the best color scheme ever made
+Plug 'luochen1990/rainbow'           " rainbow parens
+  let g:rainbow_active = 1
+  let g:rainbow_conf = {
+  \   'ctermfgs': ['4', '3', '12', '8', '10', '5'],
+  \}
 
 " controls
 Plug 'christoomey/vim-tmux-navigator'  " ctrl + HJKL to navigate vim & tmux splits
@@ -90,15 +106,16 @@ set encoding=utf-8
 scriptencoding utf-8
 
 " appearance
+colors zenburn               " aaaaaand activate
 set t_Co=256
 syntax on
-colors zenburn
-set fillchars+=vert:\                  " (space after backslash) remove vertical pipe chars
+set fillchars+=vert:\                  " (space after backslash) remove vertical pipe chars from window boundries
 set number
 set ruler
 set showmatch
 set colorcolumn=100
 highlight ColorColumn ctermbg=238
+set cursorline                         " highlight current line
 
 
 " Tabs. May be overriten by autocmd rules
@@ -108,26 +125,34 @@ set shiftwidth=2
 set expandtab
 set smarttab
 
+" indenting. don't get crazy
+set autoindent
+
 " backups: don't fuck up my local directories
 set backupdir=~/.vim/_backup
 set dir=~/.vim/_temp,/var/tmp,/tmp
 
-" needed for some stuff
+" leader-related bindings
+let mapleader="\<Space>"
+nnoremap <leader>o :CtrlP<CR>
+nnoremap <Leader>w :w<CR>
+nnoremap <Leader>f :NERDTreeFind<CR>
 
-" neovim: terminal colors
-" let g:terminal_color_0  = '#2e3436'
-" let g:terminal_color_1  = '#cc0000'
-" let g:terminal_color_2  = '#4e9a06'
-" let g:terminal_color_3  = '#c4a000'
-" let g:terminal_color_4  = '#3465a4'
-" let g:terminal_color_5  = '#75507b'
-" let g:terminal_color_6  = '#0b939b'
-" let g:terminal_color_7  = '#d3d7cf'
-" let g:terminal_color_8  = '#555753'
-" let g:terminal_color_9  = '#ef2929'
-" let g:terminal_color_10 = '#8ae234'
-" let g:terminal_color_11 = '#fce94f'
-" let g:terminal_color_12 = '#729fcf'
-" let g:terminal_color_13 = '#ad7fa8'
-" let g:terminal_color_14 = '#00f5e9'
-" let g:terminal_color_15 = '#eeeeec'
+" copy-paste from system keyboard with leader-{y,p}
+vmap <Leader>y "+y
+vmap <Leader>p "+p
+nmap <Leader>p "+p
+
+" Reselect visual block after indent/outdent
+vnoremap < <gv
+vnoremap > >gv
+
+" resize splits with arrow keys
+nnoremap <Up> <C-w>+
+nnoremap <Down> <C-w>-
+nnoremap <Left> <C-w><
+nnoremap <Right> <C-w>>
+
+" filetype customization {{{
+autocmd Filetype gitcommit setlocal spell textwidth=72
+" }}}
