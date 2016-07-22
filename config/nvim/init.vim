@@ -1,15 +1,15 @@
 "
 "
-"  .d8888888b.   d8b d8b 888    888 d8b                            d8b              
-" d88P'   'Y88b  Y8P Y8P 888    888 88P                            Y8P              
-" 888  d8b  888          888    888 8P                                              
-" 888  888  888 8888 888 888888 888 ' .d8888b    88888b.  888  888 888 88888b.d88b. 
+"  .d8888888b.   d8b d8b 888    888 d8b                            d8b
+" d88P'   'Y88b  Y8P Y8P 888    888 88P                            Y8P
+" 888  d8b  888          888    888 8P
+" 888  888  888 8888 888 888888 888 ' .d8888b    88888b.  888  888 888 88888b.d88b.
 " 888  888bd88P '888 888 888    888   88K        888 '88b 888  888 888 888 '888 '88b
 " 888  Y8888P'   888 888 888    888   'Y8888b.   888  888 Y88  88P 888 888  888  888
 " Y88b.     .d8  888 888 Y88b.  888        X88   888  888  Y8bd8P  888 888  888  888
 "  'Y88888888P'  888 888  'Y888 888    88888P'   888  888   Y88P   888 888  888  888
-"                888                             
-"               d88P                              
+"                888
+"               d88P
 "             888P'
 "
 "             written for...
@@ -35,9 +35,9 @@ call plug#begin('~/.config/nvim/plug')
 
 " visual widgets
 Plug 'scrooloose/nerdtree' | Plug 'jistr/vim-nerdtree-tabs' " file browsing sidebar thing
-Plug 'Xuyuanp/nerdtree-git-plugin' 
+Plug 'Xuyuanp/nerdtree-git-plugin'
   " TODO: figure out why &columns gives 80 on startup
-  let g:nerdtree_tabs_open_on_console_startup=1             
+  let g:nerdtree_tabs_open_on_console_startup=1
 
 
 Plug 'kien/ctrlp.vim'                  " fuzzy file opener
@@ -83,6 +83,12 @@ Plug 'tpope/vim-endwise'               " auto do..end in Ruby, etc
 
 " commands
 Plug 'tpope/vim-fugitive'              " :Gstatus, :Gedit, :Gdiff, :Glog, etc
+" :Subvert/address{,es}/reference{,s}/g
+" :Abolish {despa,sepe}rat{e,es,ed,ing,ely,ion,ions,or}  {despe,sepa}rat{}
+" crs (coerce to snake_case). MixedCase (crm), camelCase (crc), snake_case (crs), and UPPER_CASE (cru)
+Plug 'tpope/vim-abolish'
+
+
 
 " motions
 Plug 'scrooloose/nerdcommenter'        " leader c{c,u} to comment/uncomment
@@ -125,6 +131,14 @@ set shiftwidth=2
 set expandtab
 set smarttab
 
+" don't add an extra space when joining punctuation like .?!
+set nojoinspaces
+
+" search
+set ignorecase
+set smartcase
+set incsearch
+
 " indenting. don't get crazy
 set autoindent
 
@@ -134,9 +148,9 @@ set dir=~/.vim/_temp,/var/tmp,/tmp
 
 " leader-related bindings
 let mapleader="\<Space>"
-nnoremap <leader>o :CtrlP<CR>
+nnoremap <leader>f :CtrlP<CR>
 nnoremap <Leader>w :w<CR>
-nnoremap <Leader>f :NERDTreeFind<CR>
+nnoremap <Leader>n :NERDTreeFind<CR>
 
 " copy-paste from system keyboard with leader-{y,p}
 vmap <Leader>y "+y
@@ -153,6 +167,28 @@ nnoremap <Down> <C-w>-
 nnoremap <Left> <C-w><
 nnoremap <Right> <C-w>>
 
+" mapping to make movements operate on 1 screen line in wrap mode
+function! ScreenMovement(movement)
+   if &wrap
+      return "g" . a:movement
+   else
+      return a:movement
+   endif
+endfunction
+onoremap <silent> <expr> j ScreenMovement("j")
+onoremap <silent> <expr> k ScreenMovement("k")
+onoremap <silent> <expr> 0 ScreenMovement("0")
+onoremap <silent> <expr> ^ ScreenMovement("^")
+onoremap <silent> <expr> $ ScreenMovement("$")
+nnoremap <silent> <expr> j ScreenMovement("j")
+nnoremap <silent> <expr> k ScreenMovement("k")
+nnoremap <silent> <expr> 0 ScreenMovement("0")
+nnoremap <silent> <expr> ^ ScreenMovement("^")
+nnoremap <silent> <expr> $ ScreenMovement("$")
+
 " filetype customization {{{
 autocmd Filetype gitcommit setlocal spell textwidth=72
 " }}}
+
+" strip trailing whitespace
+autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
