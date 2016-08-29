@@ -40,7 +40,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
   let g:nerdtree_tabs_open_on_console_startup=1
 
 
-Plug 'kien/ctrlp.vim'                  " fuzzy file opener
+Plug 'ctrlpvim/ctrlp.vim'                  " fuzzy file opener
   " search files + buffers + MRU
   let g:ctrlp_cmd = 'CtrlPMixed'
   " use ag for CtrlP
@@ -146,11 +146,19 @@ set autoindent
 set backupdir=~/.vim/_backup
 set dir=~/.vim/_temp,/var/tmp,/tmp
 
+" opening buffers: open in a split. investiage tabs
+set switchbuf=usetab,vsplit
+
+" splits: split right, split below, instead of splitting left,above
+set splitright
+set splitbelow
+set equalalways
+
 " leader-related bindings
 let mapleader="\<Space>"
 nnoremap <leader>f :CtrlP<CR>
 nnoremap <Leader>w :w<CR>
-nnoremap <Leader>n :NERDTreeFind<CR>
+nnoremap <Leader>g :NERDTreeFind<CR>
 
 " copy-paste from system keyboard with leader-{y,p}
 vmap <Leader>y "+y
