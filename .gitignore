@@ -6,5 +6,7 @@ vim/_temp/*
 vim/_backup/*
 npm-debug.log
 zsh/history/*
-config/nvim/plug/
+
+# nvim stuff
 config/nvim/autoload/
+config/nvim/plug/
