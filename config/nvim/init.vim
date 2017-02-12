@@ -21,6 +21,7 @@
 " - should probably do syntastic at some point, but flycheck in emacs left a
 "   bad taste in my mouth
 " - should restrict vim commit width to 60 or whatever to make Github pretty
+let mapleader="\<Space>"
 
 " auto-install plugin manager
 if !filereadable(expand('~/.config/nvim/autoload/plug.vim'))
@@ -30,15 +31,22 @@ endif
 " auto-patch terminfo so that ctrl-h works
 silent !sh ~/.config/nvim/patch-terminfo-for-vim-tmux-navigator.sh
 
+" Uncomment this line for true color in your Nvim, although this makes zenburn
+" look odd. Requires tmux 2.2+ and a good emulator like iTerm2.
+"set termguicolors
+
 " plugins {{{
 call plug#begin('~/.config/nvim/plug')
+
+" linting
+Plug 'w0rp/ale'
 
 " visual widgets
 Plug 'scrooloose/nerdtree' | Plug 'jistr/vim-nerdtree-tabs' " file browsing sidebar thing
 Plug 'Xuyuanp/nerdtree-git-plugin'
   " TODO: figure out why &columns gives 80 on startup
   let g:nerdtree_tabs_open_on_console_startup=1
-
+  let NERDTreeShowHidden=1
 
 Plug 'ctrlpvim/ctrlp.vim'                  " fuzzy file opener
   " search files + buffers + MRU
@@ -52,7 +60,8 @@ Plug 'ctrlpvim/ctrlp.vim'                  " fuzzy file opener
   endif
 
 Plug 'airblade/vim-gitgutter'          " show git line status in gutter
-Plug 'bling/vim-airline'               " nifty vim statusline
+Plug 'vim-airline/vim-airline'               " nifty vim statusline
+"  let g:airline#extensions#ale#enabled = 1
 "  let g:airline#extensions#tabline#enabled = 1
 
 " completion - https://gregjs.com/vim/2016/configuring-the-deoplete-asynchronous-keyword-completion-plugin-with-tern-for-vim/
@@ -64,6 +73,7 @@ Plug 'Shougo/deoplete.nvim'            " completion bepis for NeoVim
   " auto-close the scratch window sometimes shown for completions at screen bottom
   autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 Plug 'ervandew/supertab'               " complete using <TAB>
+  let g:SuperTabDefaultCompletionType = "<c-n>"
 Plug 'racer-rust/vim-racer'            " needs `cargo install racer` and RUST_SRC_PATH
   let g:racer_cmd="racer"
 
@@ -83,12 +93,16 @@ Plug 'tpope/vim-endwise'               " auto do..end in Ruby, etc
 
 " commands
 Plug 'tpope/vim-fugitive'              " :Gstatus, :Gedit, :Gdiff, :Glog, etc
+
+" automatic typo correction
+Plug 'tpope/vim-abolish' | Plug 'jdelkins/vim-correction'
+  let g:abolish_save_file = expand("~/.config/nvim/after/plugin/abolish.vim")
 " :Subvert/address{,es}/reference{,s}/g
 " :Abolish {despa,sepe}rat{e,es,ed,ing,ely,ion,ions,or}  {despe,sepa}rat{}
 " crs (coerce to snake_case). MixedCase (crm), camelCase (crc), snake_case (crs), and UPPER_CASE (cru)
-Plug 'tpope/vim-abolish'
 
-
+Plug 'rizzatti/dash.vim'               " :Dash
+  nmap <silent> <leader>d <Plug>DashSearch
 
 " motions
 Plug 'scrooloose/nerdcommenter'        " leader c{c,u} to comment/uncomment
@@ -104,8 +118,11 @@ Plug 'honza/vim-snippets'              " snippets library
 
 " filetypes
 Plug 'sheerun/vim-polyglot'            " many languages
+  let g:jsx_ext_required = 0           " in js files, too
 
 call plug#end()
+
+" vim-abolish settings
 " }}} end plugins
 
 set encoding=utf-8
@@ -150,12 +167,11 @@ set dir=~/.vim/_temp,/var/tmp,/tmp
 set switchbuf=usetab,vsplit
 
 " splits: split right, split below, instead of splitting left,above
-set splitright
-set splitbelow
+" set splitright
+" set splitbelow
 set equalalways
 
 " leader-related bindings
-let mapleader="\<Space>"
 nnoremap <leader>f :CtrlP<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>g :NERDTreeFind<CR>
