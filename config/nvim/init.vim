@@ -14,7 +14,7 @@
 "
 "             written for...
 "             os version:   FreeBSD 10.2-RELEASE-p18 (jailed)
-"             nvim version: NVIM v0.1.5-560-ga535868 (make CMAKE_BUILD_TYPE=RelWithDebInfo)
+"             nvim version: NVIM v0.2.0-577-g30826cb2 (make CMAKE_BUILD_TYPE=RelWithDebInfo)
 "
 " TODOs:
 " - unite seems cool, conf here: https://github.com/Xuyuanp/vimrc/blob/master/vundles/unite.vim
@@ -209,6 +209,13 @@ nnoremap <silent> <expr> k ScreenMovement("k")
 nnoremap <silent> <expr> 0 ScreenMovement("0")
 nnoremap <silent> <expr> ^ ScreenMovement("^")
 nnoremap <silent> <expr> $ ScreenMovement("$")
+
+" mouse stuff
+" faster drawing is better for scroll wheels
+set ttyfast
+" enable mouse stuff
+set mouse=a
+"set ttymouse=xterm2
 
 " filetype customization {{{
 autocmd Filetype gitcommit setlocal spell textwidth=72
