@@ -178,8 +178,16 @@ nnoremap <Leader>g :NERDTreeFind<CR>
 
 " copy-paste from system keyboard with leader-{y,p}
 vmap <Leader>y "+y
+vmap <Leader>Y "+Y
+
 vmap <Leader>p "+p
+vmap <Leader>P "+P
+
 nmap <Leader>p "+p
+nmap <Leader>P "+P
+
+nmap <Leader>y "+y
+nmap <Leader>Y "+Y
 
 " Reselect visual block after indent/outdent
 vnoremap < <gv
