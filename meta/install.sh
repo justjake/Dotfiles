@@ -37,6 +37,8 @@ vimrc
 
 tmux.conf
 tmux
+
+editrc
 )
 
 # hide command output
