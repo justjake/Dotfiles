@@ -111,7 +111,7 @@ function dotfiles () {
     mkdir -p -v "$BUNDLES_DIR"
 
     # link in node bundles on sytems with JS support
-    link-into-place ".dotfiles/dotfiles-node" "$BUNDLES_DIR/"
+    link-into-place ".dotfiles/dotfiles-node" "$BUNDLES_DIR/dotfiles-node"
     popd no-output
 }
 
