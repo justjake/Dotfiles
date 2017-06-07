@@ -1,17 +1,19 @@
 #### Window Title
 title () {
   # escape '%' chars in $1, make nonprintables visible
-  a=${(V)1//\%/\%\%}
+  local running_cmd="${(V)1//\%/\%\%}"
 
   # Strip newlines from command
-  a=$(print -Pn "%70>...>$a" | tr -d "\n")
-  local xtermtitle="\e]2;$2 $a\a"
+  running_cmd="$(print -Pn "%70>...>$running_cmd" | tr -d "\n")"
+
+  local title="$2 $running_cmd"
+  local xtermtitle="\e]2;$title\a"
 
   case $TERM in
   screen*)
     print -Pn "$xtermtitle" # plain xterm title
-    print -Pn "\ek$a\e\\"      # screen title (in ^A")
-    print -Pn "\e_$2   \e\\"   # screen location
+    print -Pn "\ek$title\e\\" # screen title (in ^A")
+    print -Pn "\e_$2\e\\"   # screen location
     ;;
   xterm*|rxvt*)
     print -Pn "$xtermtitle" # plain xterm title
@@ -19,7 +21,7 @@ title () {
   esac
 }
 
-TITLE_LOCATION="[%m:%~]"
+TITLE_LOCATION="%~"
 
 # precmd is called just before the prompt is printed
 function jake-precmd {
