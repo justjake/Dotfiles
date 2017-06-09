@@ -1,0 +1,30 @@
+Windows Registry Editor Version 5.00
+; Low-contrast, pastel color scheme
+; for Windows command prompt.
+
+; Values stored as 00-BB-GG-RR
+[HKEY_CURRENT_USER\Console]
+; BLACK DGRAY
+"ColorTable00"=dword:00222222
+"ColorTable08"=dword:00454545
+; BLUE LBLUE
+"ColorTable01"=dword:00a69a7c
+"ColorTable09"=dword:00bfad8f
+; GREEN LGREEN
+"ColorTable02"=dword:00557e6c
+"ColorTable10"=dword:007db37d
+; CYAN LCYAN
+"ColorTable03"=dword:00a18e4c
+"ColorTable11"=dword:00d0c16b
+; RED LRED
+"ColorTable04"=dword:0041569e
+"ColorTable12"=dword:006d89cc
+; MAGENTA LMAGENTA
+"ColorTable05"=dword:009d6d95
+"ColorTable13"=dword:00cb8fc1
+; YELLOW LYELLOW
+"ColorTable06"=dword:002bafca
+"ColorTable14"=dword:0056b5bf
+; LGRAY WHITE
+"ColorTable07"=dword:00808080
+"ColorTable15"=dword:00cdcdcd
