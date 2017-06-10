@@ -61,11 +61,11 @@ Plug 'ctrlpvim/ctrlp.vim'                  " fuzzy file opener
 
 Plug 'airblade/vim-gitgutter'          " show git line status in gutter
 Plug 'vim-airline/vim-airline'               " nifty vim statusline
-"  let g:airline#extensions#ale#enabled = 1
+  let g:airline#extensions#ale#enabled = 1
 "  let g:airline#extensions#tabline#enabled = 1
 
 " completion - https://gregjs.com/vim/2016/configuring-the-deoplete-asynchronous-keyword-completion-plugin-with-tern-for-vim/
-Plug 'Shougo/deoplete.nvim'            " completion bepis for NeoVim
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " completion bepis for NeoVim
   let g:deoplete#enable_at_startup = 1
   if !exists('g:deoplete#omni#input_patterns')
     let g:deoplete#omni#input_patterns = {}
@@ -84,6 +84,8 @@ Plug 'luochen1990/rainbow'           " rainbow parens
   let g:rainbow_conf = {
   \   'ctermfgs': ['4', '3', '12', '8', '10', '5'],
   \}
+Plug 'google/vim-colorscheme-primary'
+Plug 'NLKNguyen/papercolor-theme'
 
 " controls
 Plug 'christoomey/vim-tmux-navigator'  " ctrl + HJKL to navigate vim & tmux splits
@@ -120,6 +122,10 @@ Plug 'honza/vim-snippets'              " snippets library
 Plug 'sheerun/vim-polyglot'            " many languages
   let g:jsx_ext_required = 0           " in js files, too
 
+Plug 'fatih/vim-go'                    " golang
+"Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': 'nvim/symlink.sh' }
+Plug 'zchee/deoplete-go', { 'do': 'make' }
+
 call plug#end()
 
 " vim-abolish settings
@@ -129,9 +135,13 @@ set encoding=utf-8
 scriptencoding utf-8
 
 " appearance
-colors zenburn               " aaaaaand activate
 set t_Co=256
 syntax on
+set background=dark
+"set background=light
+"colorscheme PaperColor
+ colors zenburn               " aaaaaand activate
+
 set fillchars+=vert:\                  " (space after backslash) remove vertical pipe chars from window boundries
 set number
 set ruler
@@ -230,4 +240,13 @@ autocmd Filetype gitcommit setlocal spell textwidth=72
 " }}}
 
 " strip trailing whitespace
-autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+fun! StripTrailingWhitespace()
+    " Only strip if the b:noStripWhitespace variable isn't set
+    if exists('b:noStripWhitespace')
+        return
+    endif
+    %s/\s\+$//e
+endfun
+
+autocmd BufWritePre * call StripTrailingWhitespace()
+autocmd FileType markdown let b:noStripWhitespace=1
