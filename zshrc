@@ -10,7 +10,7 @@ MANSECT=1:1p:8:2:3:3p:4:5:6:7:9:0p:n:l:o
 TZ="America/Los_Angeles"
 HOSTNAME="$(hostname -f)"
 PAGER='less'
-EDITOR='vim'
+EDITOR='nvim'
 # set SVN_EDITOR only if unset
 [ -z "$SVN_EDITOR" ] && SVN_EDITOR="$EDITOR"
 VISUAL="$EDITOR"
@@ -60,12 +60,10 @@ fi
 # 99     : jokes and deprecated
 ####
 for config in "$ZSH_FILES/rc.d"/* ; do
-    # echo "loading $config"
     source "$config"
 done
-# source "$ZSH_FILES"/zshrc.d/*
 
 #### Host Settings
 [[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] && source "$ZSH_FILES/hosts/$HOSTNAME"
 [[ -f "$ZSH_FILES/hosts/$HOSTNAME.zsh" ]] && source "$ZSH_FILES/hosts/$HOSTNAME.zsh"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
