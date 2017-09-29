@@ -42,6 +42,7 @@ zshall          "$ZSH_FILES"
 vimrc           "~/.dotfiles/vimrc"
 nvimrc          "~/.dotfiles/config/nvim/init.vim"
 sshconfig       "~/.ssh/config"
+tmuxrc          "~/.dotfiles/tmux.conf"
 )
 for short in ${(k)settings_files}; do
     alias $short="$EDITOR $settings_files[$short]"

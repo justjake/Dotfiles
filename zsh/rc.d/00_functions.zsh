@@ -19,3 +19,9 @@ function this-script-dir {
 function expand-string {
     eval echo "$1"
 }
+
+function enable-host-specific-history {
+    export HISTFILE="$ZSH_FILES/cache/$HOSTNAME.zhistory"
+}
+
+autoload -U zargs

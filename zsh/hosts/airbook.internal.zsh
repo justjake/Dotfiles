@@ -1,4 +1,5 @@
 eval "$(rbenv init -)"
+eval "$(nodenv init -)"
 
 export GOPATH="$HOME/src/golang"
 export PATH="$PATH:${GOPATH//://bin:}/bin"
@@ -18,7 +19,6 @@ alias vboxrestart='sudo /Library/StartupItems/VirtualBox/VirtualBox restart'
 alias jsc='env NODE_NO_READLINE=1 rlwrap -p Green -S "node >>> " node'
 alias prodrc='ssh jake_teton-landis@rc1.musta.ch'
 alias logstash-connect='ssh jake_teton-landis@bastion1.musta.ch -L 9200:i-bf8365ed.inst.aws.airbnb.com:9200'
-alias rekey="ssh-add -e /usr/lib/opensc-pkcs11.so; ssh-add -s /usr/lib/opensc-pkcs11.so -t 3600"
 alias migrate="bundle exec rake db:migrate"
 function push-gem {
   scp $1 jake_teton-landis@geminabox-internal.aws.airbnb.com:~ && \
