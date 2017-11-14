@@ -10,7 +10,11 @@ MANSECT=1:1p:8:2:3:3p:4:5:6:7:9:0p:n:l:o
 TZ="America/Los_Angeles"
 HOSTNAME="$(hostname -f)"
 PAGER='less'
-EDITOR='nvim'
+if which nvim > /dev/null 2>&1 ; then
+  EDITOR='nvim'
+else
+  EDITOR='vim'
+fi
 # set SVN_EDITOR only if unset
 [ -z "$SVN_EDITOR" ] && SVN_EDITOR="$EDITOR"
 VISUAL="$EDITOR"

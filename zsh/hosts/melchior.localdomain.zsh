@@ -1,0 +1,8 @@
+# NVIM
+alias vi=$(which vim)
+alias vim=$(which nvim)
+
+# GO
+export PATH="/usr/local/go/bin:$PATH"
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
