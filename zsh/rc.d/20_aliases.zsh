@@ -22,7 +22,7 @@ done
 
 # some more ls aliases
 alias ll='ls -alFh'
-alias la='ls -A'
+# alias la='ls -A'
 alias l='ls -CF'
 
 # ack-grep --> ack
@@ -50,41 +50,13 @@ done
 [[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] && alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME"
 alias resource="source ~/.zshrc"
 
-
-# rdesktop
-alias remote="rdesktop -u just.jake -g 1280x768 remote.housing.berkeley.edu"
-
 #### SSH
-alias unlock="
-    ssh-add ~/.ssh/id_rsa.wopr
-    ssh -N stargate.housing.berkeley.edu
-"
-
-### Rescomp Dev hosts
-for n in {1..15} ; do
-    alias dev$n="ssh dev-www$n.rescomp.berkeley.edu"
-done
-
 typeset -A ssh_hosts
 ssh_hosts=(
-# rescomp
-hal         "hal.rescomp.berkeley.edu"
-irc         "irc.housing.berkeley.edu"
-architect   "thearchitect.rescomp.berkeley.edu"
-devbox      "dev-www14.rescomp.berkeley.edu"
-stargate    "stargate.housing.berkeley.edu"
-pitfall     "pitfall.rescomp.berkeley.edu"
-test-db     "test-db.rescomp.berkeley.edu"
-dev9        "dev9-forward"
-
 # personal
 tonic       "tonic.teton-landis.org"
 armada      "armada.systems"
 cc          "jitl@cc.internal"
-
-# airbnb
-rc1        "rc1.musta.ch"
-rc1-next   "rc1-next.musta.ch"
 )
 for short in ${(k)ssh_hosts}; do
     alias $short="ssh $ssh_hosts[$short]"
@@ -143,8 +115,46 @@ is-e-running () {
   fi
 }
 
+alias godocs="godoc"
 alias e-quit="emacsclient -e '(kill-emacs)'"
 alias e-daemon="emacs --daemon"
 alias scrab="scrabble-solver"
 alias ruboshit="bundle exec rubocop --auto-correct"
 alias ezj="sudo ezjail-admin"
+alias tpbcopy='tmux show-buffer | pbcopy'
+alias :qa="exit"
+
+# pgrep but show all output with ps
+function pgrep() {
+  ruby -- - "$@" <<'EOR'
+require 'shellwords'
+pids = `/usr/bin/pgrep #{ARGV.shelljoin}`.strip.split("\n")
+exit 1 unless pids.any?
+exec('ps', '-p', pids.join(','))
+EOR
+}
+
+function confirm-rm () {
+  local usage="Usage: $0 file [file...]
+View file in PAGER, then ask to delete
+  "
+  local response
+
+  if [ "$#" == 0 ]; then
+    echo "$usage"
+    return 2
+  fi
+
+  while (( $# )); do
+    $PAGER "$1"
+    read -r "Delete $1? [Y/n] " response
+    response="${response,,}" # tolower
+    if [[ "$response" =~ ^(yes|y| ) ]] || [[ -z "$response" ]]; then
+      rm -vf "$1"
+    fi
+    shift
+  done
+}
+
+which exa >/dev/null 2>&1 && alias ls="exa"
+
