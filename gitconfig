@@ -29,7 +29,6 @@
   ftch = !rekey && git fetch
   prune-merged = !git branch --merged master | grep -v -E '^(\\* |  master$|  production$)' | xargs -n 1 git branch -d
 [core]
-  excludesfile = /Users/jake_teton-landis/.gitignore_global
   precomposeunicode = true
   sparseCheckout = true
 [github]
