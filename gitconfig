@@ -1,33 +1,50 @@
 # git config
 [user]
-	name = Jake Teton-Landis
-	email = jake.tl@airbnb.com
+  name = Jake Teton-Landis
+  email = jake.tl@airbnb.com
 [color]
-	diff = auto
-	status = auto
-	branch = auto
-	interactive = auto
-	ui = auto
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = auto
 [alias]
   # 'add all' stages all new+changed+deleted files
-	aa = !git ls-files -d | xargs -r git rm && git ls-files -m -o --exclude-standard | xargs -r git add
-	st = status
-	ci = commit
-	co = checkout
-	br = branch
-	lg = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
-	lg2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
-	gud = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
-	gud = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
-	ll = log --graph --all --format=format:'%C(white)%s%C(reset) %C(bold yellow)%d%C(reset)' --abbrev-commit
-    graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
-    diffstat = diff --stat
-    subupdate = submodule update --init --recursive
+  aa = !git ls-files -d | xargs -r git rm && git ls-files -m -o --exclude-standard | xargs -r git add
+  st = status
+  ci = commit
+  co = checkout
+  br = branch
+  lg = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
+  lg2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
+  gud = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
+  gud = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)— %an%C(reset)' --abbrev-commit
+  ll = log --graph --all --format=format:'%C(white)%s%C(reset) %C(bold yellow)%d%C(reset)' --abbrev-commit
+  graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
+  diffstat = diff --stat
+  subupdate = submodule update --init --recursive
+  whatadded = log --diff-filter=A
+  psh = !rekey && git push
+  pll = !rekey && git pull
+  ftch = !rekey && git fetch
+  prune-merged = !git branch --merged master | grep -v -E '^(\\* |  master$|  production$)' | xargs -n 1 git branch -d
 [core]
-	excludesfile = ~/.dotfiles/gitignore_global
+  excludesfile = /Users/jake_teton-landis/.gitignore_global
+  precomposeunicode = true
+  sparseCheckout = true
 [github]
-	user = justjake
+  user = justjake
 [rerere]
-	enabled = 1
+  enabled = true
 [push]
-	default = current
+  default = current
+[filter "lfs"]
+  clean = git-lfs clean %f
+  smudge = git-lfs smudge %f
+  required = true
+[credential]
+  helper = osxkeychain
+[pull]
+  default = current
+[remote "origin"]
+  prune = true
