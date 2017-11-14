@@ -26,7 +26,7 @@ Plugin 'Lokaltog/vim-easymotion'         " press leader-leader then motion
 Plugin 'mattn/emmet-vim'                 " zencoding motions: <c-y>,
 
 " Widgets
-Plugin 'kien/ctrlp.vim'                  " fuzzy file opener
+Plugin 'ctrlpvim/ctrlp.vim'                  " fuzzy file opener
 Plugin 'tacahiroy/ctrlp-funky'           " find functions in ctrl-p
 Plugin 'scrooloose/nerdtree'             " files pane
 Plugin 'jistr/vim-nerdtree-tabs'         " NerdTree in all tabs
