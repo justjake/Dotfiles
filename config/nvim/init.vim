@@ -137,10 +137,10 @@ scriptencoding utf-8
 " appearance
 set t_Co=256
 syntax on
-set background=dark
+"set background=dark
 "set background=light
 "colorscheme PaperColor
- colors zenburn               " aaaaaand activate
+colors zenburn               " aaaaaand activate
 
 set fillchars+=vert:\                  " (space after backslash) remove vertical pipe chars from window boundries
 set number
