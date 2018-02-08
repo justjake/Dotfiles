@@ -33,10 +33,11 @@ fi
 # Settings shortcuts
 typeset -A settings_files
 settings_files=(
-zshrc           "~/.zshrc"
+zshrc           "~/.dotfiles/zshrc"
 hostsettings    "$ZSH_FILES/hosts/$HOSTNAME.zsh"
 aliases         "$ZSH_FILES/rc.d/20_aliases.zsh"
 zshall          "$ZSH_FILES"
+gotorc          "~/.dotfiles/zsh/rc.d/19_goto.sh"
 
 # non-zsh
 vimrc           "~/.dotfiles/vimrc"
@@ -158,3 +159,12 @@ View file in PAGER, then ask to delete
 
 which exa >/dev/null 2>&1 && alias ls="exa"
 
+# List all imports of given go package
+# https://dave.cheney.net/2014/09/14/go-list-your-swiss-army-knife
+go-imports () {
+  go list -f '{{ join .Imports "\n" }}' "$@"
+}
+
+go-nonstandard-imports () {
+  go-imports "$@" | xargs go list -f '{{if not .Standard}}{{.ImportPath}}{{end}}'
+}
