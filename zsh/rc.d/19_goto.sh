@@ -37,7 +37,6 @@ goto () {
 
 _goto () {
   goto-refresh-search-paths
-  echo "_goto: $COMP_CWORD" >&2
   COMPREPLY=()
 
   # Only complete one word
@@ -48,11 +47,19 @@ _goto () {
   # Complete with matching paths inside our search paths
   local cur
   cur="${COMP_WORDS[COMP_CWORD]}"
-  echo "_goto: cur = ${cur}" >&2
 
-  for p in $goto_search_paths; do
-    COMPREPLY+=("$p/$cur"*)
+  local path_glob
+  local candidates
+  for p in "${goto_search_paths[@]}"; do
+    # Loop through all the search paths and see if we can glob anything
+    # beginning with the user's typing.
+    path_glob="$p/$cur*"
+    candidates=($(compgen -G "$path_glob" | xargs basename))
+    # Add any matches to the completion result
+    COMPREPLY+=( "${candidates[@]}" )
   done
+
+  return 0
 }
 
 if [[ "$SHELL" == *"zsh" ]]; then
