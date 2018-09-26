@@ -65,6 +65,22 @@ Plug 'vim-airline/vim-airline'               " nifty vim statusline
 "  let g:airline#extensions#tabline#enabled = 1
 
 " completion - https://gregjs.com/vim/2016/configuring-the-deoplete-asynchronous-keyword-completion-plugin-with-tern-for-vim/
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+  set hidden " Required for operations modifying multiple buffers like rename
+  let g:LanguageClient_serverCommands = {
+    \ 'go': system('which go-langserver')
+    \ }
+  " example extra config:
+  "nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+  "nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+  "nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run install script
+
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " completion bepis for NeoVim
   let g:deoplete#enable_at_startup = 1
   if !exists('g:deoplete#omni#input_patterns')
@@ -115,16 +131,35 @@ Plug 'scrooloose/nerdcommenter'        " leader c{c,u} to comment/uncomment
 Plug 'Lokaltog/vim-easymotion'         " press leader-leader then motion
 
 " snippets. this is new, and maybe should be disabled until the user is ready.
-Plug 'SirVer/ultisnips'                " snippets engine
-Plug 'honza/vim-snippets'              " snippets library
+Plug 'Shougo/neosnippet.vim'           " snippets engine
+Plug 'Shougo/neosnippet-snippets'      " snippets lib
 
-" filetypes
-Plug 'sheerun/vim-polyglot'            " many languages
-  let g:jsx_ext_required = 0           " in js files, too
 
-Plug 'fatih/vim-go'                    " golang
-"Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': 'nvim/symlink.sh' }
+" golang
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+  " press K to get docs
+  let g:go_auto_type_info = 1          " Type info under cursor
+  " ts expands to type | struct
+  " ti expands to type | interface
+  " ife expands to if err != nil { | }
+  let g:go_snippet_engine = "neosnippet"
+  " go-to-declaration
+  au FileType go nmap <leader>gt :GoDeclsDir<cr>
+  " auto-import stuff
+  let g:go_fmt_command = "goimports"
+Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plug/gocode/nvim/symlink.sh' }
 Plug 'zchee/deoplete-go', { 'do': 'make' }
+  let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+" good doc: https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
+
+Plug 'sebastianmarkow/deoplete-rust'
+  let g:deoplete#sources#rust#racer_binary=$HOME.'/.cargo/bin/racer'
+  let g:deoplete#sources#rust#rust_source_path=$HOME.'/src/rust'
+
+" filetypes not otherwise supported
+Plug 'sheerun/vim-polyglot'            " many languages
+  let g:polyglot_disabled = ['go']     " we use upstream go
+  let g:jsx_ext_required = 0           " in js files, too
 
 call plug#end()
 
@@ -250,3 +285,5 @@ endfun
 
 autocmd BufWritePre * call StripTrailingWhitespace()
 autocmd FileType markdown let b:noStripWhitespace=1
+
+set modeline
