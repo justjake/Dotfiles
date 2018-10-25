@@ -3,7 +3,7 @@
 goto-refresh-search-paths () {
   goto_search_paths=(
     $GOPATH/src/*/*
-    ~/airlab-stable/repos
+    ~/airlab/repos
     ~/src
     ~/src/disabled-repos
   )
