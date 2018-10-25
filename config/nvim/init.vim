@@ -147,7 +147,7 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
   au FileType go nmap <leader>gt :GoDeclsDir<cr>
   " auto-import stuff
   let g:go_fmt_command = "goimports"
-Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plug/gocode/nvim/symlink.sh' }
+Plug 'mdempsky/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
 Plug 'zchee/deoplete-go', { 'do': 'make' }
   let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
 " good doc: https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
