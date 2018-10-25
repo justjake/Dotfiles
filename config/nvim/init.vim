@@ -11,16 +11,6 @@
 "                888
 "               d88P
 "             888P'
-"
-"             written for...
-"             os version:   FreeBSD 10.2-RELEASE-p18 (jailed)
-"             nvim version: NVIM v0.2.0-577-g30826cb2 (make CMAKE_BUILD_TYPE=RelWithDebInfo)
-"
-" TODOs:
-" - unite seems cool, conf here: https://github.com/Xuyuanp/vimrc/blob/master/vundles/unite.vim
-" - should probably do syntastic at some point, but flycheck in emacs left a
-"   bad taste in my mouth
-" - should restrict vim commit width to 60 or whatever to make Github pretty
 let mapleader="\<Space>"
 
 " auto-install plugin manager
@@ -48,19 +38,20 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
   let g:nerdtree_tabs_open_on_console_startup=1
   let NERDTreeShowHidden=1
 
-Plug 'ctrlpvim/ctrlp.vim'                  " fuzzy file opener
-  " search files + buffers + MRU
-  let g:ctrlp_cmd = 'CtrlPMixed'
-  " use ag for CtrlP
-  if executable('ag')
-    " use ag to list files - nice because fast and .gitignore support
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-    " ag fast, don't need cache
-    let g:ctrlp_use_caching = 0
-  endif
+"Plug 'ctrlpvim/ctrlp.vim'                  " fuzzy file opener
+"  " search files + buffers + MRU
+"  let g:ctrlp_cmd = 'CtrlPMixed'
+"  " use ag for CtrlP
+"  if executable('ag')
+"    " use ag to list files - nice because fast and .gitignore support
+"    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+"    " ag fast, don't need cache
+"    let g:ctrlp_use_caching = 0
+"  endif
 
 Plug 'airblade/vim-gitgutter'          " show git line status in gutter
 Plug 'vim-airline/vim-airline'               " nifty vim statusline
+Plug 'vim-airline/vim-airline-themes'
   let g:airline#extensions#ale#enabled = 1
 "  let g:airline#extensions#tabline#enabled = 1
 
@@ -79,6 +70,7 @@ Plug 'autozimu/LanguageClient-neovim', {
   "nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
   " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run install script
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " completion bepis for NeoVim
@@ -102,6 +94,9 @@ Plug 'luochen1990/rainbow'           " rainbow parens
   \}
 Plug 'google/vim-colorscheme-primary'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'chriskempson/base16-vim'         " a very cool colorcheme setup for script-based color config
+                                       " check out the homepage: https://github.com/chriskempson/base16-shell
+
 
 " controls
 Plug 'christoomey/vim-tmux-navigator'  " ctrl + HJKL to navigate vim & tmux splits
@@ -119,8 +114,9 @@ Plug 'tpope/vim-abolish' | Plug 'jdelkins/vim-correction'
 " :Abolish {despa,sepe}rat{e,es,ed,ing,ely,ion,ions,or}  {despe,sepa}rat{}
 " crs (coerce to snake_case). MixedCase (crm), camelCase (crc), snake_case (crs), and UPPER_CASE (cru)
 
-Plug 'rizzatti/dash.vim'               " :Dash
-  nmap <silent> <leader>d <Plug>DashSearch
+" I never bought this.
+" Plug 'rizzatti/dash.vim'               " :Dash
+"   nmap <silent> <leader>d <Plug>DashSearch
 
 " motions
 Plug 'scrooloose/nerdcommenter'        " leader c{c,u} to comment/uncomment
@@ -175,7 +171,18 @@ syntax on
 "set background=dark
 "set background=light
 "colorscheme PaperColor
-colors zenburn               " aaaaaand activate
+" Load the current base16-vim color scheme.
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace = 256
+
+  " We have silent! here because this will only succeed once the base16-vim
+  " plugin is installed.
+  silent! source ~/.vimrc_background
+  let g:airline_theme = 'base16'
+  let g:airline_powerline_fonts = 1
+else
+  colors zenburn               " aaaaaand activate
+endif
 
 set fillchars+=vert:\                  " (space after backslash) remove vertical pipe chars from window boundries
 set number
@@ -217,7 +224,7 @@ set switchbuf=usetab,vsplit
 set equalalways
 
 " leader-related bindings
-nnoremap <leader>f :CtrlP<CR>
+nnoremap <leader>f :Files<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>g :NERDTreeFind<CR>
 
@@ -269,6 +276,16 @@ set ttyfast
 " enable mouse stuff
 set mouse=a
 "set ttymouse=xterm2
+"
+" Wrap lines at word boundaries and make the wrapping more obvious.
+set showbreak=..
+set breakindent
+set breakindentopt=shift:2,sbr
+
+" Turn on spell checking everywhere.
+" set spell spelllang=en_us
+"syntax spell toplevel
+"autocmd Syntax * :syntax spell toplevel
 
 " filetype customization {{{
 autocmd Filetype gitcommit setlocal spell textwidth=72
