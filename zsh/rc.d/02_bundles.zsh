@@ -40,9 +40,12 @@ if [ $SHELL = /bin/zsh ] || [ $SHELL = /bin/bash ] ; then
     alias 'bundle-dir'=bundle_dir
 fi
 
-DEFAULT_BUNDLES="$HOME/bundles"
-if [ -d "$DEFAULT_BUNDLES" ]; then
-  if [ -n "$(ls -A "$DEFAULT_BUNDLES")" ]; then
-    bundle_dir "$DEFAULT_BUNDLES" && echo "installed bundles in $DEFAULT_BUNDLES"
-  fi
-fi
+# This doesn't work on macOS and I don't even remember what it's supposed to do.
+# Maybe run bundle_dir if any bundles are installed?
+#
+# DEFAULT_BUNDLES="$HOME/bundles"
+# if [ -d "$DEFAULT_BUNDLES" ]; then
+#   if [ -n "$(ls -A "$DEFAULT_BUNDLES")" ]; then
+#     bundle_dir "$DEFAULT_BUNDLES" && echo "installed bundles in $DEFAULT_BUNDLES"
+#   fi
+# fi
