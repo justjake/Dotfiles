@@ -56,12 +56,6 @@ if [[ $COLORTERM == "gnome-terminal" ]] ; then
     export TERM="xterm-256color"
 fi
 
-# Base16 Shell & Theme
-BASE16_SHELL="$HOME/.config/base16-shell/"
-if [ -n "$PS1" ] && [ -s "$BASE16_SHELL/profile_helper.sh" ] ; then
-  eval "$("$BASE16_SHELL/profile_helper.sh")"
-  base16_circus
-fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 ####
