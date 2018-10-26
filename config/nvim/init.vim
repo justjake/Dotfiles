@@ -30,6 +30,11 @@ call plug#begin('~/.config/nvim/plug')
 
 " linting
 Plug 'w0rp/ale'
+let g:ale_linters = {
+\   'ruby': [],
+\   'java': [],
+\}
+let g:ale_lint_on_text_changed = 'never'
 
 " visual widgets
 Plug 'scrooloose/nerdtree' | Plug 'jistr/vim-nerdtree-tabs' " file browsing sidebar thing
@@ -72,6 +77,19 @@ Plug 'autozimu/LanguageClient-neovim', {
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
   " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run install script
+
+" ProjectFiles tries to locate files relative to the git root contained in
+" NerdTree, falling back to the current NerdTree dir if not available
+" see https://github.com/junegunn/fzf.vim/issues/47#issuecomment-160237795
+function! s:find_project_root()
+  let nerd_root = g:NERDTree.ForCurrentTab().getRoot().path.str()
+  let git_root = system('git -C '.shellescape(nerd_root).' rev-parse --show-toplevel 2> /dev/null')[:-2]
+  if strlen(git_root)
+    return git_root
+  endif
+  return nerd_root
+endfunction
+command! ProjectFiles execute 'Files' s:find_project_root()
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " completion bepis for NeoVim
   let g:deoplete#enable_at_startup = 1
@@ -224,7 +242,7 @@ set switchbuf=usetab,vsplit
 set equalalways
 
 " leader-related bindings
-nnoremap <leader>f :Files<CR>
+nnoremap <leader>f :ProjectFiles<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>g :NERDTreeFind<CR>
 
