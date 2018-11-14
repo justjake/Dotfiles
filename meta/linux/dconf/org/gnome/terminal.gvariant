@@ -1,0 +1,10 @@
+[legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
+bold-is-bright=true
+default-size-rows=100
+scrollbar-policy='never'
+visible-name='Standard'
+audible-bell=false
+
+[legacy]
+schema-version=uint32 3
+default-show-menubar=false

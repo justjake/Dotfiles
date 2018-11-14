@@ -1,0 +1,11 @@
+[/]
+text-scaling-factor=0.84999999999999987
+clock-format='12h'
+font-name='Ubuntu 11'
+document-font-name='Sans 11'
+gtk-im-module='gtk-im-context-simple'
+cursor-theme='DMZ-Black'
+icon-theme='ubuntu-mono-dark'
+monospace-font-name='Ubuntu Mono 12'
+gtk-theme='Adwaita-dark'
+clock-show-date=true

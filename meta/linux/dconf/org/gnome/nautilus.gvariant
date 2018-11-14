@@ -1,0 +1,10 @@
+[preferences]
+search-view='list-view'
+default-folder-viewer='list-view'
+search-filter-time-type='last_modified'
+
+[desktop]
+trash-icon-visible=false
+
+[list-view]
+default-zoom-level='small'
