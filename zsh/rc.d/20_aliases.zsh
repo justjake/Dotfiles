@@ -168,3 +168,25 @@ go-imports () {
 go-nonstandard-imports () {
   go-imports "$@" | xargs go list -f '{{if not .Standard}}{{.ImportPath}}{{end}}'
 }
+
+repo () {
+  local repo="$(basename "$1")"
+  local owner="$(dirname "$1")"
+
+  if [[ "$owner" == "." ]] ; then
+    # default to me
+    owner="justjake"
+  fi
+
+  if ! [[ -d "$HOME/src/$repo" ]]; then
+    (
+      set -ex
+      mkdir -p "$HOME/src"
+      cd "$HOME/src"
+      git clone "git@github.com:$owner/$repo"
+    )
+  fi
+  cd "$HOME/src/$repo"
+  pwd
+  ls
+}
