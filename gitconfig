@@ -1,7 +1,7 @@
 # git config
 [user]
   name = Jake Teton-Landis
-  email = jake.tl@airbnb.com
+  email = just.1.jake@gmail.com
 [color]
   diff = auto
   status = auto
@@ -24,9 +24,9 @@
   diffstat = diff --stat
   subupdate = submodule update --init --recursive
   whatadded = log --diff-filter=A
-  psh = !rekey && git push
-  pll = !rekey && git pull
-  ftch = !rekey && git fetch
+  psh = !git push
+  pll = !git pull
+  ftch = !git fetch
   prune-merged = !git branch --merged master | grep -v -E '^(\\* |  master$|  production$)' | xargs -n 1 git branch -d
 [core]
   precomposeunicode = true

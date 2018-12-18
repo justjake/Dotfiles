@@ -1,12 +1,14 @@
 # paths in which to find projects or directories
 # top path wins
 goto-refresh-search-paths () {
+  setopt nullglob
   goto_search_paths=(
     $GOPATH/src/*/*
     ~/airlab/repos
     ~/src
     ~/src/disabled-repos
   )
+  unsetopt nullglob
 }
 
 goto-which () {
@@ -24,14 +26,13 @@ goto-which () {
 }
 
 goto () {
-  goto-refresh-search-paths
   local dir=$(goto-which "$1")
   if [ -n "$dir" ]; then
     echo "cd $dir"
     cd "$dir"
   else
-    # fallback: try to resolve via role name
-    lab cd "$@"
+    echo "goto: not found: $1" > /dev/stderr
+    return 1
   fi
 }
 

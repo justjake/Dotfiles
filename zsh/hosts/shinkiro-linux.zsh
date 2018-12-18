@@ -12,7 +12,8 @@ matebook_x_pro_setup () (
 		git \
     curl \
 		build-essential \
-    tree
+    tree \
+    xclip
 
   # Install popular programming languages
   sudo apt install ruby nodejs
