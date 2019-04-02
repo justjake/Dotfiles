@@ -14,3 +14,7 @@ Host shields
 Host shields.internal shields.aramada.systems
     User jitl
     Port 2222
+
+Host *
+  AddKeysToAgent yes
+  UseKeychain yes
