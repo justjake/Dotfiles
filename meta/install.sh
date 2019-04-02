@@ -120,8 +120,14 @@ function dotfiles () {
 function js () {
 }
 
-function brew () {
+function linuxbrew () {
     git clone "https://github.com/Homebrew/linuxbrew" "$BUNDLES_DIR/linuxbrew"
+}
+
+function vscode () {
+  if [[ "$(uname)" =~ "Darwin" ]]; then
+    link-into-place "$HOME/.dotfiles/config/Code/User" "$HOME/Library/Application Support/Code/User"
+  fi
 }
 
 # make sure we param ok?
@@ -134,7 +140,8 @@ where 'MODULE' is any installation function defined here:
   - submodules:     get all git submodules
   - ssh-config:     link my ssh-config into ~/.ssh/config
   - desktop-config: links in XDG_DESKTOP settings in ~/.config
-  - brew:           install linuxhomebrew"
+  - vscode:         links VS Code settings as appropriate
+  - linuxbrew:           install linuxhomebrew"
     exit 1
 fi
 
