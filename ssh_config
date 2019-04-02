@@ -1,84 +1,16 @@
-# Rescomp Hosts
-
-Host *.rescomp.berkeley.edu *.housing.berkeley.edu
-    User jitl
-    IdentityFile ~/.ssh/id_rsa.wopr
-
-Host stargate.housing.berkeley.edu cardiff.rescomp.berkeley.edu
-    ForwardAgent yes
-    ControlPath ~/.ssh/controlmasters/%r@%h:%p
-    ControlMaster auto
-    DynamicForward 9001
-
-## Bastion rescomp hosts
-Host dev-* architect pythondev pitfall.rescomp.berkeley.edu stormtrooper.rescomp.berkeley.edu test-*.rescomp.berkeley.edu
-    ProxyCommand ssh stargate.housing.berkeley.edu nc %h %p
-    ForwardAgent yes
-
-Host pythondev
-    Hostname dev-www14.rescomp.berkeley.edu
-    DynamicForward 9002
-
-Host dev9-forward
-    Hostname dev-www9.rescomp.berkeley.edu
-    User jitl
-    LocalForward 22022 127.0.0.1:22
-    ProxyCommand ssh stargate.housing.berkeley.edu nc %h %p
-    ForwardAgent yes
-
-# rescomp-only settings for public hosts
-Host resgithub
-    Hostname github.com
-    User git
-    IdentityFile ~/.ssh/id_rsa.hal
-
 host github
     Hostname github.com
     User git
-
-Host resgit
-    Hostname git.rescomp.berkeley.edu
-    User gitolite3
-    IdentityFile ~/.ssh/id_rsa_git
-
-# Other hosts
-Host nomcopter nomcopter.com
-    Hostname nomcopter.com
-    User justjake
-    Port 484
 
 Host armada armada.systems
     Hostname armada.systems
     User justjake
 
-Host yamamoto yamamoto.internal
-    Hostname yamamoto.internal
+Host shields
+    Hostname shields.internal
     User jitl
-    ProxyCommand ssh armada.systems nc %h %p
-
-Host teevee teevee.internal
-    Hostname teevee.internal
-    User jitl
-
-# BERKE1337 cluster
-Host berke1337
-    Hostname 10.254.24.6
-    User jitl
-    ProxyCommand ssh irc.housing.berkeley.edu nc %h %p
-    DynamicForward 9002
-# the above for VNC sometimes
-
-Host bastion
-    Hostname 10.254.24.6
     Port 2222
-    ProxyCommand ssh irc.housing.berkeley.edu nc %h %p
-    DynamicForward 9003
-    User user
 
-Host armada armada.systems
-    User justjake
-
-# CS
-Host cs61b
-    Hostname hive4.cs.berkeley.edu
-    User cs61b-hg
+Host shields.internal shields.aramada.systems
+    User jitl
+    Port 2222

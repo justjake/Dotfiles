@@ -5,18 +5,17 @@
 # load paths, so they take precedence over system versions
 add_bundle_to_path () {
     local bundle="$1"
-    [ -d "$bundle/bin" ] && export PATH="$bundle/bin:$PATH"
-    [ -d "$bundle/share/man" ] && export MANPATH="$bundle/share/man:$MANPATH"
-    [ -d "$bundle/lib" ] && export LD_LIBRARY_PATH="$bundle/lib:$LD_LIBRARY_PATH"
-    [ -d "$bundle/lib64" ] && export LD_LIBRARY_PATH="$bundle/lib64:$LD_LIBRARY_PATH"
-    [ -d "$bundle/lib/pkgconfig" ] && export PKG_CONFIG_PATH="$bundle/lib/pkgconfig:$PKG_CONFIG_PATH"
-    [ -d "$bundle/include" ] && export C_INCLUDE_PATH="$bundle/include:$C_INCLUDE_PATH"
-
+    [ -d "$bundle/bin" ]            && export PATH="$bundle/bin:$PATH"
+    [ -d "$bundle/bin/x64" ]        && export PATH="$bundle/bin/x64:$PATH"
+    [ -d "$bundle/share/man" ]      && export MANPATH="$bundle/share/man:$MANPATH"
+    [ -d "$bundle/lib" ]            && export LD_LIBRARY_PATH="$bundle/lib:$LD_LIBRARY_PATH"
+    [ -d "$bundle/lib64" ]          && export LD_LIBRARY_PATH="$bundle/lib64:$LD_LIBRARY_PATH"
+    [ -d "$bundle/lib/pkgconfig" ]  && export PKG_CONFIG_PATH="$bundle/lib/pkgconfig:$PKG_CONFIG_PATH"
+    [ -d "$bundle/include" ]        && export C_INCLUDE_PATH="$bundle/include:$C_INCLUDE_PATH"
     # add sub folders like "usr"
-    [ -d "$bundle/usr" ] && add_bundle_to_path "$bundle/usr"
-
+    [ -d "$bundle/usr" ]            && add_bundle_to_path "$bundle/usr"
     # source bundle config if it exists
-    [ -f "$bundle/bundle.rc" ] && . "$bundle/bundle.rc"
+    [ -f "$bundle/bundle.rc" ]      && . "$bundle/bundle.rc"
 }
 
 # I like to use ~/bundles to store my personal software in

@@ -61,14 +61,14 @@ Plug 'vim-airline/vim-airline-themes'
 "  let g:airline#extensions#tabline#enabled = 1
 
 " completion - https://gregjs.com/vim/2016/configuring-the-deoplete-asynchronous-keyword-completion-plugin-with-tern-for-vim/
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-  set hidden " Required for operations modifying multiple buffers like rename
-  let g:LanguageClient_serverCommands = {
-    \ 'go': system('which go-langserver')
-    \ }
+"Plug 'autozimu/LanguageClient-neovim', {
+"    \ 'branch': 'next',
+"    \ 'do': 'bash install.sh',
+"    \ }
+"  set hidden " Required for operations modifying multiple buffers like rename
+"  let g:LanguageClient_serverCommands = {
+"    \ 'go': system('which go-langserver')
+"    \ }
   " example extra config:
   "nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
   "nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
@@ -148,9 +148,13 @@ Plug 'Lokaltog/vim-easymotion'         " press leader-leader then motion
 Plug 'Shougo/neosnippet.vim'           " snippets engine
 Plug 'Shougo/neosnippet-snippets'      " snippets lib
 
+" TypeScript
+Plug 'HerringtonDarkholme/yats.vim' " syntax needed for deoplete-typescript
+" Plug 'HerringtonDarkholme/deoplete-typescript'
+Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 
 " golang
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
   " press K to get docs
   let g:go_auto_type_info = 1          " Type info under cursor
   " ts expands to type | struct
@@ -161,9 +165,9 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
   au FileType go nmap <leader>gt :GoDeclsDir<cr>
   " auto-import stuff
   let g:go_fmt_command = "goimports"
-Plug 'mdempsky/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
-Plug 'zchee/deoplete-go', { 'do': 'make' }
-  let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+Plug 'mdempsky/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plug/gocode/nvim/symlink.sh' }
+"Plug 'zchee/deoplete-go', { 'do': 'make' }
+  "let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
 " good doc: https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
 
 Plug 'sebastianmarkow/deoplete-rust'
@@ -315,10 +319,14 @@ fun! StripTrailingWhitespace()
     if exists('b:noStripWhitespace')
         return
     endif
+    if getline(1) =~ "noStripWhitespace"
+        return
+    endif
     %s/\s\+$//e
 endfun
 
 autocmd BufWritePre * call StripTrailingWhitespace()
 autocmd FileType markdown let b:noStripWhitespace=1
+au BufRead,BufEnter /home/jitl/src/notion-next/* set noet
 
 set modeline
