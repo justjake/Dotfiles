@@ -55,12 +55,33 @@ matebook_x_pro_setup () (
 
   # Restore gnome shell settings
   dotfiles-dconf-load
+
+  # Max inotify watches plz, otherwise node stuff sucks
+  echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.d/60-inotify-max.conf
+  sudo service procps start
 )
 
-# Normal settings
+source $HOME/.nix-profile/etc/profile.d/nix.sh
+
+# Copy stdin to Ctrl-V clipboard
 alias pbcopy="xclip -selection c"
 
+# Neovim replaces vim
 if which nvim > /dev/null 2>&1; then
   alias vi=vim
   alias vim=nvim
 fi
+
+# Rustup
+if [[ -e ~/.cargo/bin ]]; then
+  export PATH="$HOME/.cargo/bin:$PATH"
+  source "$HOME/.cargo/env"
+fi
+
+alias docker="sudo docker"
+export PATH="$PATH:/usr/local/go/bin"
+export GOPATH="$HOME/go"
+export PATH="$HOME/.npm-prefix/bin:$PATH"
+
+# Use bundles
+bundle-dir ~/bundles

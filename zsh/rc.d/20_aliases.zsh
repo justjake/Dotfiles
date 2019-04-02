@@ -58,6 +58,7 @@ ssh_hosts=(
 tonic       "tonic.teton-landis.org"
 armada      "armada.systems"
 cc          "jitl@cc.internal"
+sheilds     "jitl@shields"
 )
 for short in ${(k)ssh_hosts}; do
     alias $short="ssh $ssh_hosts[$short]"
@@ -190,3 +191,5 @@ repo () {
   pwd
   ls
 }
+
+alias :q=exit
