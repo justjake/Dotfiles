@@ -10,3 +10,8 @@ zsh/history/*
 # nvim stuff
 config/nvim/autoload/
 config/nvim/plug/
+config/nvim/ftplugin
+
+# vscode stuff
+*.vscdb
+config/Code/User/workplaceStorage
