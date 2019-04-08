@@ -5,8 +5,7 @@
 " 888  d8b  888          888    888 8P
 " 888  888  888 8888 888 888888 888 ' .d8888b    88888b.  888  888 888 88888b.d88b.
 " 888  888bd88P '888 888 888    888   88K        888 '88b 888  888 888 888 '888 '88b
-" 888  Y8888P'   888 888 888    888   'Y8888b.   888  888 Y88  88P 888 888  888  888
-" Y88b.     .d8  888 888 Y88b.  888        X88   888  888  Y8bd8P  888 888  888  888
+" 888  Y8888P'   888 888 888    888   'Y8888b.   888  888 Y88  88P 888 888  888  888 Y88b.     .d8  888 888 Y88b.  888        X88   888  888  Y8bd8P  888 888  888  888
 "  'Y88888888P'  888 888  'Y888 888    88888P'   888  888   Y88P   888 888  888  888
 "                888
 "               d88P
@@ -31,10 +30,17 @@ call plug#begin('~/.config/nvim/plug')
 " linting
 Plug 'w0rp/ale'
 let g:ale_linters = {
-\   'ruby': [],
-\   'java': [],
+\  'javascript': [],
+\  'ruby': [],
+\  'java': [],
+\}
+let g:ale_fixers = {
+\  'javascript': ['prettier'],
+\  'typescript': ['prettier'],
+\  'css': ['prettier'],
 \}
 let g:ale_lint_on_text_changed = 'never'
+let g:ale_fix_on_save = 1
 
 " visual widgets
 Plug 'scrooloose/nerdtree' | Plug 'jistr/vim-nerdtree-tabs' " file browsing sidebar thing
@@ -91,18 +97,161 @@ function! s:find_project_root()
 endfunction
 command! ProjectFiles execute 'Files' s:find_project_root()
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " completion bepis for NeoVim
-  let g:deoplete#enable_at_startup = 1
-  if !exists('g:deoplete#omni#input_patterns')
-    let g:deoplete#omni#input_patterns = {}
-  endif
-  " auto-close the scratch window sometimes shown for completions at screen bottom
-  autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-Plug 'ervandew/supertab'               " complete using <TAB>
-  let g:SuperTabDefaultCompletionType = "<c-n>"
-Plug 'racer-rust/vim-racer'            " needs `cargo install racer` and RUST_SRC_PATH
-  let g:racer_cmd="racer"
 
+
+
+" start CoC IDE ###############################################################
+" https://github.com/neoclide/coc.nvim
+" https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions
+" https://www.npmjs.com/search?q=keywords%3Acoc.nvim
+Plug 'neoclide/coc.nvim',           {'do': { -> coc#util#install()}}
+Plug 'neoclide/coc-tsserver',       {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-tslint-plugin',  {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-html',           {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-css',            {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-json',           {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-highlight',      {'do': 'yarn install --frozen-lockfile'}
+
+" if hidden is not set, TextEdit might fail.
+set hidden
+
+" Unsure if this is needed w/ backupdir backups, but is reccomended by
+" CoC's README.
+" See https://github.com/neoclide/coc.nvim/issues/649
+	" set nobackup
+	" set nowritebackup
+
+" Better display for messages
+set cmdheight=2
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+" always show signcolumns
+set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" :  <SID>check_back_space() ? "\<TAB>" :  coc#refresh()
+
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> for trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use `[c` and `]c` for navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Remap for format selected region
+vmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+vmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Use `:Format` for format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` for fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+
+" Add diagnostic info for https://github.com/itchyny/lightline.vim
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status'
+      \ },
+      \ }
+
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <leader>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <leader>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <leader>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <leader>,  :<C-u>CocListResume<CR>
+
+" end CoC IDE #################################################################
+
+
+
+
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " completion bepis for NeoVim
+"   let g:deoplete#enable_at_startup = 1
+"   if !exists('g:deoplete#omni#input_patterns')
+"     let g:deoplete#omni#input_patterns = {}
+"   endif
+"   " auto-close the scratch window sometimes shown for completions at screen bottom
+"   autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+" Plug 'ervandew/supertab'               " complete using <TAB>
+"   let g:SuperTabDefaultCompletionType = "<c-n>"
+" Plug 'racer-rust/vim-racer'            " needs `cargo install racer` and RUST_SRC_PATH
+"   let g:racer_cmd="racer"
+"
 " visual style
 Plug 'jnurmine/Zenburn'                " the best color scheme ever made
 Plug 'luochen1990/rainbow'           " rainbow parens
@@ -120,10 +269,15 @@ Plug 'chriskempson/base16-vim'         " a very cool colorcheme setup for script
 Plug 'christoomey/vim-tmux-navigator'  " ctrl + HJKL to navigate vim & tmux splits
 Plug 'Raimondi/delimitMate'            " paren matching. Shift-tab to jump out of delim,
                                        "   ctrl-c+thing to avoid
-Plug 'tpope/vim-endwise'               " auto do..end in Ruby, etc
+
+" Disabled for conflict with CoC related bindings:
+" Plug 'tpope/vim-endwise'               " auto do..end in Ruby, etc
+
 
 " commands
 Plug 'tpope/vim-fugitive'              " :Gstatus, :Gedit, :Gdiff, :Glog, etc
+Plug 'tpope/vim-sleuth'                " Automatically detect indentation
+  let g:sleuth_automatic = 0               " :Sleuth to run again
 
 " automatic typo correction
 Plug 'tpope/vim-abolish' | Plug 'jdelkins/vim-correction'
@@ -151,7 +305,7 @@ Plug 'Shougo/neosnippet-snippets'      " snippets lib
 " TypeScript
 Plug 'HerringtonDarkholme/yats.vim' " syntax needed for deoplete-typescript
 " Plug 'HerringtonDarkholme/deoplete-typescript'
-Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
+" Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 
 " golang
 "Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -202,6 +356,10 @@ if filereadable(expand("~/.vimrc_background"))
   silent! source ~/.vimrc_background
   let g:airline_theme = 'base16'
   let g:airline_powerline_fonts = 1
+
+  " Customize some hard-to-read error colors
+  hi SpellBad           ctermfg=7 ctermbg=9
+  hi NvimInternalError  ctermfg=7 ctermbg=9
 else
   colors zenburn               " aaaaaand activate
 endif
@@ -327,6 +485,5 @@ endfun
 
 autocmd BufWritePre * call StripTrailingWhitespace()
 autocmd FileType markdown let b:noStripWhitespace=1
-au BufRead,BufEnter /home/jitl/src/notion-next/* set noet
 
-set modeline
+au BufRead,BufEnter /home/jitl/src/notion-next/* set noet ts=2 sw=2
