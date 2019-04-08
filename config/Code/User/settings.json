@@ -1,5 +1,11 @@
 {
-    "editor.tabSize": 2,
-    "workbench.colorTheme": "Base16 Circus Dark",
-    "editor.fontFamily": "Monaco, 'Courier New', monospace"
+  "editor.tabSize": 2,
+  "workbench.colorTheme": "Base16 Circus Dark",
+  "editor.fontFamily": "Monaco, 'Courier New', monospace",
+  "editor.formatOnSave": true,
+  "workbench.iconTheme": "seti",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "window.zoomLevel": 0
 }
