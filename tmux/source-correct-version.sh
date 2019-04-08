@@ -5,7 +5,7 @@ verify_tmux_verision () {
   tmux_version="`tmux -V | cut -c 6-`"
 
   if [ `echo "$tmux_version >= 2.8" | bc` -eq 1 ]; then
-    tmux source-file "$tmux_home/tmux_ge_21.conf"
+    tmux source-file "$tmux_home/tmux_ge_28.conf"
     exit 0
   elif [ `echo "$tmux_version >= 2.1" | bc` -eq 1 ]; then
     tmux source-file "$tmux_home/tmux_21_28.conf"
