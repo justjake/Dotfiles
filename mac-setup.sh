@@ -3,14 +3,18 @@
 # Exit on error
 set -eo pipefail
 
-ssh_setup () {
+ssh_key () {
 if [ ! -f ~/.ssh/id_rsa ]; then
+  if [ -z "$1" ]; then
+    echo "pass the SSH name of this machine"
+    return 1
+  fi
   echo "creating ssh key"
   mkdir -p ~/.ssh
   (
   cd ~/.ssh
   set -x
-  ssh-keygen -t rsa -b 4096 -C "jake@makenotion.com"
+  ssh-keygen -t rsa -b 4096 -C "$1"
   )
 fi
 }
@@ -18,7 +22,11 @@ fi
 clone_dotfiles () {
 if [ ! -d ~/.dotfiles ]; then
   (set -x
-  git clone git@github.com:justjake/Dotfiles ~/.dotfiles
+  if ! git clone git@github.com:justjake/Dotfiles ~/.dotfiles ; then
+    echo "*** clone failed. Do you need to add ~/.ssh/id_rsa.pub to your github account?"
+    echo "    https://github.com/settings/keys"
+    read -p "Press enter to try again, or type Ctrl-C to abort"
+  fi
   )
 fi
 }
@@ -32,7 +40,7 @@ mkdir -p ~/Applications
 mkdir -p ~/Pictures/Screenshots
 }
 
-mac_brew () {
+mac_brew_install () {
   if ! which brew > /dev/null ; then
     echo "Installing Homebrew"
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -42,8 +50,10 @@ mac_brew () {
 mac_brew_cli () {
   (
   set -x
-  brew install neovim
   brew install node@10
+  brew install python
+  brew install tmux
+  brew install neovim
   brew install ripgrep
   )
 }
@@ -51,13 +61,19 @@ mac_brew_cli () {
 mac_brew_cask () {
   (
   set -x
-  if ! which docker > /dev/null ; then
-    brew cask install docker
-  fi
+
+  # Work-related essentials
+  brew cask install docker
   brew cask install visual-studio-code
   brew cask install homebrew/cask-versions/iterm2-beta
+  brew cask install google-chrome-dev
+  brew cask install viscosity  # VPN Client
+  brew cask install postico
+
+  # These are personal preference
   brew cask install karabiner-elements
   brew cask install metamove
+  brew cask install spotify
   )
 }
 
@@ -120,14 +136,29 @@ mac_prefs () {
     General -bool true \
     OpenWith -bool true \
     Privileges -bool true
+
+  echo "Enable Fast Key Repeat"
+  defaults write -g ApplePressAndHoldEnabled -bool false
+  defaults write -g KeyRepeat -int 1
 }
 
+all () {
+  ssh_key "$1"
+  clone_dotfiles
+  standard_dirs
+  mac_dirs
+  mac_brew_install
+  mac_brew_cli
+  mac_brew_cask
+  mac_prefs
+}
 
-ssh_setup
-clone_dotfiles
-standard_dirs
-mac_dirs
-mac_brew
-mac_brew_cli
-mac_brew_cask
-mac_prefs
+if [[ -z "$*" ]]; then
+  echo "pass a function name:"
+  declare -F | sed 's/declare -f /  /g'
+  echo "for all or ssh_setup, also pass the SSH key comment"
+  echo "example: setup.sh ssh_key myname@newcompany.com"
+  exit 1
+fi
+
+"$@"

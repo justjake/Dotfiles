@@ -31,6 +31,7 @@ call plug#begin('~/.config/nvim/plug')
 Plug 'w0rp/ale'
 let g:ale_linters = {
 \  'javascript': [],
+\  'typescript': [],
 \  'ruby': [],
 \  'java': [],
 \}
@@ -304,6 +305,8 @@ Plug 'Shougo/neosnippet-snippets'      " snippets lib
 
 " TypeScript
 Plug 'HerringtonDarkholme/yats.vim' " syntax needed for deoplete-typescript
+"Plug 'leafgarland/typescript-vim'
+"Plug 'peitalin/vim-jsx-typescript'
 " Plug 'HerringtonDarkholme/deoplete-typescript'
 " Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 
