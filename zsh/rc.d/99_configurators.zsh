@@ -29,15 +29,11 @@ use-host () {
 		pushd "$ZSH_FILES/hosts/" no-output
 		if [[ -e "$other_host".zsh ]] ; then
 			ln -sv "$other_host".zsh `hostname`.zsh
-			return 0
-		fi
-
-		if [[ -e "$other_host" ]] ; then
+		elif [[ -e "$other_host" ]] ; then
 			ln -sv "$other_host" `hostname`.zsh
-			return 0
+		else
+			echo "Host not found: $other_host" > /dev/stderr
+			return 1
 		fi
-
-		echo "Host not found: $other_host" > /dev/stderr
-		return 1
 	)
 }
