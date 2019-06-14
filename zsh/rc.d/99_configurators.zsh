@@ -21,3 +21,23 @@ use-office-client () {
     ln -s "all-office-workstations.zsh" "`hostname`.zsh"
     popd no-output
 }
+
+use-host () {
+  local other_host="$1"
+
+	(
+		pushd "$ZSH_FILES/hosts/" no-output
+		if [[ -e "$other_host".zsh ]] ; then
+			ln -sv "$other_host".zsh `hostname`.zsh
+			return 0
+		fi
+
+		if [[ -e "$other_host" ]] ; then
+			ln -sv "$other_host" `hostname`.zsh
+			return 0
+		fi
+
+		echo "Host not found: $other_host" > /dev/stderr
+		return 1
+	)
+}
