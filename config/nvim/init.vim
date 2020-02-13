@@ -5,7 +5,8 @@
 " 888  d8b  888          888    888 8P
 " 888  888  888 8888 888 888888 888 ' .d8888b    88888b.  888  888 888 88888b.d88b.
 " 888  888bd88P '888 888 888    888   88K        888 '88b 888  888 888 888 '888 '88b
-" 888  Y8888P'   888 888 888    888   'Y8888b.   888  888 Y88  88P 888 888  888  888 Y88b.     .d8  888 888 Y88b.  888        X88   888  888  Y8bd8P  888 888  888  888
+" 888  Y8888P'   888 888 888    888   'Y8888b.   888  888 Y88  88P 888 888  888  888
+" Y88b.     .d8  888 888 Y88b.  888        X88   888  888  Y8bd8P  888 888  888  888
 "  'Y88888888P'  888 888  'Y888 888    88888P'   888  888   Y88P   888 888  888  888
 "                888
 "               d88P
@@ -28,16 +29,16 @@ silent !sh ~/.config/nvim/patch-terminfo-for-vim-tmux-navigator.sh
 call plug#begin('~/.config/nvim/plug')
 
 " linting
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 let g:ale_linters = {
 \  'javascript': [],
-\  'typescript': [],
+\  'typescript': ['tslint'],
 \  'ruby': [],
 \  'java': [],
 \}
 let g:ale_fixers = {
 \  'javascript': ['prettier'],
-\  'typescript': ['prettier'],
+\  'typescript': ['prettier', 'tslint'],
 \  'css': ['prettier'],
 \}
 let g:ale_lint_on_text_changed = 'never'
@@ -96,7 +97,12 @@ function! s:find_project_root()
   endif
   return nerd_root
 endfunction
+function! s:find_project_root_node_modules()
+  let root = s:find_project_root()
+  return root . "/node_modules"
+endfunction
 command! ProjectFiles execute 'Files' s:find_project_root()
+command! ProjectNodeModules execute 'Files' s:find_project_root_node_modules()
 
 
 
@@ -277,8 +283,8 @@ Plug 'Raimondi/delimitMate'            " paren matching. Shift-tab to jump out o
 
 " commands
 Plug 'tpope/vim-fugitive'              " :Gstatus, :Gedit, :Gdiff, :Glog, etc
-Plug 'tpope/vim-sleuth'                " Automatically detect indentation
-  let g:sleuth_automatic = 0               " :Sleuth to run again
+"Plug 'tpope/vim-sleuth'                " Automatically detect indentation
+"  let g:sleuth_automatic = 0               " :Sleuth to run again
 
 " automatic typo correction
 Plug 'tpope/vim-abolish' | Plug 'jdelkins/vim-correction'
@@ -300,11 +306,13 @@ Plug 'scrooloose/nerdcommenter'        " leader c{c,u} to comment/uncomment
 Plug 'Lokaltog/vim-easymotion'         " press leader-leader then motion
 
 " snippets. this is new, and maybe should be disabled until the user is ready.
-Plug 'Shougo/neosnippet.vim'           " snippets engine
-Plug 'Shougo/neosnippet-snippets'      " snippets lib
+" Plug 'Shougo/neosnippet.vim'           " snippets engine
+" Plug 'Shougo/neosnippet-snippets'      " snippets lib
 
 " TypeScript
 Plug 'HerringtonDarkholme/yats.vim' " syntax needed for deoplete-typescript
+  let g:yats_host_keyword = 0       " don't highlight addEventLister & similar
+
 "Plug 'leafgarland/typescript-vim'
 "Plug 'peitalin/vim-jsx-typescript'
 " Plug 'HerringtonDarkholme/deoplete-typescript'
@@ -322,14 +330,14 @@ Plug 'HerringtonDarkholme/yats.vim' " syntax needed for deoplete-typescript
   au FileType go nmap <leader>gt :GoDeclsDir<cr>
   " auto-import stuff
   let g:go_fmt_command = "goimports"
-Plug 'mdempsky/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plug/gocode/nvim/symlink.sh' }
+" Plug 'mdempsky/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plug/gocode/nvim/symlink.sh' }
 "Plug 'zchee/deoplete-go', { 'do': 'make' }
   "let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
 " good doc: https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
 
-Plug 'sebastianmarkow/deoplete-rust'
-  let g:deoplete#sources#rust#racer_binary=$HOME.'/.cargo/bin/racer'
-  let g:deoplete#sources#rust#rust_source_path=$HOME.'/src/rust'
+" Plug 'sebastianmarkow/deoplete-rust'
+"   let g:deoplete#sources#rust#racer_binary=$HOME.'/.cargo/bin/racer'
+"   let g:deoplete#sources#rust#rust_source_path=$HOME.'/src/rust'
 
 " filetypes not otherwise supported
 Plug 'sheerun/vim-polyglot'            " many languages
@@ -408,6 +416,7 @@ set equalalways
 
 " leader-related bindings
 nnoremap <leader>f :ProjectFiles<CR>
+nnoremap <leader>fn :ProjectNodeModules<CR>
 nnoremap <Leader>w :w<CR>
 nnoremap <Leader>g :NERDTreeFind<CR>
 
@@ -483,10 +492,13 @@ fun! StripTrailingWhitespace()
     if getline(1) =~ "noStripWhitespace"
         return
     endif
-    %s/\s\+$//e
+
+    exe "normal mz"
+    %s/\s\+$//ge
+    exe "normal `z"
 endfun
 
 autocmd BufWritePre * call StripTrailingWhitespace()
 autocmd FileType markdown let b:noStripWhitespace=1
 
-au BufRead,BufEnter /home/jitl/src/notion-next/* set noet ts=2 sw=2
+au BufRead,BufEnter /Users/jitl/src/notion/*.{js,ts,tsx,json} set ts=2 sw=2 noet
