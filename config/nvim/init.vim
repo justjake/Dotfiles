@@ -51,7 +51,8 @@ let g:ale_fix_on_save = 1
 Plug 'scrooloose/nerdtree' | Plug 'jistr/vim-nerdtree-tabs' " file browsing sidebar thing
 Plug 'Xuyuanp/nerdtree-git-plugin'
   " TODO: figure out why &columns gives 80 on startup
-  let g:nerdtree_tabs_open_on_console_startup=1
+  " let g:nerdtree_tabs_open_on_console_startup=1 " diabled for now in favor
+  " of coc-explorer
   let NERDTreeShowHidden=1
 
 "Plug 'ctrlpvim/ctrlp.vim'                  " fuzzy file opener
@@ -93,7 +94,7 @@ Plug 'junegunn/fzf.vim'
 " NerdTree, falling back to the current NerdTree dir if not available
 " see https://github.com/junegunn/fzf.vim/issues/47#issuecomment-160237795
 function! s:find_project_root()
-  let nerd_root = g:NERDTree.ForCurrentTab().getRoot().path.str()
+  let nerd_root = getcwd()
   let git_root = system('git -C '.shellescape(nerd_root).' rev-parse --show-toplevel 2> /dev/null')[:-2]
   if strlen(git_root)
     return git_root
@@ -104,6 +105,7 @@ function! s:find_project_root_node_modules()
   let root = s:find_project_root()
   return root . "/node_modules"
 endfunction
+
 command! ProjectFiles execute 'Files' s:find_project_root()
 command! ProjectNodeModules execute 'Files' s:find_project_root_node_modules()
 
@@ -123,6 +125,8 @@ call add(g:coc_global_extensions, 'coc-css')
 call add(g:coc_global_extensions, 'coc-json')
 call add(g:coc_global_extensions, 'coc-highlight')
 call add(g:coc_global_extensions, 'coc-prettier')
+call add(g:coc_global_extensions, 'coc-explorer') " https://github.com/weirongxu/coc-explorer
+call add(g:coc_global_extensions, 'coc-lists')    " https://github.com/neoclide/coc-lists
 
 " if hidden is not set, TextEdit might fail.
 set hidden
@@ -423,7 +427,8 @@ set equalalways
 nnoremap <leader>f :ProjectFiles<CR>
 nnoremap <leader>fn :ProjectNodeModules<CR>
 nnoremap <Leader>w :w<CR>
-nnoremap <Leader>g :NERDTreeFind<CR>
+" nnoremap <Leader>g :NERDTreeFind<CR>
+nnoremap <Leader>g :CocCommand explorer --no-toggle<CR>
 
 " copy-paste from system keyboard with leader-{y,p}
 vmap <Leader>y "+y
@@ -511,3 +516,22 @@ au BufRead,BufEnter /Users/jitl/src/notion/*.{js,ts,tsx,json} set ts=2 sw=2 noet
 " tsconfig.json is actually jsonc, help TypeScript set the correct filetype
 autocmd BufRead,BufNewFile tsconfig.json set filetype=jsonc
 autocmd BufRead,BufNewFile *tsconfig.json set filetype=jsonc
+
+autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif
+
+function! AuCocExplorerAutoOpen()
+    " Move focus back after opening the explorer this time.
+    autocmd User CocExplorerOpenPost ++once exe 'wincmd l'
+    " Now open the explorer
+    exe ':CocCommand explorer --no-toggle'
+endfunction
+
+
+function! AuCocExplorerCloseLast()
+  if (winnr("$") == 1)
+    quit
+  endif
+endfunction
+
+autocmd User CocNvimInit call AuCocExplorerAutoOpen()
+autocmd User CocExplorerOpenPost call AuCocExplorerCloseLast()

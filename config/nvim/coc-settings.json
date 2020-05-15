@@ -8,5 +8,7 @@
     "markdown",
     "css"
   ],
-  "tslint.autoFixOnSave": true
+  "tslint.autoFixOnSave": true,
+  "explorer.icon.enableNerdfont": true,
+  "explorer.previewAction.onHover": false
 }
