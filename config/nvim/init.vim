@@ -428,7 +428,11 @@ nnoremap <leader>f :ProjectFiles<CR>
 nnoremap <leader>fn :ProjectNodeModules<CR>
 nnoremap <Leader>w :w<CR>
 " nnoremap <Leader>g :NERDTreeFind<CR>
-nnoremap <Leader>g :CocCommand explorer --no-toggle<CR>
+
+function! ExploreHere()
+  exe ':CocCommand explorer --no-toggle --reveal ' . expand('%:p')
+endfunction
+nnoremap <Leader>g :call ExploreHere()<CR>
 
 " copy-paste from system keyboard with leader-{y,p}
 vmap <Leader>y "+y

@@ -10,5 +10,6 @@
   ],
   "tslint.autoFixOnSave": true,
   "explorer.icon.enableNerdfont": true,
-  "explorer.previewAction.onHover": false
+  "explorer.previewAction.onHover": false,
+  "explorer.file.autoReveal": false
 }
