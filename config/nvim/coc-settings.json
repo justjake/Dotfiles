@@ -7,5 +7,6 @@
     "json",
     "markdown",
     "css"
-  ]
+  ],
+  "tslint.autoFixOnSave": true
 }

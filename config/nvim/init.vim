@@ -33,6 +33,7 @@ Plug 'dense-analysis/ale'
 " Diable annoying linters / fixers
 " Some of these are suppied by CoC plugins, instead
 let g:ale_linters = {
+\  'json': [],
 \  'javascript': [],
 \  'typescript': [],
 \  'ruby': [],
@@ -116,7 +117,7 @@ command! ProjectNodeModules execute 'Files' s:find_project_root_node_modules()
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = []
 call add(g:coc_global_extensions, 'coc-tsserver')
-call add(g:coc_global_extensions, 'coc-tslint-plugin')
+call add(g:coc_global_extensions, 'coc-tslint-plugin')  " Also requires coc-tsserver
 call add(g:coc_global_extensions, 'coc-html')
 call add(g:coc_global_extensions, 'coc-css')
 call add(g:coc_global_extensions, 'coc-json')
@@ -506,3 +507,7 @@ autocmd BufWritePre * call StripTrailingWhitespace()
 autocmd FileType markdown let b:noStripWhitespace=1
 
 au BufRead,BufEnter /Users/jitl/src/notion/*.{js,ts,tsx,json} set ts=2 sw=2 noet
+
+" tsconfig.json is actually jsonc, help TypeScript set the correct filetype
+autocmd BufRead,BufNewFile tsconfig.json set filetype=jsonc
+autocmd BufRead,BufNewFile *tsconfig.json set filetype=jsonc
