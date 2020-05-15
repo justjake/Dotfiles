@@ -30,16 +30,18 @@ call plug#begin('~/.config/nvim/plug')
 
 " linting
 Plug 'dense-analysis/ale'
+" Diable annoying linters / fixers
+" Some of these are suppied by CoC plugins, instead
 let g:ale_linters = {
 \  'javascript': [],
-\  'typescript': ['tslint'],
+\  'typescript': [],
 \  'ruby': [],
 \  'java': [],
 \}
 let g:ale_fixers = {
-\  'javascript': ['prettier'],
-\  'typescript': ['prettier', 'tslint'],
-\  'css': ['prettier'],
+\  'javascript': [],
+\  'typescript': [],
+\  'css': [],
 \}
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_fix_on_save = 1
@@ -111,13 +113,15 @@ command! ProjectNodeModules execute 'Files' s:find_project_root_node_modules()
 " https://github.com/neoclide/coc.nvim
 " https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions
 " https://www.npmjs.com/search?q=keywords%3Acoc.nvim
-Plug 'neoclide/coc.nvim',           {'do': { -> coc#util#install()}}
-Plug 'neoclide/coc-tsserver',       {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-tslint-plugin',  {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-html',           {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-css',            {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-json',           {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-highlight',      {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+let g:coc_global_extensions = []
+call add(g:coc_global_extensions, 'coc-tsserver')
+call add(g:coc_global_extensions, 'coc-tslint-plugin')
+call add(g:coc_global_extensions, 'coc-html')
+call add(g:coc_global_extensions, 'coc-css')
+call add(g:coc_global_extensions, 'coc-json')
+call add(g:coc_global_extensions, 'coc-highlight')
+call add(g:coc_global_extensions, 'coc-prettier')
 
 " if hidden is not set, TextEdit might fail.
 set hidden
