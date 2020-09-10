@@ -430,7 +430,12 @@ nnoremap <Leader>w :w<CR>
 " nnoremap <Leader>g :NERDTreeFind<CR>
 
 function! ExploreHere()
-  exe ':CocCommand explorer --no-toggle --reveal ' . expand('%:p')
+  " Ensure the explorer is open
+  exe ':CocCommand explorer --no-toggle --no-focus'
+  " Reveal the current file in the explorer
+  call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['relative', 0, 'file']])
+  " Focus the explorer
+  exe ':CocCommand explorer --no-toggle --focus'
 endfunction
 nnoremap <Leader>g :call ExploreHere()<CR>
 
@@ -525,7 +530,7 @@ autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | end
 
 function! AuCocExplorerAutoOpen()
     " Move focus back after opening the explorer this time.
-    autocmd User CocExplorerOpenPost ++once exe 'wincmd l'
+    autocmd User CocExplorerOpenPost ++once exe ':wincmd p'
     " Now open the explorer
     exe ':CocCommand explorer --no-toggle'
 endfunction
