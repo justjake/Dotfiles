@@ -24,7 +24,7 @@
   diffstat = diff --stat
   subupdate = submodule update --init --recursive
   whatadded = log --diff-filter=A
-  psh = !git push
+  psh = !git push -u --force-with-lease
   pll = !git pull
   ftch = !git fetch
   prune-merged = !git branch --merged master | grep -v -E '^(\\* |  master$|  production$)' | xargs -n 1 git branch -d
