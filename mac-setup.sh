@@ -53,8 +53,9 @@ mac_brew_cli () {
   brew install node@10
   brew install python
   brew install tmux
-  brew install neovim
+  brew install --HEAD neovim
   brew install ripgrep
+  brew install jq
   )
 }
 
