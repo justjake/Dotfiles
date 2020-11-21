@@ -56,6 +56,7 @@ mac_brew_cli () {
   brew install --HEAD neovim
   brew install ripgrep
   brew install jq
+  brew install scmpuff
   )
 }
 
