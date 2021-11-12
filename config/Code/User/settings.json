@@ -1,11 +1,35 @@
 {
-  "editor.tabSize": 2,
-  "workbench.colorTheme": "Base16 Circus Dark",
-  "editor.fontFamily": "Monaco, 'Courier New', monospace",
-  "editor.formatOnSave": true,
-  "workbench.iconTheme": "seti",
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "window.zoomLevel": 0
+	"editor.tabSize": 2,
+	"editor.fontFamily": "Monaco, 'Courier New', monospace",
+	"editor.formatOnSave": true,
+	"workbench.iconTheme": "seti",
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"vsicons.dontShowNewVersionMessage": true,
+	"workbench.startupEditor": "newUntitledFile",
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"docker.showStartPage": false,
+	"gitlens.hovers.currentLine.over": "line",
+	"cSpell.userWords": [
+		"emscripten",
+		"PGBOUNCER",
+		"postgres",
+		"quickjs",
+		"upsert",
+		"Vercel"
+	],
+	"workbench.colorTheme": "Darcula Theme from IntelliJ",
+	"editor.accessibilitySupport": "off",
+	"githubPullRequests.fileListLayout": "flat",
+	"emmet.showAbbreviationSuggestions": false,
+	"emmet.showExpandedAbbreviation": "inMarkupAndStylesheetFilesOnly",
+	"[html]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	}
 }

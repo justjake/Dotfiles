@@ -15,3 +15,5 @@ config/nvim/ftplugin
 # vscode stuff
 *.vscdb
 config/Code/User/workplaceStorage
+config/Code/User/globalStorage/
+config/Code/User/workspaceStorage/
