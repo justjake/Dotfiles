@@ -6,7 +6,7 @@ autoload -U complist
 compinit -d ~/.zsh/cache/"`hostname -s`".zcompdump
 
 # setopt auto_menu
-setopt correct
+# setopt correct
 setopt auto_remove_slash
 setopt complete_aliases
 # fuzzy matching
