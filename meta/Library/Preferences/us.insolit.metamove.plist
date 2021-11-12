@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSStatusItem Preferred Position Item-0</key>
+	<real>474</real>
+	<key>SULastCheckTime</key>
+	<date>2021-11-12T03:14:50Z</date>
+	<key>move_button</key>
+	<integer>200081704319188994</integer>
+	<key>move_modifiers</key>
+	<integer>1572864</integer>
+	<key>resize_button</key>
+	<integer>6755399441055747</integer>
+	<key>resize_modifiers</key>
+	<integer>1572864</integer>
+</dict>
+</plist>

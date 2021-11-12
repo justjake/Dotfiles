@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>HideIcon</key>
+	<false/>
+	<key>MoCalendarNumRows</key>
+	<integer>6</integer>
+	<key>NSStatusItem Preferred Position ItsycalStatusItem</key>
+	<real>158.5</real>
+	<key>NSWindow Frame SUUpdateAlert</key>
+	<string>650 582 620 398 0 0 1920 1175 </string>
+	<key>PinItsycal</key>
+	<false/>
+	<key>SUHasLaunchedBefore</key>
+	<true/>
+	<key>SULastCheckTime</key>
+	<date>2021-11-10T15:42:37Z</date>
+	<key>SUUpdateRelaunchingMarker</key>
+	<false/>
+	<key>SelectedCalendars</key>
+	<array>
+		<string>50F87FB2-BEB1-4BEA-A9F1-CAF46606C5EA</string>
+		<string>3280EDB8-4D62-4D40-90FF-A6A976E9AA0F</string>
+	</array>
+	<key>ShowDayOfWeekInIcon</key>
+	<true/>
+	<key>ShowEventDays</key>
+	<integer>1</integer>
+	<key>ShowMonthInIcon</key>
+	<true/>
+	<key>SizePreference</key>
+	<real>2</real>
+	<key>UseOutlineIcon</key>
+	<false/>
+	<key>WeekStartDOW</key>
+	<integer>3</integer>
+</dict>
+</plist>
