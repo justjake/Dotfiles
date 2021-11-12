@@ -8,8 +8,10 @@
     "markdown",
     "css"
   ],
+  "tsserver.maxTsServerMemory": 6096,
   "tslint.autoFixOnSave": true,
   "explorer.icon.enableNerdfont": true,
   "explorer.previewAction.onHover": false,
-  "explorer.file.autoReveal": false
+  "explorer.file.autoReveal": false,
+  "explorer.file.showHiddenFiles": true
 }
