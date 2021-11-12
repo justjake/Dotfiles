@@ -17,3 +17,6 @@ config/nvim/ftplugin
 config/Code/User/workplaceStorage
 config/Code/User/globalStorage/
 config/Code/User/workspaceStorage/
+
+# karabiner stuff
+config/karabiner/automatic_backups/

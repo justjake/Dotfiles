@@ -50,13 +50,13 @@ mac_brew_install () {
 mac_brew_cli () {
   (
   set -x
-  brew install node@10
   brew install python
   brew install tmux
   brew install --HEAD neovim
   brew install ripgrep
   brew install jq
   brew install scmpuff
+  brew install mas
   )
 }
 
@@ -64,19 +64,38 @@ mac_brew_cask () {
   (
   set -x
 
+  export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
+
   # Work-related essentials
   brew cask install docker
   brew cask install visual-studio-code
-  brew cask install homebrew/cask-versions/iterm2-beta
-  brew cask install google-chrome-dev
+  brew cask install iterm2
   brew cask install viscosity  # VPN Client
   brew cask install postico
+  brew cask install figma
+
+  # Browsers
+  brew cask install firefox
+  brew cask install google-chrome
 
   # These are personal preference
   brew cask install karabiner-elements
   brew cask install metamove
   brew cask install spotify
+  brew cask install google-drive
+  brew cask install notion
+  brew cask install grandperspective # Directory size viewer, like Disk Daisy
+  brew cask install signal
+  brew cask install itsycal # Free/tiny bar calendar dingus
   )
+}
+
+mac_app_store () {
+  mas install 497799835  # Xcode
+  mas install 803453959  # Slack
+  mas install 1514817810 # Poolside.fm
+  mas install 425424353  # The Unarchiver
+  mas install 540348655  # Monosnap
 }
 
 # stolen from https://github.com/mathiasbynens/dotfiles/blob/master/.osx
@@ -152,6 +171,7 @@ all () {
   mac_brew_install
   mac_brew_cli
   mac_brew_cask
+  mac_app_store
   mac_prefs
 }
 
