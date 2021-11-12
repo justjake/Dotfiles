@@ -42,6 +42,7 @@ gotorc          "~/.dotfiles/zsh/rc.d/19_goto.sh"
 # non-zsh
 vimrc           "~/.dotfiles/vimrc"
 nvimrc          "~/.dotfiles/config/nvim/init.vim"
+gitrc           "~/.dotfiles/gitconfig"
 sshconfig       "~/.ssh/config"
 tmuxrc          "~/.dotfiles/tmux.conf"
 )
@@ -63,7 +64,6 @@ sheilds     "jitl@shields"
 for short in ${(k)ssh_hosts}; do
     alias $short="ssh $ssh_hosts[$short]"
 done
-
 
 # tmux config: https://github.com/adnichols/tmux_setup
 alias fixssh="source ~/bin/fixssh"
@@ -197,3 +197,9 @@ alias :q=exit
 fix-uuid() {
   pbpaste | sed 's|\([a-z0-9]\{8\}\)\([a-z0-9]\{4\}\)\([a-z0-9]\{4\}\)\([a-z0-9]\{4\}\)|\1-\2-\3-\4-|' | tee /dev/stderr | pbcopy
 }
+
+unfix-uuid() {
+  pbpaste | sed 's|-||g' | tee /dev/stderr | pbcopy
+}
+
+alias nfix="notion eslint --branch --fix ; notion prettier --branch"
