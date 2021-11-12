@@ -1,13 +1,13 @@
-host github
-    Hostname github.com
+Host github
+    HostName github.com
     User git
 
 Host armada armada.systems
-    Hostname armada.systems
+    HostName armada.systems
     User justjake
 
 Host shields
-    Hostname shields.internal
+    HostName shields.internal
     User jitl
     Port 2222
 
@@ -15,6 +15,18 @@ Host shields.internal shields.aramada.systems
     User jitl
     Port 2222
 
+Host cozy.systems
+  ConnectTimeout 15
+
+
 Host *
   AddKeysToAgent yes
   UseKeychain yes
+
+# Host *.notion.so
+#   ForwardAgent yes
+
+Host utility.notion.so
+    HostName utility.notion.so
+    ForwardAgent yes
+    User jitl
