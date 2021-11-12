@@ -1,0 +1,162 @@
+{
+  "Video" : {
+    "Quality" : "AVCaptureSessionPresetHigh",
+    "Capture Mouse Clicks" : true,
+    "Capture Mouse Cursor" : true,
+    "Framerate" : 30
+  },
+  "Advanced" : {
+    "Image File Format" : 1,
+    "open from clipboard" : true,
+    "Filename Template" : "%W %Y-%m-%d %H-%M-%S",
+    "Video File Format" : 0,
+    "DragAndDropCopyFlags" : 7,
+    "Always Save" : false,
+    "icloud actions" : 0,
+    "GIF Frames per second" : 10,
+    "ClipboardCopyFlags" : 1,
+    "Screenshots only" : false,
+    "Apply template to opened files" : false,
+    "Always Save Movie" : true,
+    "Copy image format clipboard" : 0,
+    "GIF Image quality" : 100,
+    "Drag and drop image format" : 0,
+    "JPEG Quality" : 100,
+    "Shrink Retina" : false
+  },
+  "System and App Info" : {
+    "Prev version" : "4.16.1",
+    "Launch Count" : 4,
+    "Current Version" : "4.16.1"
+  },
+  "Monosnap Hotkeys" : {
+    "ImageFromClipBoard" : {
+      "Active" : false
+    },
+    "Capture Fullscreen Delayed" : {
+      "Active" : false
+    },
+    "Record\/Pause" : {
+      "Active" : false
+    },
+    "Capture screencast" : {
+      "Active" : false
+    },
+    "Capture previous area" : {
+      "Active" : false
+    },
+    "Capture previous area with attach" : {
+      "Active" : false
+    },
+    "Capture Area And Upload" : {
+      "Active" : true,
+      "Mask" : 1572864,
+      "Code" : 26,
+      "Characters" : "7"
+    },
+    "Stop" : {
+      "Active" : false
+    },
+    "Capture Fullscreen" : {
+      "Active" : true,
+      "Mask" : 1572864,
+      "Code" : 22,
+      "Characters" : "6"
+    },
+    "Arrow" : {
+      "Active" : false
+    },
+    "Open Editor" : {
+      "Active" : true,
+      "Mask" : 1572864,
+      "Code" : 29,
+      "Characters" : "0"
+    },
+    "hotkeyFullscreen" : {
+      "Active" : false
+    },
+    "Capture Frozen Area" : {
+      "Active" : true,
+      "Mask" : 1703936,
+      "Code" : 23,
+      "Characters" : "5"
+    },
+    "Capture Area" : {
+      "Active" : true,
+      "Mask" : 1572864,
+      "Code" : 23,
+      "Characters" : "5"
+    },
+    "Rectangle" : {
+      "Active" : false
+    }
+  },
+  "Image Editor" : {
+    "Shadow" : true,
+    "Color" : "DFAB01",
+    "Primitive" : "btnEditor_rect",
+    "Line Width" : 8,
+    "hightLight" : true,
+    "Drawing Type" : "Solid"
+  },
+  "Appearance" : {
+    "Dont show notif" : false,
+    "Show tooltip editor" : true,
+    "Lite Mode" : false,
+    "Highlight Windows" : true,
+    "Show Startup Tooltip" : true,
+    "Show animation progress" : false,
+    "Window Shadow" : true,
+    "Show Magnifier" : true,
+    "Image shadow" : false,
+    "Realtime Crop" : true,
+    "Upload button type" : 0,
+    "Simple share window" : false,
+    "shot on click" : true,
+    "Show Tooltip" : true
+  },
+  "InApp" : {
+    "InApp Was Purchased Before" : false,
+    "Is Clicked On Menu Ads" : false
+  },
+  "Fonts" : {
+    "fontsPathes3" : "",
+    "fontsPathes0" : "\/Applications\/Monosnap.app\/Contents\/Resources\/DroidSans-Bold.ttf",
+    "fontsPathes1" : "\/Applications\/Monosnap.app\/Contents\/Resources\/DroidSansFallback.ttf",
+    "fonts2" : "",
+    "fonts0" : "DroidSans-Bold",
+    "fontsPathes2" : "",
+    "fonts3" : "",
+    "fonts1" : "DroidSansFallback"
+  },
+  "Locations" : {
+    "Save Directory" : "\/Users\/jitl\/Pictures\/Monosnap"
+  },
+  "Accounts" : {
+    "Upload service" : 0,
+    "Monosnap" : {
+      "Email" : "just.1.jake@gmail.com",
+      "Id" : "ms_72372",
+      "Credentials" : {
+        "User Name" : "jitl"
+      }
+    },
+    "Default upload service" : 0
+  },
+  "General" : {
+    "after upload" : 2,
+    "slack team name" : "",
+    "open in browser" : false,
+    "Dropbox links" : false,
+    "short links" : false,
+    "start at launch" : true,
+    "open in slack" : true,
+    "close after upload" : true,
+    "after screenshot" : 0,
+    "show links" : "YES",
+    "show hint" : true,
+    "sound effects" : false,
+    "Google drive links" : false,
+    "external image editor" : "\/Applications\/Preview.app"
+  }
+}
