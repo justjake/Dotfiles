@@ -45,6 +45,11 @@ mac_brew_install () {
     echo "Installing Homebrew"
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
+
+  if ! which brew > /dev/null ; then
+    # Brew probably needs to be sourced
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
 }
 
 mac_brew_cli () {
@@ -67,26 +72,26 @@ mac_brew_cask () {
   export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
 
   # Work-related essentials
-  brew cask install docker
-  brew cask install visual-studio-code
-  brew cask install iterm2
-  brew cask install viscosity  # VPN Client
-  brew cask install postico
-  brew cask install figma
+  brew install --cask docker
+  brew install --cask visual-studio-code
+  brew install --cask iterm2
+  brew install --cask viscosity  # VPN Client
+  brew install --cask postico
+  brew install --cask figma
 
   # Browsers
-  brew cask install firefox
-  brew cask install google-chrome
+  brew install --cask firefox
+  brew install --cask google-chrome
 
   # These are personal preference
-  brew cask install karabiner-elements
-  brew cask install metamove
-  brew cask install spotify
-  brew cask install google-drive
-  brew cask install notion
-  brew cask install grandperspective # Directory size viewer, like Disk Daisy
-  brew cask install signal
-  brew cask install itsycal # Free/tiny bar calendar dingus
+  brew install --cask karabiner-elements
+  brew install --cask metamove
+  brew install --cask spotify
+  brew install --cask google-drive
+  brew install --cask notion
+  brew install --cask grandperspective # Directory size viewer, like Disk Daisy
+  brew install --cask signal
+  brew install --cask itsycal # Free/tiny bar calendar dingus
   )
 }
 
