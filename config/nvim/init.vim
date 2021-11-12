@@ -119,7 +119,7 @@ command! ProjectNodeModules execute 'Files' s:find_project_root_node_modules()
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = []
 call add(g:coc_global_extensions, 'coc-tsserver')
-call add(g:coc_global_extensions, 'coc-tslint-plugin')  " Also requires coc-tsserver
+call add(g:coc_global_extensions, 'coc-eslint')
 call add(g:coc_global_extensions, 'coc-html')
 call add(g:coc_global_extensions, 'coc-css')
 call add(g:coc_global_extensions, 'coc-json')
@@ -127,6 +127,7 @@ call add(g:coc_global_extensions, 'coc-highlight')
 call add(g:coc_global_extensions, 'coc-prettier')
 call add(g:coc_global_extensions, 'coc-explorer') " https://github.com/weirongxu/coc-explorer
 call add(g:coc_global_extensions, 'coc-lists')    " https://github.com/neoclide/coc-lists
+call add(g:coc_global_extensions, 'coc-rls')
 
 " if hidden is not set, TextEdit might fail.
 set hidden
@@ -525,6 +526,7 @@ au BufRead,BufEnter /Users/jitl/src/notion/*.{js,ts,tsx,json} set ts=2 sw=2 noet
 " tsconfig.json is actually jsonc, help TypeScript set the correct filetype
 autocmd BufRead,BufNewFile tsconfig.json set filetype=jsonc
 autocmd BufRead,BufNewFile *tsconfig.json set filetype=jsonc
+au BufRead,BufNewFile *.dl             set filetype=dl
 
 autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif
 
