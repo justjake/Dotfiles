@@ -85,7 +85,6 @@ mac_brew_cask () {
 
   # These are personal preference
   brew install --cask karabiner-elements
-  brew install --cask metamove
   brew install --cask spotify
   brew install --cask google-drive
   brew install --cask notion
@@ -168,6 +167,20 @@ mac_prefs () {
   defaults write -g KeyRepeat -int 1
 }
 
+metamove () {
+  if [ -e ~/Applications/metamove.app ] ; then
+    return 0
+  fi
+
+  (
+    set -x
+    cd ~/Applications
+    curl -L 'https://github.com/jmgao/metamove/releases/download/v0.3.7/metamove-0.3.7.zip' -o metamove.zip
+    unzip metamove.zip
+    rm metamove.zip
+  )
+}
+
 all () {
   ssh_key "$1"
   clone_dotfiles
@@ -175,6 +188,7 @@ all () {
   mac_dirs
   mac_brew_install
   mac_brew_cli
+  metamove
   mac_brew_cask
   mac_app_store
   mac_prefs
