@@ -34,7 +34,6 @@ fi
 typeset -A settings_files
 settings_files=(
 zshrc           "~/.dotfiles/zshrc"
-hostsettings    "$ZSH_FILES/hosts/$HOSTNAME.zsh"
 aliases         "$ZSH_FILES/rc.d/20_aliases.zsh"
 zshall          "$ZSH_FILES"
 gotorc          "~/.dotfiles/zsh/rc.d/19_goto.sh"
@@ -49,7 +48,6 @@ tmuxrc          "~/.dotfiles/tmux.conf"
 for short in ${(k)settings_files}; do
     alias $short="$EDITOR $settings_files[$short]"
 done
-[[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] && alias hostsettings="$EDITOR $ZSH_FILES/hosts/$HOSTNAME"
 alias resource="source ~/.zshrc"
 
 #### SSH
@@ -203,3 +201,11 @@ unfix-uuid() {
 }
 
 alias nfix="notion eslint --branch --fix ; notion prettier --branch"
+
+if which nvim > /dev/null ; then
+  alias vim=nvim
+fi
+
+if which rg > /dev/null ; then
+  alias ag=rg
+fi

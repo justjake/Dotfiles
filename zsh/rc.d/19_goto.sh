@@ -12,6 +12,12 @@ goto-refresh-search-paths () {
 }
 
 goto-which () {
+  local quiet=false
+  if [[ "$1" == "--quiet" ]]; then
+    quiet=true
+    shift
+  fi
+
   goto-refresh-search-paths
   for p in $goto_search_paths; do
     local it="$p/$1"
@@ -21,12 +27,14 @@ goto-which () {
     fi
   done
 
-  echo "goto-which: not found: $1" > /dev/stderr
+  if [[ quiet != true ]] ; then
+    echo "goto-which: not found: $1" > /dev/stderr
+  fi
   return 1
 }
 
 goto () {
-  local dir=$(goto-which "$1")
+  local dir="$(goto-which --quiet "$1")"
   if [ -n "$dir" ]; then
     echo "cd $dir"
     cd "$dir"
