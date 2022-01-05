@@ -2,7 +2,7 @@
 	"editor.tabSize": 2,
 	"editor.fontFamily": "Monaco, 'Courier New', monospace",
 	"editor.formatOnSave": true,
-	"workbench.iconTheme": "seti",
+	"workbench.iconTheme": "vscode-icons",
 	"[typescriptreact]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
@@ -14,10 +14,12 @@
 	"docker.showStartPage": false,
 	"gitlens.hovers.currentLine.over": "line",
 	"cSpell.userWords": [
+		"Empscripten",
 		"emscripten",
 		"PGBOUNCER",
 		"postgres",
 		"quickjs",
+		"tldraw",
 		"upsert",
 		"Vercel"
 	],
@@ -31,5 +33,6 @@
 	},
 	"[json]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	}
+	},
+	"editor.inlineSuggest.enabled": true
 }
