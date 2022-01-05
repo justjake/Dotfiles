@@ -1,3 +1,10 @@
+# Aliases for directories outside of search paths
+typeset -A goto_names
+goto_names=(
+  dotfiles ~/.dotfiles
+  zsh      ~/.dotfiles/zsh
+)
+
 # paths in which to find projects or directories
 # top path wins
 goto-refresh-search-paths () {
@@ -11,11 +18,18 @@ goto-refresh-search-paths () {
   unsetopt nullglob
 }
 
+
 goto-which () {
   local quiet=false
   if [[ "$1" == "--quiet" ]]; then
     quiet=true
     shift
+  fi
+
+  local lookup="${goto_names[$1]}"
+  if [[ -n "$lookup" ]] ; then
+    echo "$lookup"
+    return 0
   fi
 
   goto-refresh-search-paths

@@ -52,3 +52,4 @@ fi
 
 complete -F _hostsettings_complete hostsettings
 complete -F _hostsettings_complete host-use
+complete -F _hostsettings_complete use-host
