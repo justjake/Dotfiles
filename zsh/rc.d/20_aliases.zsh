@@ -209,3 +209,7 @@ fi
 if which rg > /dev/null ; then
   alias ag=rg
 fi
+
+markdown=glow
+md=glow
+tf=terraform
