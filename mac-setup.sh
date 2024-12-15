@@ -14,7 +14,7 @@ if [ ! -f ~/.ssh/id_rsa ]; then
   (
   cd ~/.ssh
   set -x
-  ssh-keygen -t rsa -b 4096 -C "$1"
+  ssh-keygen -C "$1"
   )
 fi
 }

@@ -6,6 +6,10 @@
 # export all of these settings
 setopt ALL_EXPORT
 
+if [[ -e /opt/homebrew ]] ; then
+  PATH="/opt/homebrew/bin:$PATH"
+fi
+
 MANSECT=1:1p:8:2:3:3p:4:5:6:7:9:0p:n:l:o
 TZ="America/Los_Angeles"
 HOSTNAME="$(hostname -f)"

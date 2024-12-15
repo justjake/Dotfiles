@@ -210,6 +210,7 @@ if which rg > /dev/null ; then
   alias ag=rg
 fi
 
-markdown=glow
-md=glow
-tf=terraform
+alias markdown=glow
+alias md=glow
+alias tf=terraform
+alias wezrc='vim ~/.config/wezterm/wezterm.lua'
