@@ -5,6 +5,15 @@ return {
     "nvim-neo-tree/neo-tree.nvim",
     opts = {
       close_if_last_window = true,
+      filesystem = {
+        filtered_items = {
+          -- https://github.com/nvim-neo-tree/neo-tree.nvim/discussions/353
+          -- true: all "hide" just mean "dimmed out"
+          visible = true,
+          hide_dotfiles = false,
+          -- hide_gitignored = false,
+        },
+      },
     },
     keys = {
       {
