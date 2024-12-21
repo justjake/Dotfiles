@@ -41,6 +41,18 @@ local jake_circus = function()
     ctermfg = termcolor,
     ctermbg = thick and termcolor or nil,
   }
+
+  hi.NeoTreeGitUntraced = {
+    guifg = M.colors.base0B,
+  }
+
+  -- with popup_border_style = "rounded"
+  hi.NeoTreeFloatBorder = {
+    guifg = M.colors.base02,
+  }
+  hi.NeoTreeTitleBar = {
+    guibg = M.colors.base03,
+  }
 end
 
 -- https://lazy.folke.io/spec
