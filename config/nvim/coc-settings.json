@@ -1,0 +1,17 @@
+{
+  "coc.preferences.formatOnSaveFiletypes": [
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact",
+    "json",
+    "markdown",
+    "css"
+  ],
+  "tsserver.maxTsServerMemory": 16000,
+  "tslint.autoFixOnSave": true,
+  "explorer.icon.enableNerdfont": true,
+  "explorer.previewAction.onHover": false,
+  "explorer.file.autoReveal": false,
+  "explorer.file.showHiddenFiles": true
+}
