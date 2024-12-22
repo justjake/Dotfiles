@@ -21,3 +21,7 @@ config/Code/User/workspaceStorage/
 
 # karabiner stuff
 config/karabiner/automatic_backups/
+
+config/iterm2/AppSupport
+config/iterm2/sockets
+
