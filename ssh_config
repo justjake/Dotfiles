@@ -1,3 +1,7 @@
+Host *
+  AddKeysToAgent yes
+  UseKeychain yes
+
 Host github
     HostName github.com
     User git
@@ -17,11 +21,6 @@ Host shields.internal shields.aramada.systems
 
 Host cozy.systems
   ConnectTimeout 15
-
-
-Host *
-  AddKeysToAgent yes
-  UseKeychain yes
 
 # Host *.notion.so
 #   ForwardAgent yes
