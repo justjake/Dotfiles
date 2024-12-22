@@ -25,13 +25,15 @@ function M.setup(config)
 	-- config.disable_default_key_bindings = true
 	config.hyperlink_rules = wezterm.default_hyperlink_rules()
 	config.mouse_bindings = {
-		-- Ctrl-click will open the link under the mouse cursor
+		-- Cmd-click to open links
 		{
 			event = { Up = { streak = 1, button = "Left" } },
 			mods = "CMD",
 			action = wezterm.action.OpenLinkAtMouseCursor,
 		},
 	}
+
+	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/index.html
 	config.keys = {
 		-- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
 		{
@@ -67,6 +69,21 @@ function M.setup(config)
 			key = "l",
 			mods = "CTRL|ALT",
 			action = act.ActivateTabRelative(1),
+		},
+		{
+			key = "'",
+			mods = "LEADER",
+			action = act.PromptInputLine({
+				description = "Set tab title",
+				action = wezterm.action_callback(function(window, pane, line)
+					-- line will be `nil` if they hit escape without entering anything
+					-- An empty string if they just hit enter
+					-- Or the actual line of text they wrote
+					if line then
+						window:active_tab():set_title(line)
+					end
+				end),
+			}),
 		},
 		{
 			key = "t",
