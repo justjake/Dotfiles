@@ -32,12 +32,18 @@ config.window_frame = {
 	font = wezterm.font({ family = "Monaco", weight = "Bold" }),
 	font_size = 15,
 }
-
+config.window_padding = {
+	left = "0cell",
+	right = "0cell",
+	top = "0.5cell",
+	bottom = "0.5cell",
+}
 config.window_decorations = "RESIZE"
 
 -- Tab bar
 -- https://wezfurlong.org/wezterm/config/appearance.html#retro-tab-bar-appearance
 config.tab_bar_at_bottom = true
+config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false
 config.tab_max_width = 50
 
@@ -94,6 +100,13 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 		table.insert(format, { Text = " " })
 	end
 	return format
+end)
+-- https://wezfurlong.org/wezterm/config/lua/wezterm/nerdfonts.html?h=clock
+wezterm.on("update-right-status", function(window, pane)
+	local date = wezterm.time.now():format_utc("%Y-%m-%d %H:%M UTC")
+	window:set_right_status(wezterm.format({
+		{ Text = date },
+	}))
 end)
 
 -- Command palette
