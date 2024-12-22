@@ -519,6 +519,10 @@ __wezterm_user_vars_precmd() {
   else
     __wezterm_set_user_var "WEZTERM_HOST" "${WEZTERM_HOSTNAME}"
   fi
+
+  # Jake: pass current $PATH to Wezterm so it can run subcommands
+  # "inside" the pane.
+  __wezterm_set_user_var "WEZTERM_PATH" "${PATH}"
 }
 
 __wezterm_user_vars_preexec() {
