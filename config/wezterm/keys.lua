@@ -1,5 +1,8 @@
 local wezterm = require("wezterm")
+local smart_splits = wezterm.plugin.require("https://github.com/mrjones2014/smart-splits.nvim")
+local act = wezterm.action
 local M = {}
+
 -- you can put the rest of your Wezterm config here
 
 wezterm.on("update-plugins", function(window, pane)
@@ -19,7 +22,7 @@ end)
 
 function M.setup(config)
 	config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
-	config.disable_default_key_bindings = true
+	-- config.disable_default_key_bindings = true
 	config.hyperlink_rules = wezterm.default_hyperlink_rules()
 	config.mouse_bindings = {
 		-- Ctrl-click will open the link under the mouse cursor
@@ -30,38 +33,109 @@ function M.setup(config)
 		},
 	}
 	config.keys = {
-		-- Attach to muxer
+		-- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
+		{
+			key = "a",
+			mods = "LEADER|CTRL",
+			action = wezterm.action.SendKey({ key = "a", mods = "CTRL" }),
+		},
+
+		-- Session management
 		{
 			key = "a",
 			mods = "LEADER",
 			action = wezterm.action.AttachDomain("unix"),
 		},
-		-- Detach from muxer
 		{
 			key = "d",
 			mods = "LEADER",
 			action = wezterm.action.DetachDomain({ DomainName = "unix" }),
 		},
-		-- toggle opacity
+
+		-- Tab management
 		{
-			key = "b",
-			mods = "LEADER",
-			action = wezterm.action.EmitEvent("toggle-opacity"),
-		},
-		{
-			key = "p",
-			mods = "LEADER",
-			action = wezterm.action.ActivateCommandPalette,
-		},
-		{
-			key = "n",
+			key = "c",
 			mods = "LEADER",
 			action = wezterm.action({ SpawnTab = "CurrentPaneDomain" }),
+		},
+		{
+			key = "h",
+			mods = "CTRL|ALT",
+			action = act.ActivateTabRelative(-1),
+		},
+		{
+			key = "l",
+			mods = "CTRL|ALT",
+			action = act.ActivateTabRelative(1),
 		},
 		{
 			key = "t",
 			mods = "LEADER",
 			action = wezterm.action.ShowTabNavigator,
+		},
+
+		-- Splits
+		-- Splits: creation
+		{
+			key = [[\]],
+			mods = "LEADER",
+			action = wezterm.action({
+				SplitHorizontal = { domain = "CurrentPaneDomain" },
+			}),
+		},
+		{
+			key = "v",
+			mods = "LEADER",
+			action = wezterm.action.SplitPane({
+				top_level = true,
+				direction = "Right",
+				size = { Percent = 50 },
+			}),
+		},
+		{
+			key = [[|]],
+			mods = "LEADER",
+			action = wezterm.action.SplitPane({
+				top_level = true,
+				direction = "Right",
+				size = { Percent = 50 },
+			}),
+		},
+		{
+			key = "s",
+			mods = "LEADER",
+			action = wezterm.action({
+				SplitVertical = { domain = "CurrentPaneDomain" },
+			}),
+		},
+		{
+			key = [[-]],
+			mods = "LEADER",
+			action = wezterm.action({
+				SplitVertical = { domain = "CurrentPaneDomain" },
+			}),
+		},
+		{
+			key = [[_]],
+			mods = "LEADER",
+			action = wezterm.action.SplitPane({
+				top_level = true,
+				direction = "Down",
+				size = { Percent = 50 },
+			}),
+		},
+		-- Splits: destroy
+		{ key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentPane({ confirm = false }) },
+		-- Splits: resizing
+		{ key = "LeftArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Left", 1 }) },
+		{ key = "RightArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Right", 1 }) },
+		{ key = "UpArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Up", 1 }) },
+		{ key = "DownArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Down", 1 }) },
+
+		{
+			key = "p",
+			mods = "LEADER",
+			action = wezterm.action.ActivateCommandPalette,
 		},
 		{
 			key = "`",
@@ -82,61 +156,26 @@ function M.setup(config)
 				end),
 			}),
 		},
-		{
-			key = [[\]],
-			mods = "LEADER",
-			action = wezterm.action({
-				SplitHorizontal = { domain = "CurrentPaneDomain" },
-			}),
-		},
-		{
-			key = [[|]],
-			mods = "LEADER",
-			action = wezterm.action.SplitPane({
-				top_level = true,
-				direction = "Right",
-				size = { Percent = 50 },
-			}),
-		},
-		{
-			key = [[-]],
-			mods = "LEADER",
-			action = wezterm.action({
-				SplitVertical = { domain = "CurrentPaneDomain" },
-			}),
-		},
-		{
-			key = [[_]],
-			mods = "LEADER",
-			action = wezterm.action.SplitPane({
-				top_level = true,
-				direction = "Down",
-				size = { Percent = 50 },
-			}),
-		},
+
 		{
 			key = "q",
 			mods = "LEADER",
 			action = wezterm.action({ CloseCurrentTab = { confirm = false } }),
 		},
+		-- TODO: do we need this since we kept the default keybinds?
 		{ key = "u", mods = "LEADER", action = wezterm.action.EmitEvent("update-plugins") },
-		{ key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentPane({ confirm = false }) },
 		{ key = "z", mods = "LEADER", action = wezterm.action.TogglePaneZoomState },
-		{ key = "LeftArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Left", 1 }) },
-		{ key = "RightArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Right", 1 }) },
-		{ key = "UpArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Up", 1 }) },
-		{ key = "DownArrow", mods = "LEADER", action = wezterm.action.AdjustPaneSize({ "Down", 1 }) },
 		{ key = "y", mods = "LEADER", action = wezterm.action.ActivateCopyMode },
-		{ key = "c", mods = "SUPER", action = wezterm.action({ CopyTo = "Clipboard" }) },
-		{ key = "v", mods = "SUPER", action = wezterm.action({ PasteFrom = "Clipboard" }) },
 		{ key = "h", mods = "SUPER", action = wezterm.action.HideApplication },
 		{ key = "f", mods = "SUPER", action = wezterm.action.Search({ CaseSensitiveString = "" }) },
 		{ key = "F12", mods = "", action = wezterm.action.ToggleFullScreen },
-		{ key = "[", mods = "ALT", action = wezterm.action({ ActivateTabRelative = -1 }) },
-		{ key = "]", mods = "ALT", action = wezterm.action({ ActivateTabRelative = 1 }) },
-		{ key = "PageDown", mods = "ALT", action = wezterm.action.MoveTabRelative(-1) },
-		{ key = "PageUp", mods = "ALT", action = wezterm.action.MoveTabRelative(1) },
 	}
+	smart_splits.apply_to_config(config, {
+		-- direction_keys = {
+		-- 	move = { "h", "j", "k", "l" },
+		-- 	resize = { "LeftArrow", "DownArrow", "UpArrow", "RightArrow" },
+		-- },
+	})
 end
 
 -- return keys and mouse
