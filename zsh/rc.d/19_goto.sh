@@ -2,12 +2,14 @@
 typeset -A goto_names
 goto_names=(
   dotfiles ~/.dotfiles
-  zsh      ~/.dotfiles/zsh
+  zsh ~/.dotfiles/zsh
+  nvim ~/.dotfiles/nvim
+  nvimdeps ~/.local/share/nvim/lazy/
 )
 
 # paths in which to find projects or directories
 # top path wins
-goto-refresh-search-paths () {
+goto-refresh-search-paths()  {
   setopt nullglob
   goto_search_paths=(
     $GOPATH/src/*/*
@@ -18,8 +20,7 @@ goto-refresh-search-paths () {
   unsetopt nullglob
 }
 
-
-goto-which () {
+goto-which()  {
   local quiet=false
   if [[ "$1" == "--quiet" ]]; then
     quiet=true
@@ -27,7 +28,7 @@ goto-which () {
   fi
 
   local lookup="${goto_names[$1]}"
-  if [[ -n "$lookup" ]] ; then
+  if [[ -n "$lookup" ]]; then
     echo "$lookup"
     return 0
   fi
@@ -35,30 +36,30 @@ goto-which () {
   goto-refresh-search-paths
   for p in $goto_search_paths; do
     local it="$p/$1"
-    if [ -e "$it" ] ; then
+    if [ -e "$it" ]; then
       echo "$it"
       return 0
     fi
   done
 
-  if [[ quiet != true ]] ; then
-    echo "goto-which: not found: $1" > /dev/stderr
+  if [[ quiet != true ]]; then
+    echo "goto-which: not found: $1" >/dev/stderr
   fi
   return 1
 }
 
-goto () {
+goto()  {
   local dir="$(goto-which --quiet "$1")"
   if [ -n "$dir" ]; then
     echo "cd $dir"
     cd "$dir"
   else
-    echo "goto: not found: $1" > /dev/stderr
+    echo "goto: not found: $1" >/dev/stderr
     return 1
   fi
 }
 
-_goto () {
+_goto()  {
   goto-refresh-search-paths
   COMPREPLY=()
 
@@ -79,7 +80,7 @@ _goto () {
     path_glob="$p/$cur*"
     candidates=($(compgen -G "$path_glob" | xargs basename))
     # Add any matches to the completion result
-    COMPREPLY+=( "${candidates[@]}" )
+    COMPREPLY+=("${candidates[@]}")
   done
 
   return 0

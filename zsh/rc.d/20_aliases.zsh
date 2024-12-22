@@ -31,22 +31,44 @@ if which ack-grep no-output; then
 fi
 
 # Settings shortcuts
-typeset -A settings_files
-settings_files=(
+typeset -A editor_aliases
+editor_aliases=(
+dotfiles        "~/.dotfiles"
 zshrc           "~/.dotfiles/zshrc"
-aliases         "$ZSH_FILES/rc.d/20_aliases.zsh"
-zshall          "$ZSH_FILES"
+aliases         "~/.dotfiles/zsh/rc.d/20_aliases.zsh"
 gotorc          "~/.dotfiles/zsh/rc.d/19_goto.sh"
-
-# non-zsh
-vimrc           "~/.dotfiles/vimrc"
-nvimrc          "~/.dotfiles/config/nvim/init.vim"
+vimrc           "~/.dotfiles/config/nvim"
+nvimrc          "~/.dotfiles/config/nvim"
+nvimdeps        "~/.local/share/nvim/lazy/"
 gitrc           "~/.dotfiles/gitconfig"
 sshconfig       "~/.ssh/config"
 tmuxrc          "~/.dotfiles/tmux.conf"
+wezrc           "~/.dotfiles/config/wezterm"
+
+nodemods        "node_modules"
 )
-for short in ${(k)settings_files}; do
-    alias $short="$EDITOR $settings_files[$short]"
+
+edit_alias_path () {
+  if [[ -d "$1" ]] ; then
+    ( cd "$1" && "$EDITOR" . )
+  else
+    "$EDITOR" "$1"
+  fi
+  local exit_code=$?
+
+  if [[ $exit_code != 0 ]] ; then
+    return $exit_code
+  fi
+
+  # If we just edited a zsh config file, re-source it.
+  if [[ "$1" == "$ZSH_FILES"*.zsh || "$1" == "$ZSH_FILES"*.sh || "$1" == ~/.dotfiles/zshrc ]] ; then
+    source "$1"
+    echo "sourced $1"
+  fi
+}
+
+for short in ${(k)editor_aliases}; do
+    alias $short="edit_alias_path $editor_aliases[$short]"
 done
 alias resource="source ~/.zshrc"
 
@@ -213,4 +235,3 @@ fi
 alias markdown=glow
 alias md=glow
 alias tf=terraform
-alias wezrc='vim ~/.config/wezterm/wezterm.lua'

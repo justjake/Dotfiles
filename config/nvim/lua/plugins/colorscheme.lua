@@ -42,8 +42,11 @@ local jake_circus = function()
     ctermbg = thick and termcolor or nil,
   }
 
-  hi.NeoTreeGitUntraced = {
+  hi.NeoTreeGitUntracked = {
     guifg = M.colors.base0B,
+  }
+  hi.NeoTreeGitUnstaged = {
+    guifg = M.colors.base0A,
   }
 
   -- with popup_border_style = "rounded"

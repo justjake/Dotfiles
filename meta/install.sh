@@ -7,10 +7,9 @@
 # Usage:
 # ~/.dotfiles/meta/install.sh [EXTRAS...]
 # where "extras" is any installation function defined here:
-#   - dotfiles:       the base dotfiles
+#   - dotfiles:       the base dotfiles & ~/.config
 #   - submodules:     get all git submodules
 #   - ssh-config:     link my ssh-config into ~/.ssh/config
-#   - desktop-config: links in XDG_DESKTOP settings in ~/.config
 ####
 
 set -e
@@ -20,6 +19,7 @@ DOTFILES_DIR="$HOME/.dotfiles"
 BUNDLES_DIR="$HOME/bundles"
 # list of files to link into homedir
 DOTFILES=(
+config
 zshrc
 zsh
 
@@ -83,8 +83,13 @@ function submodules () {
 }
 
 # desktop config
+# DEPRECATED: just link the whole fucking thing
 function desktop-config () {
     local desktop_config_dir="$HOME/.dotfiles/config"
+    if ! [[ -d "$HOME/.config"]] ; then
+      pushd "$HOME" no-output
+
+
     mkdir -p "$HOME/.config"
 
     pushd "$HOME" no-output
