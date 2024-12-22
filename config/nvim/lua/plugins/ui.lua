@@ -1,4 +1,26 @@
 return {
+  -- Mouse hover (is this good? idk...)
+  {
+    "lewis6991/hover.nvim",
+    opts = {
+      init = function()
+        require("hover.providers.diagnostic")
+        require("hover.providers.lsp")
+        require("hover.providers.fold_preview")
+      end,
+      preview_opts = {
+        border = "rounded",
+      },
+      mouse_providers = {
+        "Diagnostics",
+        "LSP",
+        "Man",
+        "Fold Preview",
+      },
+      title = false,
+      mouse_delay = 500,
+    },
+  },
   -- https://github.com/nvim-neo-tree/neo-tree.nvim
   -- http://www.lazyvim.org/plugins/editor#neo-treenvim
   {

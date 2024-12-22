@@ -98,3 +98,6 @@ end
 --   exe ':CocCommand explorer --no-toggle --focus'
 -- endfunction
 -- nnoremap <Leader>g :call ExploreHere()<CR>
+
+vim.keymap.set({ "i", "n" }, "<MouseMove>", require("hover").hover_mouse, { desc = "hover.nvim (mouse)" })
+vim.o.mousemoveevent = true
