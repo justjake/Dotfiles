@@ -10,14 +10,10 @@ wezterm.on("update-plugins", function(window, pane)
 	window:toast_notification("wezterm", "Plugins updated!", nil, 4000)
 end)
 
-wezterm.on("toggle-opacity", function(window, pane)
-	local overrides = window:get_config_overrides() or {}
-	if not overrides.window_background_opacity then
-		overrides.window_background_opacity = 1
-	else
-		overrides.window_background_opacity = nil
-	end
-	window:set_config_overrides(overrides)
+wezterm.on("leader-debug", function(window, pane)
+	print("Window: ", window, window:get_dimensions())
+	print("Pane: ", pane, pane:get_dimensions())
+	window:perform_action(act.ShowDebugOverlay, pane)
 end)
 
 function M.setup(config)
@@ -40,6 +36,16 @@ function M.setup(config)
 			key = "a",
 			mods = "LEADER|CTRL",
 			action = wezterm.action.SendKey({ key = "a", mods = "CTRL" }),
+		},
+
+		-- Cmd-E: emoji input
+		{
+			action = act.CharSelect({
+				copy_on_select = true,
+				copy_to = "ClipboardAndPrimarySelection",
+			}),
+			key = "e",
+			mods = "CMD",
 		},
 
 		-- Session management
@@ -173,7 +179,11 @@ function M.setup(config)
 				end),
 			}),
 		},
-
+		{
+			key = "?",
+			mods = "LEADER",
+			action = act.EmitEvent("leader-debug"),
+		},
 		{
 			key = "q",
 			mods = "LEADER",

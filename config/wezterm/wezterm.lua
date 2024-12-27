@@ -26,6 +26,9 @@ local theme = {
 	base0F = "#b888e2",
 }
 
+config.initial_rows = 50
+config.initial_cols = 140
+
 config.font = wezterm.font({ family = "Monaco" })
 config.font_size = 15
 config.window_frame = {
@@ -109,10 +112,23 @@ wezterm.on("update-right-status", function(window, pane)
 	}))
 end)
 
+local popup = {
+	font_size = 22,
+	fg_color = theme.base05,
+	bg_color = theme.base02,
+}
+
 -- Command palette
 -- https://wezfurlong.org/wezterm/config/lua/keyassignment/ActivateCommandPalette.html#key-assignments
-config.command_palette_font_size = 15
-config.command_palette_fg_color = theme.base05
-config.command_palette_bg_color = theme.base02
+config.command_palette_font_size = popup.font_size
+config.command_palette_fg_color = popup.fg_color
+config.command_palette_bg_color = popup.bg_color
+
+-- Char select
+-- https://wezfurlong.org/wezterm/config/lua/keyassignment/CharSelect.html
+-- https://wezfurlong.org/wezterm/tags.html#char_select
+config.char_select_font_size = 36
+config.char_select_fg_color = popup.fg_color
+config.char_select_bg_color = popup.bg_color
 
 return config
