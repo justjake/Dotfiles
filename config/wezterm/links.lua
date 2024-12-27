@@ -2,6 +2,7 @@
 
 local wezterm = require("wezterm")
 local nvim = require("nvim")
+local exec = require("exec")
 local M = {}
 
 local line_param = "?line="
@@ -48,29 +49,6 @@ local function get_uri_line_column(protocol, uri)
 end
 
 local default_path = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin"
-local function run_child_with_pane_path(pane, argv)
-	if type(argv) == "string" then
-		argv = { "sh", "-c", argv }
-	end
-
-	-- https://wezfurlong.org/wezterm/config/lua/pane/index.html
-	local cwd = wezterm.shell_quote_arg(pane:get_current_working_dir().file_path)
-	local path_var = pane:get_user_vars().WEZTERM_PATH or default_path
-
-	local env_argv = {
-		"env",
-		"PATH=" .. path_var,
-		"PWD=" .. cwd,
-		"bash",
-		"-c",
-		[[cd "$PWD" && exec "$@"]],
-		"run_child_with_pane_path", -- $0, used in error messages
-		table.unpack(argv), -- becomes $@
-	}
-	local ok, stdout, stderr = wezterm.run_child_process(env_argv)
-	print("run_child_with_pane_path:", env_argv, "result:", { ok = ok, stdout = stdout, stderr = stderr })
-	return ok, stdout, stderr
-end
 
 -- Code from discussion: https://github.com/wez/wezterm/discussions/529
 
@@ -148,6 +126,9 @@ function M.setup(config)
 	local path_group = "(/" .. not_boundary_class .. "+)"
 
 	-- NodeJS internal modules, node: protocol
+	-- Examples:
+	-- at Function._load (node:internal/modules/cjs/loader:1091:17)
+	-- at TracingChannel.traceSync (node:diagnostics_channel:322:14)
 	local node_protocol = "node:"
 	rule({
 		regex = boundary_class
@@ -181,21 +162,15 @@ importTarget = importTarget.match(/\.js(\w)?$/) ?
   importTarget + ".js"
 return `https://github.com/nodejs/node/blob/${process.version}/lib/${importTarget}`
 })()]]
-			local ok, stdout, stderr = run_child_with_pane_path(pane, {
+
+			-- https://wezfurlong.org/wezterm/config/lua/wezterm.url/Url.html
+			local resolved_uri = exec.pane_stdout(pane, {
 				"node",
 				"-p",
 				resolve_url_script,
 				"--",
 				file_and_line.path,
 			})
-
-			if not ok then
-				error("node protocol error:" .. stderr)
-				return false
-			end
-
-			-- https://wezfurlong.org/wezterm/config/lua/wezterm.url/Url.html
-			local resolved_uri = stdout:gsub("^%s*(.-)%s*$", "%1")
 			local resolved_url = wezterm.url.parse(resolved_uri)
 			if resolved_url.scheme == "file" then
 				nvim.edit({
@@ -206,7 +181,7 @@ return `https://github.com/nodejs/node/blob/${process.version}/lib/${importTarge
 				})
 			else
 				if resolved_url.scheme == "https" then
-					wezterm.run_child_process({ "open", resolved_uri .. "#L" .. file_and_line.line })
+					exec.open(resolved_uri .. "#L" .. file_and_line.line)
 				else
 					error("unexpected scheme resolved by node: " .. resolved_uri)
 				end
@@ -269,10 +244,7 @@ return `https://github.com/nodejs/node/blob/${process.version}/lib/${importTarge
 			end
 
 			-- Fall back to OS open
-			wezterm.run_child_process({
-				"open",
-				path,
-			})
+			exec.open(file_and_line.path)
 			return false
 		end,
 	})
@@ -293,29 +265,15 @@ return `https://github.com/nodejs/node/blob/${process.version}/lib/${importTarge
 	rule({
 		regex = [[\#(\d+)]],
 		format = gh_issue_prefix .. "$1",
-	})
-	local function open_github_issue_uri(window, pane, uri)
-		local start, match_end = uri:find(gh_issue_prefix)
-		if start == 1 then
-			local number = uri:sub(match_end + 1)
-			local ok, stdout, stderr = run_child_with_pane_path(pane, "gh pr view --web " .. number)
-			print("URL Handler: Github PR command ok? " .. tostring(ok))
-			print("URL Handler: stdout:\n" .. stdout)
-			print("URL Handler: stderr:\n" .. stderr)
-
-			if not ok then
-				-- This didn't do anything :(
-				-- TODO: we could show a prompt or inject text instead...
-				window:toast_notification("Github PR Error", stdout .. stderr)
+		handler = function(window, pane, uri)
+			local number = get_uri_body(gh_issue_prefix, uri)
+			if not number then
+				return nil
 			end
-
-			-- prevent the default action from opening in a browser
+			exec.pane_stdout(pane, "gh pr view --web " .. number)
 			return false
-		end
-		-- otherwise, by not specifying a return value, we allow later
-		-- handlers and ultimately the default action to caused the
-		-- URI to be opened in the browser
-	end
+		end,
+	})
 
 	wezterm.on("open-uri", function(window, pane, uri)
 		for _, handler in ipairs(uri_handlers) do
