@@ -87,22 +87,6 @@ function is_editable(filename)
 	return true
 end
 
-local function get_file_uri_path(uri)
-	-- `file://hostname/path/to/file`
-	local start, match_end = uri:find("file:")
-	if start == 1 then
-		-- skip "file://", -> `hostname/path/to/file`
-		local host_and_path = uri:sub(match_end + 3)
-		local start, match_end = host_and_path:find("/")
-		if start then
-			-- -> `/path/to/file`
-			return host_and_path:sub(match_end)
-		end
-	end
-
-	return nil
-end
-
 function M.setup(config)
 	config.hyperlink_rules = wezterm.default_hyperlink_rules()
 	local uri_handlers = {}

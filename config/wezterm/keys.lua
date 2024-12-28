@@ -12,7 +12,7 @@ end)
 
 wezterm.on("leader-debug", function(window, pane)
 	print("Window: ", window, window:get_dimensions())
-	print("Pane: ", pane, pane:get_dimensions())
+	print("Pane: ", pane, pane:get_dimensions(), "vars:", pane:get_user_vars())
 	window:perform_action(act.ShowDebugOverlay, pane)
 end)
 

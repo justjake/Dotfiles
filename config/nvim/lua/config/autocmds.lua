@@ -27,6 +27,21 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufEnter" }, {
   end,
 })
 
+-- Expose NVIM remote control socket to Wezterm
+local wezterm = require("util.wezterm")
+wezterm.set_var("NVIM_LISTEN_ADDRESS", vim.v.servername)
+vim.api.nvim_create_autocmd("VimResume", {
+  callback = function()
+    wezterm.set_var("NVIM_LISTEN_ADDRESS", vim.v.servername)
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "VimSuspend", "VimLeavePre" }, {
+  callback = function()
+    wezterm.set_var("NVIM_LISTEN_ADDRESS", "")
+  end,
+})
+
 -- TODO: strip trailing whitespace globally
 --
 -- " strip trailing whitespace

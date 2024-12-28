@@ -1,6 +1,6 @@
 local wezterm = require("wezterm")
+local exec = require("exec")
 local M = {}
-
 local function resolve_location(location)
 	local pane = location and location.pane
 	local tab = pane and pane:tab() or location and location.tab
@@ -62,6 +62,19 @@ function M.find_pane(is_match, maybe_location)
 	end
 end
 
+local function var_is_falsy(string)
+	return string == nil or string == "" or string == "false" or string == "0"
+end
+
+local function get_nvim_listen_address(pane)
+	local vars = pane:get_user_vars()
+	local listen_address = vars.NVIM_LISTEN_ADDRESS
+	if var_is_falsy(listen_address) then
+		return nil
+	end
+	return listen_address
+end
+
 local function is_nvim_pane(pane)
 	-- Example process info
 	--[[
@@ -110,6 +123,11 @@ local function is_nvim_pane(pane)
     "status": "Run",
 }
   --]]
+
+	if get_nvim_listen_address(pane) then
+		return true
+	end
+
 	local proc = pane:get_foreground_process_info()
 	if proc.name == "nvim" then
 		return true
@@ -127,16 +145,39 @@ function M.find_nvim_pane(location)
 	return M.find_pane(is_nvim_pane, location)
 end
 
+local function vim_cmd(vimscript)
+	return string.format([[<C-\><C-N>:%s<CR>]], vimscript)
+end
+
+-- /Example/example-path.txt
+-- https://neovim.io/doc/user/remote.html
 function M.edit(args)
 	local pane = M.find_nvim_pane(args)
 	if pane then
 		pane:activate()
-		-- TODO: send escape, or use remote control via server
+
+		local server = get_nvim_listen_address(pane)
+		if server then
+			local lua = string.format(
+				[[lua require("util.wezterm").drop(%s, %s, %s)]],
+				wezterm.json_encode(args.path),
+				args.line and tostring(args.line) or "nil",
+				args.column and tostring(args.column) or "nil"
+			)
+			local command = { "nvim", "--server", server, "--remote-send", vim_cmd(lua) }
+			print("nvim.edit: found server", {
+				pane = pane,
+				command = command,
+				server = server,
+			})
+			exec.pane_stdout(pane, command)
+			return true
+		end
+
 		pane:send_text(":e " .. args.path)
 		return true
 	end
-
-	-- TODO: spawn new pane running nvim
+	-- TODO: spawn new nvim in new pane
 	return false
 end
 
