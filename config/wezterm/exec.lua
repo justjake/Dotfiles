@@ -69,7 +69,9 @@ function M.pane_stdout(pane, argv)
 end
 
 function M.open(path)
-	return M.stdout({ "open", path })
+	wezterm.open_with(path)
+	-- More efficient than:
+	--   return M.stdout({ "open", path })
 end
 
 return M
