@@ -48,8 +48,6 @@ local function get_uri_line_column(protocol, uri)
 	return result
 end
 
-local default_path = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin"
-
 -- Code from discussion: https://github.com/wez/wezterm/discussions/529
 
 -- Use some simple heuristics to determine if we should open it
@@ -104,6 +102,8 @@ function M.setup(config)
 	end
 
 	local boundary_characters = [[\s'"\[\]\(\):]]
+	local path_segment_boundary_characters = boundary_characters .. "/"
+	local not_path_segment_boundary = "[^" .. path_segment_boundary_characters .. "]"
 	local boundary_class = "[" .. boundary_characters .. "]"
 	local not_boundary_class = "[^" .. boundary_characters .. "]"
 	local number_group = [[(?::(\d+))]]
@@ -174,7 +174,44 @@ return `https://github.com/nodejs/node/blob/${process.version}/lib/${importTarge
 		end,
 	})
 
-	-- File paths, some examples:
+	-- Relative file paths
+	-- Examples:
+	--   ./exec.lua
+	--   ../nvim/init.lua:3
+	rule({
+		regex = boundary_class
+			.. [[?((\.{1,2}/]]
+			.. not_path_segment_boundary
+			.. "+"
+			.. "(?:/"
+			.. not_path_segment_boundary
+			.. "+)*"
+			.. ")/?" -- trailing /
+			.. number_group
+			.. "?"
+			.. number_group
+			.. "?)"
+			.. boundary_class
+			.. "?",
+		format = "RELATIVE_PATH:$2" .. line_param .. "$3" .. column_param .. "$4",
+		highlight = 1,
+		handler = function(window, pane, uri)
+			local loc = get_uri_line_column("RELATIVE_PATH:", uri)
+			if loc == nil then
+				return nil
+			end
+
+			loc.relative_path = loc.path
+			loc.cwd = pane:get_current_working_dir().file_path
+			loc.path = loc.cwd .. (loc.cwd:sub(-2, -1) == "/" and "" or "/") .. loc.relative_path
+			loc.pane = pane
+
+			nvim.edit(loc)
+			return false
+		end,
+	})
+
+	-- Absolute file paths, some examples:
 	--[[ 
 /Users/jitl/.dotfiles/zsh/rc.d/21_cs61b.zsh:8: command not found: hostname
 /Users/jitl/.dotfiles/zsh/rc.d/21_rescomp.zsh:3: command not found: hostname

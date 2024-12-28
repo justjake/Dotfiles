@@ -40,8 +40,8 @@ source ~/.zshrc
 "$@"
 exit_code=$?
 if [ $exit_code != 0 ]; then
-  echo "+" "$@"
-  echo "exec.zsh_split_command: exited $exit_code"
+  echo "exec: command failed:" "$@"
+  echo "exited $exit_code"
   echo "sleeping for 30s, press ctrl^c to close"
   sleep 30
   exit $exit_code
