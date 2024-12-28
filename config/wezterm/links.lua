@@ -108,15 +108,18 @@ function M.setup(config)
 	local not_boundary_class = "[^" .. boundary_characters .. "]"
 	local number_group = [[(?::(\d+))]]
 	local path_group = "(/" .. not_boundary_class .. "+)"
+	local start_boundary = "(?:^|" .. boundary_class .. ")"
+	local end_boundary = "(?:$|" .. boundary_class .. ")"
 
 	-- NodeJS internal modules, node: protocol
 	-- Examples:
 	-- at Function._load (node:internal/modules/cjs/loader:1091:17)
 	-- at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+	-- node:diagnostics_channel:322:14
 	local node_protocol = "node:"
 	rule({
-		regex = boundary_class
-			.. "?(("
+		regex = start_boundary
+			.. "(("
 			.. node_protocol
 			.. not_boundary_class
 			.. "+)"
@@ -125,7 +128,8 @@ function M.setup(config)
 			.. number_group
 			.. "?)"
 			.. boundary_class
-			.. "?",
+			.. end_boundary,
+		highlight = 1,
 		format = node_protocol .. "$2" .. line_param .. "$3" .. column_param .. "$4",
 		handler = function(window, pane, uri)
 			local file_and_line = get_uri_line_column(node_protocol, uri)
@@ -179,7 +183,7 @@ return `https://github.com/nodejs/node/blob/${process.version}/lib/${importTarge
 	--   ./exec.lua
 	--   ../nvim/init.lua:3
 	rule({
-		regex = boundary_class
+		regex = start_boundary
 			.. [[?((\.{1,2}/]]
 			.. not_path_segment_boundary
 			.. "+"
@@ -191,8 +195,7 @@ return `https://github.com/nodejs/node/blob/${process.version}/lib/${importTarge
 			.. "?"
 			.. number_group
 			.. "?)"
-			.. boundary_class
-			.. "?",
+			.. end_boundary,
 		format = "RELATIVE_PATH:$2" .. line_param .. "$3" .. column_param .. "$4",
 		highlight = 1,
 		handler = function(window, pane, uri)
@@ -236,15 +239,7 @@ return `https://github.com/nodejs/node/blob/${process.version}/lib/${importTarge
 	-- Default URL rules: `wezterm.default_hyperlink_rules()`
 	local editor_prefix = "EDITOR:"
 	rule({
-		regex = boundary_class
-			.. "?("
-			.. path_group
-			.. number_group
-			.. "?"
-			.. number_group
-			.. "?)"
-			.. boundary_class
-			.. "?",
+		regex = start_boundary .. "(" .. path_group .. number_group .. "?" .. number_group .. "?)" .. end_boundary,
 		format = editor_prefix .. "$2" .. line_param .. "$3" .. column_param .. "$4",
 		highlight = 1,
 		handler = function(window, pane, uri)
@@ -275,10 +270,11 @@ return `https://github.com/nodejs/node/blob/${process.version}/lib/${importTarge
 	-- as long as a full url hyperlink regex exists above this it should not match a full url to
 	-- github or gitlab / bitbucket (i.e. https://gitlab.com/user/project.git is still a whole clickable url)
 	--
-	-- rule({
-	-- 	regex = [[\b["']?([\w\d]{1}[-\w\d]+)(/){1}([-\w\d\.]+)["']?]],
-	-- 	format = "https://www.github.com/$1/$3",
-	-- })
+	rule({
+		regex = start_boundary .. [[(([\w\d][-\w\d]+)/([-\w\d\.]+))]] .. end_boundary,
+		format = "https://www.github.com/$2/$3",
+		highlight = 1,
+	})
 
 	-- Github Issues: #12345
 	-- Asks `gh pr view --web` to open the PR based on the git repo
