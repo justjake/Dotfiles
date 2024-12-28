@@ -34,6 +34,22 @@ function M.pane_command(pane, argv)
 	}
 end
 
+function M.zsh_split_command(argv)
+	local script = [[
+source ~/.zshrc
+"$@"
+exit_code=$?
+if [ $exit_code != 0 ]; then
+  echo "+" "$@"
+  echo "exec.zsh_split_command: exited $exit_code"
+  echo "sleeping for 30s, press ctrl^c to close"
+  sleep 30
+  exit $exit_code
+fi
+]]
+	return { "zsh", "-c", script, "exec.zsh_split_command", table.unpack(to_argv(argv)) }
+end
+
 function M.ok_stdout_stderr(argv)
 	local ok, stdout, stderr = wezterm.run_child_process(to_argv(argv))
 	return ok, chomp_newline(stdout), chomp_newline(stderr)

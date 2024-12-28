@@ -149,8 +149,19 @@ local function vim_cmd(vimscript)
 	return string.format([[<C-\><C-N>:%s<CR>]], vimscript)
 end
 
--- /Example/example-path.txt
 -- https://neovim.io/doc/user/remote.html
+function M.send_keys(pane, keys)
+	local server = get_nvim_listen_address(pane)
+	if not server then
+		error("no server in pane: " .. tostring(pane))
+	end
+
+	local command = { "nvim", "--server", server, "--remote-send", keys }
+	exec.pane_stdout(pane, command)
+end
+
+-- Used for testing:
+--   /Users/jitl/.dotfiles/config/nvim/lua/util/wezterm.lua:36:7
 function M.edit(args)
 	local pane = M.find_nvim_pane(args)
 	if pane then
@@ -158,27 +169,30 @@ function M.edit(args)
 
 		local server = get_nvim_listen_address(pane)
 		if server then
-			local lua = string.format(
-				[[lua require("util.wezterm").drop(%s, %s, %s)]],
-				wezterm.json_encode(args.path),
-				args.line and tostring(args.line) or "nil",
-				args.column and tostring(args.column) or "nil"
+			M.send_keys(
+				pane,
+				string.format(
+					vim_cmd([[lua require("util.wezterm").drop(%s, %s, %s)]]),
+					wezterm.json_encode(args.path),
+					args.line and tostring(args.line) or "nil",
+					args.column and tostring(args.column) or "nil"
+				)
 			)
-			local command = { "nvim", "--server", server, "--remote-send", vim_cmd(lua) }
-			print("nvim.edit: found server", {
-				pane = pane,
-				command = command,
-				server = server,
-			})
-			exec.pane_stdout(pane, command)
 			return true
 		end
 
 		pane:send_text(":e " .. args.path)
 		return true
 	end
-	-- TODO: spawn new nvim in new pane
-	return false
+
+	args.pane:split({
+		direction = "Right",
+		top_level = true,
+		args = exec.zsh_split_command({ "nvim", args.path }),
+		size = 0.33,
+	})
+
+	return true
 end
 
 return M
