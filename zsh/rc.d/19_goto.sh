@@ -3,7 +3,6 @@ typeset -A goto_names
 goto_names=(
   dotfiles ~/.dotfiles
   zsh ~/.dotfiles/zsh
-  nvim ~/.dotfiles/nvim
   nvimdeps ~/.local/share/nvim/lazy/
 )
 
@@ -16,6 +15,7 @@ goto-refresh-search-paths()  {
     ~/airlab/repos
     ~/src
     ~/src/disabled-repos
+    ~/.dotfiles/config
   )
   unsetopt nullglob
 }
