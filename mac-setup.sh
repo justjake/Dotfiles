@@ -3,98 +3,100 @@
 # Exit on error
 set -eo pipefail
 
-ssh_key () {
-if [ ! -f ~/.ssh/id_rsa ]; then
-  if [ -z "$1" ]; then
-    echo "pass the SSH name of this machine"
-    return 1
+ssh_key()  {
+  if [ ! -f ~/.ssh/id_rsa ]; then
+    if [ -z "$1" ]; then
+      echo "pass the SSH name of this machine"
+      return 1
+    fi
+    echo "creating ssh key"
+    mkdir -p ~/.ssh
+    ( 
+      cd ~/.ssh
+      set -x
+      ssh-keygen -C "$1"
+    )
   fi
-  echo "creating ssh key"
-  mkdir -p ~/.ssh
-  (
-  cd ~/.ssh
-  set -x
-  ssh-keygen -C "$1"
-  )
-fi
 }
 
-clone_dotfiles () {
-if [ ! -d ~/.dotfiles ]; then
-  (set -x
-  if ! git clone git@github.com:justjake/Dotfiles ~/.dotfiles ; then
-    echo "*** clone failed. Do you need to add ~/.ssh/id_rsa.pub to your github account?"
-    echo "    https://github.com/settings/keys"
-    read -p "Press enter to try again, or type Ctrl-C to abort"
+clone_dotfiles()  {
+  if [ ! -d ~/.dotfiles ]; then
+    ( 
+      set -x
+      if ! git clone git@github.com:justjake/Dotfiles ~/.dotfiles; then
+        echo "*** clone failed. Do you need to add ~/.ssh/id_rsa.pub to your github account?"
+        echo "    https://github.com/settings/keys"
+        read -p "Press enter to try again, or type Ctrl-C to abort"
+      fi
+    )
   fi
-  )
-fi
 }
 
-standard_dirs () {
-mkdir -p ~/src
+standard_dirs()  {
+  mkdir -p ~/src
 }
 
-mac_dirs () {
-mkdir -p ~/Applications
-mkdir -p ~/Pictures/Screenshots
+mac_dirs()  {
+  mkdir -p ~/Applications
+  mkdir -p ~/Pictures/Screenshots
 }
 
-mac_brew_install () {
-  if ! which brew > /dev/null ; then
+mac_brew_install()  {
+  if ! which brew >/dev/null; then
     echo "Installing Homebrew"
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
 
-  if ! which brew > /dev/null ; then
+  if ! which brew >/dev/null; then
     # Brew probably needs to be sourced
     eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
 }
 
-mac_brew_cli () {
-  (
-  set -x
-  brew install python
-  brew install tmux
-  brew install --HEAD neovim
-  brew install ripgrep
-  brew install jq
-  brew install scmpuff
-  brew install mas
+mac_brew_cli()  {
+  ( 
+    set -x
+    brew install python
+    brew install tmux
+    brew install --HEAD neovim
+    brew install ripgrep
+    brew install jq
+    brew install scmpuff
+    brew install mas
+    brew install 1password-cli
   )
 }
 
-mac_brew_cask () {
-  (
-  set -x
+mac_brew_cask()  {
+  ( 
+    set -x
 
-  export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
+    export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
 
-  # Work-related essentials
-  brew install --cask docker
-  brew install --cask visual-studio-code
-  brew install --cask iterm2
-  brew install --cask viscosity  # VPN Client
-  brew install --cask postico
-  brew install --cask figma
+    # Work-related essentials
+    brew install --cask docker
+    brew install --cask visual-studio-code
+    brew install --cask iterm2
+    brew install --cask viscosity # VPN Client
+    brew install --cask postico
+    brew install --cask figma
 
-  # Browsers
-  brew install --cask firefox
-  brew install --cask google-chrome
+    # Browsers
+    brew install --cask firefox
+    brew install --cask google-chrome
 
-  # These are personal preference
-  brew install --cask karabiner-elements
-  brew install --cask spotify
-  brew install --cask google-drive
-  brew install --cask notion
-  brew install --cask grandperspective # Directory size viewer, like Disk Daisy
-  brew install --cask signal
-  brew install --cask itsycal # Free/tiny bar calendar dingus
+    # These are personal preference
+    brew install --cask karabiner-elements
+    brew install --cask spotify
+    brew install --cask google-drive
+    brew install --cask notion
+    brew install --cask grandperspective # Directory size viewer, like Disk Daisy
+    brew install --cask signal
+    brew install --cask itsycal # Free/tiny bar calendar dingus
   )
 }
 
-mac_app_store () {
+mac_app_store()  {
   mas install 497799835  # Xcode
   mas install 803453959  # Slack
   mas install 1514817810 # Poolside.fm
@@ -104,7 +106,7 @@ mac_app_store () {
 
 # stolen from https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 # also https://github.com/bkuhlmann/osx/blob/master/scripts/defaults.sh
-mac_prefs () {
+mac_prefs()  {
   printf "System - Expand save panel by default\n"
   defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 
@@ -145,7 +147,6 @@ mac_prefs () {
   defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
   defaults write com.apple.DiskUtility advanced-image-options -bool true
 
-
   printf "Printer - Expand print panel by default\n"
   defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
 
@@ -167,21 +168,25 @@ mac_prefs () {
   defaults write -g KeyRepeat -int 1
 }
 
-metamove () {
-  if [ -e ~/Applications/metamove.app ] ; then
+metamove()  {
+  if [ -e ~/Applications/metamove.app ]; then
     return 0
   fi
 
-  (
+  ( 
     set -x
     cd ~/Applications
     curl -L 'https://github.com/jmgao/metamove/releases/download/v0.3.7/metamove-0.3.7.zip' -o metamove.zip
     unzip metamove.zip
     rm metamove.zip
   )
+  defaults write us.insolit.metamove move_button -5030362041781583870
+  defaults write us.insolit.metamove move_modifiers 1572864
+  defaults write us.insolit.metamove resize_button 6755399441055747
+  defaults write us.insolit.metamove resize_modifiers 1572864
 }
 
-all () {
+all()  {
   ssh_key "$1"
   clone_dotfiles
   standard_dirs

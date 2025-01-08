@@ -135,11 +135,6 @@ function vscode () {
   fi
 }
 
-function mac-prefs () {
-    for file in "$DOTFILES_DIR/meta/Library/Preferences"/*; do
-        link-into-place "$file" ~"/Library/Preferences/$(basename "$file")"
-    done
-}
 
 # make sure we param ok?
 if [ -z "$*" ]; then
@@ -153,7 +148,6 @@ where 'MODULE' is any installation function defined here:
   - desktop-config: links in XDG_DESKTOP settings in ~/.config
   - vscode:         links VS Code settings as appropriate
   - linuxbrew:      install linuxhomebrew
-  - mac-prefs:      link macOS ~/Library/Preferences"
     exit 1
 fi
 
