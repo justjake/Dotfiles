@@ -2,30 +2,32 @@
 # hostsettings <hostname> - Edit the given host's settings
 # host-use <hostname>     - Use the given host's settings for this host
 
-hostsettings () {
+hostsettings()  {
   local target_host="${1:-$HOSTNAME}"
-  "$EDITOR" "$ZSH_FILES/hosts/$target_host.zsh"
+  local file="$ZSH_FILES/hosts/$target_host.zsh"
+  "$EDITOR" "$file"
+  source "$file"
 }
 
-host-use () {
+host-use()  {
   local other_host="$1"
 
-	(
-		pushd "$ZSH_FILES/hosts/" no-output
-		if [[ -e "$other_host".zsh ]] ; then
-			ln -sv "$other_host".zsh `hostname`.zsh
-		elif [[ -e "$other_host" ]] ; then
-			ln -sv "$other_host" `hostname`.zsh
-		else
-			echo "Host not found: $other_host" > /dev/stderr
-			return 1
-		fi
-	)
+  (
+    pushd "$ZSH_FILES/hosts/" no-output
+    if [[ -e "$other_host".zsh ]]; then
+      ln -sv "$other_host".zsh $(hostname).zsh
+    elif [[ -e "$other_host" ]]; then
+      ln -sv "$other_host" $(hostname).zsh
+    else
+      echo "Host not found: $other_host" >/dev/stderr
+      return 1
+    fi
+  )
 }
 
 alias use-host=host-use
 
-_hostsettings_complete () {
+_hostsettings_complete()  {
   goto-refresh-search-paths
   COMPREPLY=()
 
@@ -40,7 +42,7 @@ _hostsettings_complete () {
   local path_glob="$ZSH_FILES/hosts/$cur*"
   local candidates=($(compgen -G "$path_glob" | xargs basename -s .zsh))
   # Add all candidates to the reply
-  COMPREPLY+=( "${candidates[@]}" )
+  COMPREPLY+=("${candidates[@]}")
 
   return 0
 }

@@ -7,6 +7,7 @@ local map = vim.keymap.set
 -- vim-tmux-navigtor evolved keymaps. smart-splits integrates with wezterm
 --
 -- moving between splits
+if not vim.g.vscode then
 vim.keymap.set("n", "<C-h>", require("smart-splits").move_cursor_left, { desc = "Pane or window left" })
 vim.keymap.set("n", "<C-j>", require("smart-splits").move_cursor_down, { desc = "Pane or window down" })
 vim.keymap.set("n", "<C-k>", require("smart-splits").move_cursor_up, { desc = "Pane or window up" })
@@ -22,6 +23,7 @@ vim.keymap.set("n", "<leader><leader>h", require("smart-splits").swap_buf_left, 
 vim.keymap.set("n", "<leader><leader>j", require("smart-splits").swap_buf_down, { desc = "Swap buffer down" })
 vim.keymap.set("n", "<leader><leader>k", require("smart-splits").swap_buf_up, { desc = "Swap buffer up" })
 vim.keymap.set("n", "<leader><leader>l", require("smart-splits").swap_buf_right, { desc = "Swap buffer right" })
+end
 --
 
 -- copy-paste from system keyboard with leader-{y,p}
@@ -99,5 +101,7 @@ end
 -- endfunction
 -- nnoremap <Leader>g :call ExploreHere()<CR>
 
-vim.keymap.set({ "i", "n" }, "<MouseMove>", require("hover").hover_mouse, { desc = "hover.nvim (mouse)" })
-vim.o.mousemoveevent = true
+if not vim.g.vscode then
+  vim.keymap.set({ "i", "n" }, "<MouseMove>", require("hover").hover_mouse, { desc = "hover.nvim (mouse)" })
+  vim.o.mousemoveevent = true
+end

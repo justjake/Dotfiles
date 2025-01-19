@@ -76,3 +76,4 @@ done
 #### Host Settings
 [[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] && source "$ZSH_FILES/hosts/$HOSTNAME"
 [[ -f "$ZSH_FILES/hosts/$HOSTNAME.zsh" ]] && source "$ZSH_FILES/hosts/$HOSTNAME.zsh"
+eval "$(direnv hook zsh)"

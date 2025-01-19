@@ -18,16 +18,24 @@ end)
 
 function M.setup(config)
 	config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
-	-- config.disable_default_key_bindings = true
-	config.hyperlink_rules = wezterm.default_hyperlink_rules()
+
 	config.mouse_bindings = {
-		-- Cmd-click to open links
+		-- Disable the default click behavior
+		{
+			event = { Up = { streak = 1, button = "Left" } },
+			mods = "NONE",
+			action = act.DisableDefaultAssignment,
+		},
+		-- Cmd-click will open the link under the mouse cursor
 		{
 			event = { Up = { streak = 1, button = "Left" } },
 			mods = "CMD",
-			action = wezterm.action.OpenLinkAtMouseCursor,
+			action = act.OpenLinkAtMouseCursor,
 		},
 	}
+
+	-- config.disable_default_key_bindings = true
+	config.hyperlink_rules = wezterm.default_hyperlink_rules()
 
 	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/index.html
 	config.keys = {
@@ -109,10 +117,8 @@ function M.setup(config)
 		{
 			key = "v",
 			mods = "LEADER",
-			action = wezterm.action.SplitPane({
-				top_level = true,
-				direction = "Right",
-				size = { Percent = 50 },
+			action = wezterm.action({
+				SplitHorizontal = { domain = "CurrentPaneDomain" },
 			}),
 		},
 		{

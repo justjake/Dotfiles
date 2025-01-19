@@ -292,6 +292,29 @@ return `https://github.com/nodejs/node/blob/${process.version}/lib/${importTarge
 		end,
 	})
 
+	-- AWS 2-factor accept codes
+	local aws_accept_prefix = "AWS_ACCEPT:"
+	rule({
+		regex = [[^([A-Z]{4}-[A-Z]{4})$]],
+		format = aws_accept_prefix .. "$1",
+		handler = function(window, pane, uri)
+			local code = get_uri_body(aws_accept_prefix, uri)
+			-- This is async, and docs advise a sleep to ensure the clipboard is updated
+			-- https://wezfurlong.org/wezterm/config/lua/window/copy_to_clipboard.html?h=copy
+			window:copy_to_clipboard(code, "Clipboard")
+			wezterm.sleep_ms(50)
+
+			-- https://wezfurlong.org/wezterm/config/lua/keyassignment/SpawnCommandInNewWindow.html?h=new+window
+			-- https://wezfurlong.org/wezterm/config/lua/SpawnCommand.html
+			window:perform_action(
+				wezterm.action.SpawnCommandInNewWindow({
+					args = exec.zsh_split_command({ "notion", "aws", "accept" }),
+				}),
+				pane
+			)
+		end,
+	})
+
 	wezterm.on("open-uri", function(window, pane, uri)
 		for _, handler in ipairs(uri_handlers) do
 			local result = handler(window, pane, uri)
