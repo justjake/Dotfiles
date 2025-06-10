@@ -6,13 +6,18 @@ hostsettings()  {
   local target_host="${1:-$HOSTNAME}"
   local file="$ZSH_FILES/hosts/$target_host.zsh"
   "$EDITOR" "$file"
-  source "$file"
+  local exit_status=$?
+  if [[ $exit_status -ne 0 ]]; then
+    echo "hostsettings: exited $exit_status, no update" >&2
+  else
+    source "$file"
+  fi
 }
 
 host-use()  {
   local other_host="$1"
 
-  (
+  ( 
     pushd "$ZSH_FILES/hosts/" no-output
     if [[ -e "$other_host".zsh ]]; then
       ln -sv "$other_host".zsh $(hostname).zsh

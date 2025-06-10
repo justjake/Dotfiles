@@ -16,6 +16,7 @@ goto-refresh-search-paths()  {
     ~/src
     ~/src/disabled-repos
     ~/.dotfiles/config
+    ~/src/notion-next/terraform/aws/next/modules
   )
   unsetopt nullglob
 }

@@ -15,6 +15,41 @@ for color in BLACK RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
 	(( count = $count + 1 ))
 done
 PR_RESET_COLOR="%{$reset_color%}"
+PR_BOLD="%{$terminfo[bold]%}"
 
-export PROMPT='${PR_LIGHT_BLACK}[${PR_LIGHT_BLUE}%n${PR_LIGHT_BLACK}@${PR_RESET_COLOR}${PR_GREEN}%m${PR_LIGHT_BLACK}:${PR_LIGHT_GREEN}%2c${PR_LIGHT_BLACK}]${PR_RESET_COLOR}${PR_LIGHT_BLACK}${vcs_info_msg_0_}${PR_RESET_COLOR} ${PR_LIGHT_BLACK}%D{%m-%d %H:%M} [%?]
+typeset -a precmd_functions
+typeset -a prompt_info_section_functions
+prompt_info_secton_data=""
+
+precmd_functions+=(render_prompt_info_section)
+render_prompt_info_section() { 
+  prompt_info_section_data=""
+  for fn_name in "${prompt_info_section_functions[@]}" ; do
+    prompt_info_section_data+="$($fn_name)"
+  done
+}
+
+format_prompt_info_section() {
+  local key=""
+  local value="$1"
+  if [[ $# -gt 1 ]]; then
+    key="$1"
+    value="$2"
+  fi
+
+  local section_open="${PR_LIGHT_BLACK}[${PR_RESET_COLOR}"
+  local section_close="${PR_LIGHT_BLACK}]${PR_RESET_COLOR}"
+  local key_open="${PR_BOLD}"
+  local key_close="${PR_LIGHT_MAGENTA}:${PR_LIGHT_GREEN}"
+
+  local result="${section_open}"
+  if [[ -n "$key" ]] ; then
+    result+="${key_open}${key}${key_close}"
+  fi
+  result+="${value}${section_close}"
+
+  echo -n "${result}"
+}
+
+export PROMPT='${PR_LIGHT_BLACK}[${PR_LIGHT_BLUE}%n${PR_LIGHT_BLACK}@${PR_RESET_COLOR}${PR_GREEN}%m${PR_LIGHT_BLACK}:${PR_LIGHT_GREEN}%2c${PR_LIGHT_BLACK}]${PR_RESET_COLOR}${PR_LIGHT_BLACK}${vcs_info_msg_0_}${PR_RESET_COLOR}${prompt_info_section_data} ${PR_LIGHT_BLACK}%D{%m-%d %H:%M} [%?]
 ${PR_RESET_COLOR}${PR_RED}%(!.#.$)${PR_RESET_COLOR} '

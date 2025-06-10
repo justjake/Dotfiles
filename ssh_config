@@ -25,7 +25,10 @@ Host cozy.systems
 # Host *.notion.so
 #   ForwardAgent yes
 
+Match host utility.notion.so exec "notion vpn"
+
 Host utility.notion.so
     HostName utility.notion.so
     ForwardAgent yes
     User jitl
+

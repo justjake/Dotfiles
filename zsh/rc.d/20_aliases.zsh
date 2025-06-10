@@ -52,18 +52,21 @@ edit_alias_path () {
   if [[ -d "$1" ]] ; then
     ( cd "$1" && "$EDITOR" . )
   else
-    "$EDITOR" "$1"
+    ( cd "$(dirname "$1")" && "$EDITOR" "$1" )
   fi
   local exit_code=$?
 
   if [[ $exit_code != 0 ]] ; then
+    echo "$@: exited $exit_code, not updating" >&2
     return $exit_code
   fi
 
   # If we just edited a zsh config file, re-source it.
   if [[ "$1" == "$ZSH_FILES"*.zsh || "$1" == "$ZSH_FILES"*.sh || "$1" == ~/.dotfiles/zshrc ]] ; then
-    source "$1"
-    echo "sourced $1"
+    # Spawn new zsh shell to pick up changes
+    # trying to `source ...` somehow breaks inside the function.
+    echo "Replacing zsh process to pick up changes to $1..."
+    exec zsh
   fi
 }
 
@@ -235,3 +238,66 @@ fi
 alias markdown=glow
 alias md=glow
 alias tf=terraform
+
+branch() {
+  git co -b jake--$(date "+%Y-%m-%d")-${1:-$(date '+T%H-%M')}
+}
+
+long_env() {
+  long_envs=("local" development staging production)
+  for env in "${long_envs[@]}"; do
+    if [[ "$env" = "$1"* ]] ; then
+      echo "$env"
+      return 0
+    fi
+  done
+
+  echo "unknown short env: not a prefix of any [${long_envs}]: '$1'" > /dev/stderr
+  return 2
+}
+
+long_region() {
+  case "$1" in
+    usw2)
+      echo us-west-2
+      return 0
+      ;;
+    use1)
+      echo us-east-1
+      return 0
+      ;;
+    euc1)
+      echo eu-central-1
+      return 0
+      ;;
+  esac
+
+  echo "unknown short region: '$1'" > /dev/stderr
+  return 0
+}
+
+alias k=kubectl
+k-mz-foreach() {
+  local contexts=(
+    mz-dev-space-usw2-0001
+    mz-dev-space-usw2-0002
+    mz-dev-space-euc1-0001
+    mz-stg-space-usw2-0001
+    mz-prod-space-usw2-0001
+    mz-prod-space-usw2-0002
+    mz-prod-space-euc1-0001
+  )
+
+  for ctx in "${contexts[@]}" ; do
+    local cmd=(--context="${ctx}" "$@")
+    printf "\n# k ${cmd}\n"
+    k "${cmd[@]}"
+  done
+}
+
+alias -g nodes2="nodes -o 'custom-columns=NAME:.metadata.name,TYPE:.metadata.labels.node\.kubernetes\.io/instance-type',AWS:.spec.providerID,CREATED:.metadata.creationTimestamp --sort-by=.metadata.creationTimestamp"
+
+
+alias binbash=/bin/bash
+
+alias isodate='date -u +"%Y-%m-%dT%H:%M:%SZ"'
