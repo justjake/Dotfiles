@@ -1,0 +1,10 @@
+views:
+  v1/nodes:
+    sortColumn: AGE:asc
+    columns:
+      - AGE
+      - ID:.spec.providerID
+      - TYPE:.metadata.labels.node\.kubernetes\.io/instance-type
+      - POOL:.metadata.labels.karpenter\.sh/nodepool
+      - STATUS
+      - TAINTS
