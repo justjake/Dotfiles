@@ -301,3 +301,19 @@ alias -g nodes2="nodes -o 'custom-columns=NAME:.metadata.name,TYPE:.metadata.lab
 alias binbash=/bin/bash
 
 alias isodate='date -u +"%Y-%m-%dT%H:%M:%SZ"'
+alias uuid='uuidgen | tr "[:upper:]" "[:lower:]" | { uuid="$(cat /dev/stdin)"; printf "$uuid" | pbcopy; printf "$uuid" }'
+
+if [[ -e "$HOME/.claude/local/claude" ]] ; then
+  alias claude="$HOME/.claude/local/claude"
+fi
+alias ni=pnpm
+
+pbmap() {
+  local x
+  x=$(pbpaste | "$@")
+  printf '%s' "$x" | tee /dev/stderr | pbcopy
+}
+
+pbstripnewline() {
+  pbmap tr -d '\n'
+}

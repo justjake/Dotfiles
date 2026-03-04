@@ -37,7 +37,12 @@ goto-which()  {
   goto-refresh-search-paths
   for p in $goto_search_paths; do
     local it="$p/$1"
-    if [ -e "$it" ]; then
+    if [[ -e "$it" ]]; then
+      if command-exists realpath; then
+        # Resolve to correct capitalization on macOS or
+        # other case-insensitive filesystem.
+        it="$(realpath "$it")"
+      fi
       echo "$it"
       return 0
     fi

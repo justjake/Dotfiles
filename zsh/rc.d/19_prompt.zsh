@@ -1,9 +1,9 @@
 ### VCS module required
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git hg
-zstyle ':vcs_info:*' actionformats '%F{0}[%f%s%F{5}:%F{3}%F{5}%F{2}%b%F{3}|%F{1}%a%F{0}]%f'
-zstyle ':vcs_info:*' formats       '%F{0}[%f%s%F{5}:%F{3}%F{5}%F{2}%b%F{0}]%f'
-zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+zstyle ':vcs_info:*' actionformats '%F{0}[%f%s%F{5} %F{3}%F{5}%F{2}%b%F{3}|%F{1}%a%F{0}]%f'
+zstyle ':vcs_info:*' formats       '%F{0}[%f%s%F{5} %F{3}%F{5}%F{2}%b%F{0}]%f'
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1} %F{3}%r'
 
 ### Colors and Prompt
 prompt_opts=(cr percent subst)
@@ -40,7 +40,7 @@ format_prompt_info_section() {
   local section_open="${PR_LIGHT_BLACK}[${PR_RESET_COLOR}"
   local section_close="${PR_LIGHT_BLACK}]${PR_RESET_COLOR}"
   local key_open="${PR_BOLD}"
-  local key_close="${PR_LIGHT_MAGENTA}:${PR_LIGHT_GREEN}"
+  local key_close=" ${PR_LIGHT_GREEN}"
 
   local result="${section_open}"
   if [[ -n "$key" ]] ; then
