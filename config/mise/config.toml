@@ -1,0 +1,9 @@
+[tools]
+"aqua:kvz/json2hcl" = "latest"
+coder = "latest"
+kubectl = "latest"
+opencode = "latest"
+usage = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["node"]
