@@ -8,3 +8,7 @@ views:
       - POOL:.metadata.labels.karpenter\.sh/nodepool
       - STATUS
       - TAINTS
+  v1/pods:
+    columns:
+      - SHARD:.metadata.labels.materialize\.cloud/organization-name
+      - CLUSTER:.metadata.annotations.cluster\.environmentd\.materialize\.cloud/cluster-name|R
