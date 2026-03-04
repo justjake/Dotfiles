@@ -39,6 +39,13 @@ function M.setup(config)
 
 	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/index.html
 	config.keys = {
+		-- Claude
+		{
+			key = "Enter",
+			mods = "SHIFT",
+			action = wezterm.action({ SendString = "\x1b\r" }),
+		},
+
 		-- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
 		{
 			key = "a",

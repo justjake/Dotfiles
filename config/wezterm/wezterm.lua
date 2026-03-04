@@ -26,6 +26,7 @@ local theme = {
 	base0F = "#b888e2",
 }
 
+config.scrollback_lines = 50 * 1000
 config.initial_rows = 50
 config.initial_cols = 140
 
