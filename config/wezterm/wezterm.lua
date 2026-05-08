@@ -3,6 +3,9 @@ local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 config.colors = {}
 
+-- Don't block system updates
+-- config.window_close_confirmation = 'NeverPrompt'
+
 require("keys").setup(config)
 require("links").setup(config)
 
