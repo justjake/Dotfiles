@@ -76,3 +76,6 @@ done
 [[ -f "$ZSH_FILES/hosts/$HOSTNAME" ]] && . "$ZSH_FILES/hosts/$HOSTNAME"
 [[ -f "$ZSH_FILES/hosts/$HOSTNAME.zsh" ]] && . "$ZSH_FILES/hosts/$HOSTNAME.zsh"
 eval "$(direnv hook zsh)"
+
+export RIPGREP_CONFIG_PATH="/Users/jitl/src/notion-next/.ripgreprc"
+export PATH="$HOME/.local/bin:$PATH"
