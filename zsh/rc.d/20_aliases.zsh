@@ -303,9 +303,6 @@ alias binbash=/bin/bash
 alias isodate='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 alias uuid='uuidgen | tr "[:upper:]" "[:lower:]" | { uuid="$(cat /dev/stdin)"; printf "$uuid" | pbcopy; printf "$uuid" }'
 
-if [[ -e "$HOME/.claude/local/claude" ]] ; then
-  alias claude="$HOME/.claude/local/claude"
-fi
 alias ni=pnpm
 
 pbmap() {
@@ -317,3 +314,5 @@ pbmap() {
 pbstripnewline() {
   pbmap tr -d '\n'
 }
+
+alias xclaude="claude --dangerously-skip-permissions"
