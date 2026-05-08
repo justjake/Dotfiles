@@ -10,6 +10,7 @@
 #   - dotfiles:       the base dotfiles & ~/.config
 #   - submodules:     get all git submodules
 #   - ssh-config:     link my ssh-config into ~/.ssh/config
+#   - codex-skills:   link Codex skills into ~/.codex/skills
 ####
 
 set -e
@@ -82,14 +83,15 @@ function submodules () {
     fi
 }
 
+function codex-skills () {
+    mkdir -p "$HOME/.codex"
+    link-into-place "$DOTFILES_DIR/skills" "$HOME/.codex/skills"
+}
+
 # desktop config
 # DEPRECATED: just link the whole fucking thing
 function desktop-config () {
     local desktop_config_dir="$HOME/.dotfiles/config"
-    if ! [[ -d "$HOME/.config"]] ; then
-      pushd "$HOME" no-output
-
-
     mkdir -p "$HOME/.config"
 
     pushd "$HOME" no-output
@@ -102,7 +104,7 @@ function desktop-config () {
             echo "skipped because path exists: ~/.config/${file}"
         fi
     done
-    popd
+    popd no-output
 }
 
 
@@ -119,6 +121,7 @@ function dotfiles () {
 
     # link in node bundles on sytems with JS support
     link-into-place ".dotfiles/dotfiles-node" "$BUNDLES_DIR/dotfiles-node"
+    codex-skills
     popd no-output
 }
 
@@ -145,9 +148,10 @@ where 'MODULE' is any installation function defined here:
   - dotfiles:       the base dotfiles
   - submodules:     get all git submodules
   - ssh-config:     link my ssh-config into ~/.ssh/config
+  - codex-skills:   link Codex skills into ~/.codex/skills
   - desktop-config: links in XDG_DESKTOP settings in ~/.config
   - vscode:         links VS Code settings as appropriate
-  - linuxbrew:      install linuxhomebrew
+  - linuxbrew:      install linuxhomebrew"
     exit 1
 fi
 
