@@ -1,0 +1,4 @@
+interface:
+  display_name: "Split Policy and Mechanism"
+  short_description: "Separate what code decides from how code executes."
+  default_prompt: "Apply policy/mechanism separation to this design or code change."
