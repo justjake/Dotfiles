@@ -1,9 +1,11 @@
 [tools]
 "aqua:kvz/json2hcl" = "latest"
+bun = "latest"
 coder = "latest"
+codex = "latest"
 kubectl = "latest"
 opencode = "latest"
 usage = "latest"
 
 [settings]
-idiomatic_version_file_enable_tools = ["node"]
+idiomatic_version_file_enable_tools = ["node", "rust", "python"]
