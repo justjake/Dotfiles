@@ -299,6 +299,9 @@ return `https://github.com/nodejs/node/blob/${process.version}/lib/${importTarge
 		format = aws_accept_prefix .. "$1",
 		handler = function(window, pane, uri)
 			local code = get_uri_body(aws_accept_prefix, uri)
+			if not code then
+				return nil
+			end
 			-- This is async, and docs advise a sleep to ensure the clipboard is updated
 			-- https://wezfurlong.org/wezterm/config/lua/window/copy_to_clipboard.html?h=copy
 			window:copy_to_clipboard(code, "Clipboard")
