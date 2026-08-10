@@ -2,7 +2,6 @@
 "aqua:kvz/json2hcl" = "latest"
 bun = "latest"
 coder = "latest"
-codex = "latest"
 kubectl = "latest"
 opencode = "latest"
 usage = "latest"
