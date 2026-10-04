@@ -1,0 +1,180 @@
+{
+  "port": 10101,
+  "hostname": "127.0.0.1",
+  "defaultProvider": "synthetic",
+  "openaiProviderTierVersion": 2,
+  "providers": {
+    "openai": {
+      "adapter": "openai-responses",
+      "baseUrl": "https://chatgpt.com/backend-api/codex",
+      "authMode": "forward",
+      "codexAccountMode": "direct"
+    },
+    "synthetic": {
+      "adapter": "openai-chat",
+      "baseUrl": "https://api.synthetic.new/openai/v1",
+      "apiKey": "${SYNTHETIC_API_KEY}",
+      "authMode": "key",
+      "defaultModel": "hf:zai-org/GLM-5.3-Flash",
+      "modelDisplayNames": {
+        "hf:zai-org/GLM-5.3-Flash": "GLM 5.3 Flash (Synthetic)",
+        "hf:zai-org/GLM-4.7-Flash": "GLM 4.7 Flash (Synthetic)",
+        "hf:moonshotai/Kimi-K3": "Kimi K3 (Synthetic)",
+        "hf:deepseek-ai/DeepSeek-V4.1-Flash": "DeepSeek V4.1 Flash (Synthetic)",
+        "hf:Qwen/Qwen3.8-27B": "Qwen 3.8 27B (Synthetic)",
+        "hf:openai/gpt-oss-120b": "GPT OSS 120B (Synthetic)",
+        "hf:nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4": "Nemotron 3 Super (Synthetic)"
+      },
+      "liveModels": true,
+      "selectedModels": [
+        "hf:zai-org/GLM-5.3-Flash",
+        "hf:zai-org/GLM-4.7-Flash",
+        "hf:moonshotai/Kimi-K3",
+        "hf:deepseek-ai/DeepSeek-V4.1-Flash",
+        "hf:Qwen/Qwen3.8-27B",
+        "hf:openai/gpt-oss-120b",
+        "hf:nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4"
+      ],
+      "modelContextWindows": {
+        "hf:zai-org/GLM-5.3-Flash": 524288,
+        "hf:zai-org/GLM-4.7-Flash": 196608,
+        "hf:moonshotai/Kimi-K3": 524288,
+        "hf:deepseek-ai/DeepSeek-V4.1-Flash": 524288,
+        "hf:Qwen/Qwen3.8-27B": 262144,
+        "hf:openai/gpt-oss-120b": 131072,
+        "hf:nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4": 262144
+      },
+      "modelInputModalities": {
+        "hf:zai-org/GLM-5.3-Flash": [
+          "text",
+          "image"
+        ],
+        "hf:zai-org/GLM-4.7-Flash": [
+          "text"
+        ],
+        "hf:moonshotai/Kimi-K3": [
+          "text",
+          "image"
+        ],
+        "hf:deepseek-ai/DeepSeek-V4.1-Flash": [
+          "text",
+          "image"
+        ],
+        "hf:Qwen/Qwen3.8-27B": [
+          "text",
+          "image"
+        ],
+        "hf:openai/gpt-oss-120b": [
+          "text"
+        ],
+        "hf:nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4": [
+          "text"
+        ]
+      },
+      "modelReasoningEfforts": {
+        "hf:zai-org/GLM-5.3-Flash": [
+          "low",
+          "high",
+          "max"
+        ],
+        "hf:zai-org/GLM-4.7-Flash": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "hf:moonshotai/Kimi-K3": [
+          "low",
+          "high",
+          "max"
+        ],
+        "hf:deepseek-ai/DeepSeek-V4.1-Flash": [
+          "low",
+          "high",
+          "xhigh",
+          "max"
+        ],
+        "hf:Qwen/Qwen3.8-27B": [
+          "low",
+          "medium",
+          "xhigh"
+        ],
+        "hf:openai/gpt-oss-120b": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "hf:nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4": [
+          "low",
+          "medium",
+          "high"
+        ]
+      },
+      "defaultMaxOutputTokens": 65536,
+      "supportsServiceTier": false
+    }
+  },
+  "modelPickerOrder": [
+    "synthetic/hf:zai-org-GLM-5.3-Flash",
+    "gpt-6.1-sol",
+    "gpt-6-astra",
+    "gpt-6-sol",
+    "gpt-6-luna",
+    "gpt-5.6-sol",
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "gpt-5.3-codex-spark",
+    "synthetic/hf:moonshotai-Kimi-K3",
+    "synthetic/hf:deepseek-ai-DeepSeek-V4.1-Flash",
+    "synthetic/hf:Qwen-Qwen3.8-27B",
+    "synthetic/hf:zai-org-GLM-4.7-Flash",
+    "synthetic/hf:openai-gpt-oss-120b",
+    "synthetic/hf:nvidia-NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4"
+  ],
+  "clientIntegrations": {
+    "codex": false,
+    "grok": false,
+    "claude-desktop": false
+  },
+  "syncResumeHistory": false,
+  "codexAutoStart": false,
+  "codexShimAutoRestore": false,
+  "syncCodexSubagentDefaults": false,
+  "subagentModels": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "gpt-5.5"
+  ],
+  "subagentModelsVersion": 1,
+  "multiAgentMode": "default",
+  "multiAgentGuidanceEnabled": true,
+  "agentTaskRecovery": {
+    "enabled": false
+  },
+  "webSearchSidecar": {
+    "enabled": true,
+    "backend": "openai",
+    "model": "gpt-5.6-luna"
+  },
+  "visionSidecar": {
+    "enabled": true,
+    "backend": "openai",
+    "model": "gpt-5.6-luna"
+  },
+  "images": {
+    "bridgeEnabled": false,
+    "videoBridgeEnabled": false
+  },
+  "shadowCallIntercept": {
+    "enabled": false
+  },
+  "fastRows": false,
+  "websockets": false,
+  "shutdownTimeoutMs": 1800000,
+  "claudeCode": {
+    "enabled": false,
+    "injectAgents": false,
+    "systemEnv": false
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "personal-opencodex",
+  "private": true,
+  "dependencies": {
+    "@bitkyc08/opencodex": "2.77.0"
+  }
+}

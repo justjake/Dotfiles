@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+config_dir="${DOTFILES:-$HOME/.dotfiles}/config/opencodex"
+export OPENCODEX_HOME="${OPENCODEX_HOME:-$HOME/.opencodex}"
+export CODEX_HOME="$OPENCODEX_HOME/codex"
+export OPENCODEX_CODEX_SHIM_AUTO_RESTORE=0
+secret_file="${OPENCODEX_ENV_FILE:-${XDG_STATE_HOME:-$HOME/.local/state}/opencodex/secrets.env}"
+cli="$config_dir/node_modules/@bitkyc08/opencodex/src/cli/index.ts"
+if [ -f "$secret_file" ]; then
+    exec mise -C "$config_dir" exec -- bun --env-file="$secret_file" "$cli" "$@"
+fi
+exec mise -C "$config_dir" exec -- bun "$cli" "$@"

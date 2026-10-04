@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+config_dir="${DOTFILES:-$HOME/.dotfiles}/config/opencodex"
+exec mise -C "$config_dir" exec -- bun "$config_dir/setup.ts" "$@"
