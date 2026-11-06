@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+"""Register the calling Claude Code session to hear when Codex threads finish turns.
+
+Usage: codex-thread-watch THREAD_ID...
+
+For each thread, records the nearest ancestor Claude Code session as the thread's
+owner in ~/.codex/claude-notify/<thread-id>. The Codex Stop hook
+(~/.local/bin/codex-notify-claude) then sends that session a cross-session message
+from "codex-hook" every time a turn ends. No polling and no expiry: do not re-arm.
+
+A thread that is already idle (its last turn ended) is reported immediately,
+so a turn that finished before registration is never missed.
+"""
+import glob, json, os, subprocess, sys
+from pathlib import Path
+
+HOME = Path.home()
+
+
+def claude_session():
+    pid = os.getpid()
+    while pid > 1:
+        meta = HOME / ".claude" / "sessions" / f"{pid}.json"
+        if meta.exists():
+            return json.loads(meta.read_text())["sessionId"]
+        out = subprocess.run(["ps", "-o", "ppid=", "-p", str(pid)], capture_output=True, text=True)
+        try:
+            pid = int(out.stdout.strip())
+        except ValueError:
+            break
+    sys.exit("codex-thread-watch: not running under a Claude Code session")
+
+
+def rollout(thread_id):
+    files = sorted(glob.glob(str(HOME / ".codex" / "sessions" / "*" / "*" / "*" / f"rollout-*{thread_id}*.jsonl")))
+    return files[-1] if files else None
+
+
+def finished_turn(path):
+    started = ended = 0
+    last, error = "", None
+    for line in open(path, errors="replace"):
+        try:
+            payload = json.loads(line).get("payload", {})
+        except ValueError:
+            continue
+        kind = payload.get("type")
+        if kind == "task_started":
+            started += 1
+        elif kind in ("task_complete", "turn_aborted"):
+            ended += 1
+            error = (payload.get("error") or {}).get("message") if kind == "task_complete" else "aborted"
+        elif kind == "message" and payload.get("role") == "assistant":
+            last = "".join(c.get("text", "") for c in payload.get("content", []) if isinstance(c, dict))
+    if started and ended >= started:
+        return (" ERROR " + error if error else "") + ": " + last[:600].replace("\n", " ")
+    return None
+
+
+def main(ids):
+    if not ids:
+        sys.exit(__doc__)
+    session = claude_session()
+    registry = HOME / ".codex" / "claude-notify"
+    registry.mkdir(parents=True, exist_ok=True)
+    pending = []
+    for thread_id in ids:
+        path = rollout(thread_id)
+        if path is None:
+            sys.exit(f"{thread_id}: no rollout file")
+        (registry / thread_id).write_text(session + "\n")
+        done = finished_turn(path)
+        if done is not None:
+            print(f"{thread_id} turn complete{done}")
+        else:
+            pending.append(thread_id)
+    if pending:
+        print(f"Registered {' '.join(pending)}: each turn end arrives as a cross-session "
+              "message from codex-hook. No polling, no expiry; do not re-arm.")
+
+
+main(sys.argv[1:])

@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+"""Codex Stop hook: tell a Claude Code session that a Codex turn ended.
+
+The target Claude session id comes from $CLAUDE_NOTIFY_SESSION or from
+~/.codex/claude-notify/<codex-thread-id>. Threads with neither are ignored.
+Delivery uses the Claude session's local peer socket (undocumented; checked
+against Claude Code 2.1.318). Failures are logged to ~/.codex/claude-notify/errors.log.
+"""
+import glob, json, os, socket, sys, time
+
+HOME = os.path.expanduser("~")
+REGISTRY = os.path.join(HOME, ".codex", "claude-notify")
+
+
+def target_session(thread_id):
+    env = os.environ.get("CLAUDE_NOTIFY_SESSION")
+    if env:
+        return env.strip()
+    try:
+        with open(os.path.join(REGISTRY, thread_id)) as f:
+            return f.read().strip() or None
+    except (FileNotFoundError, TypeError):
+        return None
+
+
+def live_session_file(session_id):
+    for path in glob.glob(os.path.join(HOME, ".claude", "sessions", "*.json")):
+        try:
+            meta = json.load(open(path))
+        except (OSError, ValueError):
+            continue
+        if meta.get("sessionId") == session_id or meta.get("name") == session_id:
+            try:
+                os.kill(meta["pid"], 0)
+            except OSError:
+                continue
+            return meta
+    return None
+
+
+def send(meta, text):
+    keys = glob.glob(os.path.join(HOME, ".claude", "sessions", f"{meta['pid']}.*.key"))
+    token = json.load(open(keys[0]))["peerToken"]
+    body = text.replace("</cross-session-message>", "</cross-session-message >")
+    content = f'<cross-session-message from="codex-hook" from-mode="bypass">\n{body}\n</cross-session-message>'
+    s = socket.socket(socket.AF_UNIX)
+    s.settimeout(10)
+    s.connect(meta["messagingSocketPath"])
+    s.sendall((json.dumps({"type": "auth", "token": token}) + "\n"
+               + json.dumps({"type": "user", "message": {"content": content},
+                             "from": "codex-hook", "priority": "next"}) + "\n").encode())
+    s.shutdown(socket.SHUT_WR)
+    s.recv(4096)
+    s.close()
+
+
+def main():
+    event = json.load(sys.stdin)
+    thread_id = event.get("session_id")
+    session = target_session(thread_id)
+    if not session:
+        return
+    meta = live_session_file(session)
+    if meta is None:
+        raise RuntimeError(f"no live Claude session {session}")
+    last = (event.get("last_assistant_message") or "").strip()
+    if len(last) > 1500:
+        last = last[:1500] + " [...]"
+    send(meta, f"Codex turn ended: thread {thread_id} turn {event.get('turn_id')} "
+               f"cwd {event.get('cwd')}\n{last}")
+
+
+try:
+    main()
+except Exception as error:  # never block the Codex turn
+    with open(os.path.join(REGISTRY, "errors.log"), "a") as log:
+        log.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {error!r}\n")
