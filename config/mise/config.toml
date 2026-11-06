@@ -7,4 +7,5 @@ opencode = "latest"
 usage = "latest"
 
 [settings]
+lockfile = true
 idiomatic_version_file_enable_tools = ["node", "rust", "python"]

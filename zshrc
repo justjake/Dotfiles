@@ -79,3 +79,11 @@ eval "$(direnv hook zsh)"
 
 export RIPGREP_CONFIG_PATH="$DOTFILES/ripgreprc"
 export PATH="$HOME/.local/bin:$PATH"
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/jitl/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
+
+# Use the macOS system time zone in interactive shells.
+unset TZ

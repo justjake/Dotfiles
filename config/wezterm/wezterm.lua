@@ -46,6 +46,7 @@ config.window_padding = {
 	bottom = "0.5cell",
 }
 config.window_decorations = "RESIZE"
+config.window_close_confirmation = "NeverPrompt"
 
 -- Tab bar
 -- https://wezfurlong.org/wezterm/config/appearance.html#retro-tab-bar-appearance

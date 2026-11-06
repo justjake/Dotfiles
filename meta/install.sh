@@ -110,7 +110,7 @@ function desktop-config () {
 
 
 # link basic files
-function dotfiles () {
+dotfiles() {
     pushd "$HOME" no-output
     for file in "${DOTFILES[@]}"; do
         link-into-place ".dotfiles/${file}" ".${file}"
