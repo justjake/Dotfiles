@@ -1,12 +1,19 @@
-#!/usr/bin/env python3
-"""Codex Stop hook: tell a Claude Code session that a Codex turn ended.
+#!/usr/bin/python3
+"""Codex hooks: tell a Claude Code session that a Codex turn ended or failed.
+
+Stop: a turn completed; the notice carries its last message.
+PostModelRequest with status "failed": Stop does not run for a turn that ends
+in an error (retry limit, provider failure), so a failed model request starts
+one detached waiter per turn. It reads the thread's rollout until that turn's
+task_complete appears and sends a failure notice only if the turn ended with
+an error; a turn that recovers on retry sends nothing here.
 
 The target Claude session id comes from $CLAUDE_NOTIFY_SESSION or from
 ~/.codex/claude-notify/<codex-thread-id>. Threads with neither are ignored.
 Delivery uses the Claude session's local peer socket (undocumented; checked
 against Claude Code 2.1.318). Failures are logged to ~/.codex/claude-notify/errors.log.
 """
-import glob, json, os, socket, sys, time
+import glob, json, os, socket, subprocess, sys, time
 
 HOME = os.path.expanduser("~")
 REGISTRY = os.path.join(HOME, ".codex", "claude-notify")
@@ -54,20 +61,78 @@ def send(meta, text):
     s.close()
 
 
-def main():
-    event = json.load(sys.stdin)
-    thread_id = event.get("session_id")
+def notify(thread_id, text):
     session = target_session(thread_id)
     if not session:
         return
     meta = live_session_file(session)
     if meta is None:
         raise RuntimeError(f"no live Claude session {session}")
-    last = (event.get("last_assistant_message") or "").strip()
-    if len(last) > 1500:
-        last = last[:1500] + " [...]"
-    send(meta, f"Codex turn ended: thread {thread_id} turn {event.get('turn_id')} "
-               f"cwd {event.get('cwd')}\n{last}")
+    send(meta, text)
+
+
+def clipped(text, limit=1500):
+    text = (text or "").strip()
+    return text if len(text) <= limit else text[:limit] + " [...]"
+
+
+def rollout(thread_id, transcript):
+    if transcript and os.path.isfile(transcript):
+        return transcript
+    found = sorted(glob.glob(os.path.join(HOME, ".codex", "sessions", "*", "*", "*", f"rollout-*{thread_id}.jsonl")))
+    return found[-1] if found else None
+
+
+def await_failure(thread_id, turn_id, transcript):
+    """Wait (up to 30 minutes) for the turn to end; report it only if it failed."""
+    deadline = time.time() + 1800
+    while time.time() < deadline:
+        path = rollout(thread_id, transcript)
+        if path:
+            for line in open(path, errors="replace"):
+                if '"task_complete"' not in line or turn_id not in line:
+                    continue
+                payload = json.loads(line).get("payload", {})
+                if payload.get("turn_id") != turn_id:
+                    continue
+                error = payload.get("error")
+                if error:
+                    notify(thread_id, f"Codex turn FAILED: thread {thread_id} turn {turn_id}\n"
+                                      f"{clipped(error.get('message') if isinstance(error, dict) else str(error))}")
+                return
+        time.sleep(5)
+
+
+def main():
+    if sys.argv[1:2] == ["--await-failure"]:
+        try:
+            await_failure(*sys.argv[2:5])
+        finally:
+            try:
+                os.unlink(os.path.join(REGISTRY, "pending", sys.argv[3]))
+            except OSError:
+                pass
+        return
+    event = json.load(sys.stdin)
+    thread_id = event.get("session_id")
+    if not target_session(thread_id):
+        return
+    if event.get("hook_event_name") == "PostModelRequest":
+        turn_id = event.get("turn_id")
+        if event.get("status") != "failed" or not turn_id:
+            return
+        os.makedirs(os.path.join(REGISTRY, "pending"), exist_ok=True)
+        try:   # one waiter per turn, however many attempts fail
+            os.close(os.open(os.path.join(REGISTRY, "pending", turn_id), os.O_CREAT | os.O_EXCL))
+        except FileExistsError:
+            return
+        subprocess.Popen([sys.executable, os.path.abspath(__file__), "--await-failure", thread_id, turn_id,
+                          event.get("transcript_path") or ""],
+                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                         start_new_session=True)
+        return
+    notify(thread_id, f"Codex turn ended: thread {thread_id} turn {event.get('turn_id')} "
+                      f"cwd {event.get('cwd')}\n{clipped(event.get('last_assistant_message'))}")
 
 
 try:
