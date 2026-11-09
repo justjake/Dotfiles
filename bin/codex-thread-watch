@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Register the calling Claude Code session to hear when Codex threads finish turns.
 
-Usage: codex-thread-watch THREAD_ID...
+Usage: codex-thread-watch [--block [--all] [--timeout SECONDS]] THREAD_ID...
 
 For each thread, records the nearest ancestor Claude Code session as the thread's
 owner in ~/.codex/claude-notify/<thread-id>. The Codex Stop hook
@@ -10,8 +10,12 @@ from "codex-hook" every time a turn ends. No polling and no expiry: do not re-ar
 
 A thread that is already idle (its last turn ended) is reported immediately,
 so a turn that finished before registration is never missed.
+
+--block also waits, after registering, until a watched thread is idle (with
+--all, every one), printing each one's summary as it goes idle. Run it in the
+background for one completion notice. --timeout ends the wait with status 2.
 """
-import glob, json, os, subprocess, sys
+import glob, json, os, subprocess, sys, time
 from pathlib import Path
 
 HOME = Path.home()
@@ -57,8 +61,21 @@ def finished_turn(path):
     return None
 
 
-def main(ids):
-    if not ids:
+def main(argv):
+    block = wait_all = False
+    timeout = None
+    ids = []
+    args = iter(argv)
+    for arg in args:
+        if arg == "--block":
+            block = True
+        elif arg == "--all":
+            wait_all = True
+        elif arg == "--timeout":
+            timeout = float(next(args, "0"))
+        else:
+            ids.append(arg)
+    if not ids or (wait_all or timeout is not None) and not block:
         sys.exit(__doc__)
     session = claude_session()
     registry = HOME / ".codex" / "claude-notify"
@@ -76,7 +93,23 @@ def main(ids):
             pending.append(thread_id)
     if pending:
         print(f"Registered {' '.join(pending)}: each turn end arrives as a cross-session "
-              "message from codex-hook. No polling, no expiry; do not re-arm.")
+              "message from codex-hook. No polling, no expiry; do not re-arm.", flush=True)
+    if not block or not pending or (not wait_all and len(pending) < len(ids)):
+        return
+    deadline = None if timeout is None else time.monotonic() + timeout
+    while pending:
+        for thread_id in list(pending):
+            done = finished_turn(rollout(thread_id))
+            if done is not None:
+                print(f"{thread_id} turn complete{done}", flush=True)
+                pending.remove(thread_id)
+        if pending and not wait_all and len(pending) < len(ids):
+            return
+        if pending and deadline is not None and time.monotonic() >= deadline:
+            print(f"Timed out waiting for {' '.join(pending)}", flush=True)
+            sys.exit(2)
+        if pending:
+            time.sleep(2)
 
 
 main(sys.argv[1:])
