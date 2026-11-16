@@ -14,8 +14,9 @@ mise -C ~/.dotfiles/config/codex-thread-bridge install
 ~/.dotfiles/bin/codex-bridge-setup --service --project "$PWD"
 ```
 
-`--project` updates only that project's `codex-threads` MCP entry in
-`~/.claude.json`. Other projects and MCP servers are preserved. Reload that
+`--project` updates that project's `codex-threads` MCP entry in
+`~/.claude.json`; with `--service`, it also registers the folder as a project
+on the worker server. Other projects and MCP servers are preserved. Reload that
 MCP server in existing Claude Code sessions; new sessions use the new endpoint.
 Already running bridge processes keep their original endpoint and workers.
 

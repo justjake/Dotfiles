@@ -12,6 +12,7 @@ import subprocess
 import sys
 import tempfile
 import tomllib
+import uuid
 
 import tomli_w
 
@@ -129,7 +130,9 @@ def install_bridge(machine):
     if reverse.returncode:
         run(["git", "apply", "--check", patch], cwd=checkout)
         run(["git", "apply", patch], cwd=checkout)
-    run(["uv", "sync", "--frozen", "--no-dev", "--python", sys.executable], cwd=checkout)
+    env = dict(os.environ)
+    env.pop("VIRTUAL_ENV", None)
+    run(["uv", "sync", "--frozen", "--no-dev", "--python", sys.executable], cwd=checkout, env=env)
 
 
 def launch_agent(machine):
@@ -169,6 +172,14 @@ async def enable_remote():
             await asyncio.sleep(1)
 
 
+async def register_worker_project(project):
+    root = str(project.resolve())
+    return await rpc("project/create", {
+        "name": project.resolve().name, "roots": [{"path": root}],
+        "idempotencyKey": str(uuid.uuid5(uuid.NAMESPACE_URL, f"codex-thread-bridge:{root}")),
+    })
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, help="Update this project's Claude Code MCP registration")
@@ -182,6 +193,9 @@ def main():
         launch_agent(machine)
         result = asyncio.run(enable_remote())
         print(json.dumps(result, indent=2))
+        if args.project:
+            project = asyncio.run(register_worker_project(args.project))
+            print(f"Worker project: {project['project']['name']} ({project['project']['id']})")
     if args.project:
         register_claude(args.project)
     print(f"Bridge Codex home: {locations()[1]}")

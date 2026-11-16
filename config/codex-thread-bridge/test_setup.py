@@ -5,7 +5,7 @@ import plistlib
 import tempfile
 import tomllib
 import unittest
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import control
 import setup
@@ -104,6 +104,43 @@ class SetupTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "Preserving existing"):
             setup.configure(None)
 
+    def test_project_registration_is_idempotent_and_starts_no_turn(self):
+        with patch.object(setup, "rpc", new_callable=AsyncMock) as call:
+            asyncio.run(setup.register_worker_project(self.user / "project"))
+            first = call.call_args
+            asyncio.run(setup.register_worker_project(self.user / "project"))
+            self.assertEqual(call.call_args, first)
+            self.assertEqual(first.args[0], "project/create")
+            self.assertEqual(first.args[1]["roots"], [{"path": str(self.user / "project")}])
+
+    def test_notification_helpers_find_both_homes_and_register_the_owner(self):
+        def definitions(name):
+            source = Path(__file__).resolve().parents[2] / "bin" / name
+            tree = ast.parse(source.read_text(), filename=str(source))
+            tree.body = [node for node in tree.body if isinstance(node, (ast.Import, ast.ImportFrom, ast.Assign, ast.FunctionDef))]
+            namespace = {"__file__": str(source)}
+            exec(compile(tree, str(source), "exec"), namespace)
+            return namespace
+
+        watcher = definitions("codex-thread-watch")
+        notifier = definitions("codex-notify-claude")
+        for thread_id, home in [("personal-thread", self.primary), ("worker-thread", self.worker)]:
+            sessions = home / "sessions/2026/11/16"
+            sessions.mkdir(parents=True, exist_ok=True)
+            transcript = sessions / f"rollout-fixture-{thread_id}.jsonl"
+            transcript.write_text('\n'.join(json.dumps({"payload": {"type": event}})
+                                            for event in ["task_started", "task_complete"]))
+            watcher["claude_session"] = lambda: "fixture-owner"
+            with redirect_stdout(io.StringIO()):
+                watcher["main"]([thread_id])
+            self.assertEqual((home / "claude-notify" / thread_id).read_text(), "fixture-owner\n")
+            self.assertEqual(notifier["target_session"](thread_id), "fixture-owner")
+            self.assertEqual(notifier["rollout"](thread_id, None), str(transcript))
+
 
 if __name__ == "__main__":
     unittest.main()
+import ast
+import asyncio
+from contextlib import redirect_stdout
+import io
