@@ -1,0 +1,8 @@
+[project]
+name = "personal-codex-thread-bridge"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "tomli-w>=1.2,<2",
+    "websockets>=15,<18",
+]

@@ -16,7 +16,23 @@ against Claude Code 2.1.318). Failures are logged to ~/.codex/claude-notify/erro
 import glob, json, os, socket, subprocess, sys, time
 
 HOME = os.path.expanduser("~")
-REGISTRY = os.path.join(HOME, ".codex", "claude-notify")
+
+
+def codex_homes():
+    default = os.environ.get("CODEX_THREAD_BRIDGE_DEFAULT_HOME") or os.path.join(HOME, ".codex")
+    bridge = os.environ.get("CODEX_THREAD_BRIDGE_HOME") or os.path.join(HOME, ".dotfiles/config/codex-thread-bridge/home")
+    # CODEX_HOME identifies the active Codex home; search it first, then the
+    # configured default and bridge homes so registrations remain discoverable.
+    return list(dict.fromkeys(os.path.expanduser(path) for path in
+                              (os.environ.get("CODEX_HOME", ""), default, bridge) if path))
+
+
+def registry_for(thread_id):
+    for codex_home in codex_homes():
+        registry = os.path.join(codex_home, "claude-notify")
+        if os.path.isfile(os.path.join(registry, thread_id)):
+            return registry
+    return os.path.join(codex_homes()[0], "claude-notify")
 
 
 def target_session(thread_id):
@@ -24,7 +40,7 @@ def target_session(thread_id):
     if env:
         return env.strip()
     try:
-        with open(os.path.join(REGISTRY, thread_id)) as f:
+        with open(os.path.join(registry_for(thread_id), thread_id)) as f:
             return f.read().strip() or None
     except (FileNotFoundError, TypeError):
         return None
@@ -79,8 +95,10 @@ def clipped(text, limit=1500):
 def rollout(thread_id, transcript):
     if transcript and os.path.isfile(transcript):
         return transcript
-    found = sorted(glob.glob(os.path.join(HOME, ".codex", "sessions", "*", "*", "*", f"rollout-*{thread_id}.jsonl")))
-    return found[-1] if found else None
+    found = []
+    for codex_home in codex_homes():
+        found.extend(glob.glob(os.path.join(codex_home, "sessions", "*", "*", "*", f"rollout-*{thread_id}.jsonl")))
+    return sorted(found)[-1] if found else None
 
 
 def await_failure(thread_id, turn_id, transcript):
@@ -109,7 +127,7 @@ def main():
             await_failure(*sys.argv[2:5])
         finally:
             try:
-                os.unlink(os.path.join(REGISTRY, "pending", sys.argv[3]))
+                os.unlink(os.path.join(registry_for(sys.argv[2]), "pending", sys.argv[3]))
             except OSError:
                 pass
         return
@@ -121,9 +139,10 @@ def main():
         turn_id = event.get("turn_id")
         if event.get("status") != "failed" or not turn_id:
             return
-        os.makedirs(os.path.join(REGISTRY, "pending"), exist_ok=True)
+        registry = registry_for(thread_id)
+        os.makedirs(os.path.join(registry, "pending"), exist_ok=True)
         try:   # one waiter per turn, however many attempts fail
-            os.close(os.open(os.path.join(REGISTRY, "pending", turn_id), os.O_CREAT | os.O_EXCL))
+            os.close(os.open(os.path.join(registry, "pending", turn_id), os.O_CREAT | os.O_EXCL))
         except FileExistsError:
             return
         subprocess.Popen([sys.executable, os.path.abspath(__file__), "--await-failure", thread_id, turn_id,
@@ -138,5 +157,7 @@ def main():
 try:
     main()
 except Exception as error:  # never block the Codex turn
-    with open(os.path.join(REGISTRY, "errors.log"), "a") as log:
+    registry = registry_for(thread_id) if 'thread_id' in locals() and thread_id else os.path.join(codex_homes()[0], "claude-notify")
+    os.makedirs(registry, exist_ok=True)
+    with open(os.path.join(registry, "errors.log"), "a") as log:
         log.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {error!r}\n")

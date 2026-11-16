@@ -1,0 +1,70 @@
+--- a/src/codex_thread_bridge/bridge.py
++++ b/src/codex_thread_bridge/bridge.py
+@@ -1,6 +1,9 @@
+ """Tool behavior, independent of MCP transport and the installed client."""
+ 
+ import asyncio
++import json
++import os
++import subprocess
+ from pathlib import Path
+ 
+ from .ledger import Ledger
+@@ -18,6 +21,25 @@
+     if not path.is_absolute() or not path.is_dir():
+         raise ValueError("cwd must be an existing absolute directory on the App Server host")
+     return str(path.resolve())
++
++
++def register_thread_owner(thread_id: str):
++    """Record the launching Claude session beside this server's worker history."""
++    try:
++        pid = os.getpid()
++        while pid > 1:
++            meta = Path.home() / ".claude" / "sessions" / f"{pid}.json"
++            if meta.exists():
++                session = json.loads(meta.read_text())
++                codex_home = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex"))
++                registry = codex_home / "claude-notify"
++                registry.mkdir(parents=True, exist_ok=True)
++                (registry / thread_id).write_text(session["sessionId"] + "\n")
++                return
++            parent = subprocess.check_output(["ps", "-o", "ppid=", "-p", str(pid)], text=True)
++            pid = int(parent.strip())
++    except (OSError, ValueError, KeyError, subprocess.SubprocessError):
++        pass
+ 
+ 
+ DISPLAY_FIELDS = frozenset({"text", "preview", "summary", "objective", "aggregatedOutput"})
+@@ -232,6 +254,7 @@
+                 await self.rpc.call("project/read", {"projectId": app_server_project_id})
+             created = await self.rpc.call("thread/start", launch_params)
+             thread_id = created["thread"]["id"]
++            register_thread_owner(thread_id)
+             receipt.update(threadId=thread_id, creation=created)
+             self.ledger.save(receipt)  # Retain the ID even if naming or the first turn fails.
+             actual = created.get("sandbox", {}).get("type")
+@@ -399,6 +422,7 @@
+                 launch["projectId"] = app_server_project_id
+             checkpoint("creating_thread")
+             created = await self.rpc.call("thread/start", launch)
++            register_thread_owner(created["thread"]["id"])
+             checkpoint(
+                 "checking_environment",
+                 threadId=created["thread"]["id"],
+@@ -600,6 +624,7 @@
+         async def action(receipt):
+             receipt["threadId"] = thread_id
+             self.ledger.save(receipt)
++            register_thread_owner(thread_id)
+             state = await self.rpc.call("thread/read", {"threadId": thread_id})
+             if state["thread"].get("status", {}).get("type") == "active":
+                 raise RpcError(
+@@ -664,6 +689,7 @@
+             receipt["threadId"] = thread_id
+             receipt["expectedTurnId"] = expected_turn_id
+             self.ledger.save(receipt)
++            register_thread_owner(thread_id)
+             result = await self.rpc.call(
+                 "turn/steer",
+                 {

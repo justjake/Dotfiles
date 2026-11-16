@@ -1,0 +1,5 @@
+{
+  "repository": "https://github.com/saidelike/codex-thread-bridge.git",
+  "revision": "401eda9671916237364e6353fe77e1d7ea7a5389",
+  "patch": "claude-owner.patch"
+}

@@ -11,6 +11,7 @@
 #   - submodules:     get all git submodules
 #   - ssh-config:     link my ssh-config into ~/.ssh/config
 #   - codex-skills:   link Codex skills into ~/.codex/skills
+#   - codex-bridge:   install the isolated Codex worker server configuration
 ####
 
 set -e
@@ -84,8 +85,18 @@ function submodules () {
 }
 
 function codex-skills () {
-    mkdir -p "$HOME/.codex"
-    link-into-place "$DOTFILES_DIR/skills" "$HOME/.codex/skills"
+    mkdir -p "$HOME/.codex/skills"
+    for skill in "$DOTFILES_DIR"/skills/*(/N); do
+        local target="$HOME/.codex/skills/${skill:t}"
+        if [[ -L "$target" && "${target:A}" == "${skill:A}" ]]; then
+            continue
+        fi
+        link-into-place "$skill" "$target"
+    done
+}
+
+function codex-bridge () {
+    "$DOTFILES_DIR/bin/codex-bridge-setup"
 }
 
 # desktop config
@@ -149,6 +160,7 @@ where 'MODULE' is any installation function defined here:
   - submodules:     get all git submodules
   - ssh-config:     link my ssh-config into ~/.ssh/config
   - codex-skills:   link Codex skills into ~/.codex/skills
+  - codex-bridge:   install the isolated Codex worker server configuration
   - desktop-config: links in XDG_DESKTOP settings in ~/.config
   - vscode:         links VS Code settings as appropriate
   - linuxbrew:      install linuxhomebrew"

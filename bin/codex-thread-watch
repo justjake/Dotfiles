@@ -21,6 +21,14 @@ from pathlib import Path
 HOME = Path.home()
 
 
+def codex_homes():
+    default = Path(os.environ.get("CODEX_THREAD_BRIDGE_DEFAULT_HOME") or
+                   HOME / ".codex").expanduser()
+    bridge = Path(os.environ.get("CODEX_THREAD_BRIDGE_HOME") or
+                  HOME / ".dotfiles/config/codex-thread-bridge/home").expanduser()
+    return list(dict.fromkeys((default, bridge)))
+
+
 def claude_session():
     pid = os.getpid()
     while pid > 1:
@@ -36,8 +44,11 @@ def claude_session():
 
 
 def rollout(thread_id):
-    files = sorted(glob.glob(str(HOME / ".codex" / "sessions" / "*" / "*" / "*" / f"rollout-*{thread_id}*.jsonl")))
-    return files[-1] if files else None
+    for codex_home in codex_homes():
+        files = sorted(glob.glob(str(codex_home / "sessions" / "*" / "*" / "*" / f"rollout-*{thread_id}*.jsonl")))
+        if files:
+            return files[-1], codex_home
+    return None, None
 
 
 def finished_turn(path):
@@ -78,13 +89,13 @@ def main(argv):
     if not ids or (wait_all or timeout is not None) and not block:
         sys.exit(__doc__)
     session = claude_session()
-    registry = HOME / ".codex" / "claude-notify"
-    registry.mkdir(parents=True, exist_ok=True)
     pending = []
     for thread_id in ids:
-        path = rollout(thread_id)
+        path, codex_home = rollout(thread_id)
         if path is None:
             sys.exit(f"{thread_id}: no rollout file")
+        registry = codex_home / "claude-notify"
+        registry.mkdir(parents=True, exist_ok=True)
         (registry / thread_id).write_text(session + "\n")
         done = finished_turn(path)
         if done is not None:
@@ -99,7 +110,8 @@ def main(argv):
     deadline = None if timeout is None else time.monotonic() + timeout
     while pending:
         for thread_id in list(pending):
-            done = finished_turn(rollout(thread_id))
+            path, _ = rollout(thread_id)
+            done = finished_turn(path) if path else None
             if done is not None:
                 print(f"{thread_id} turn complete{done}", flush=True)
                 pending.remove(thread_id)

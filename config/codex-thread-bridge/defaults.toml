@@ -1,0 +1,3 @@
+# Layer these worker defaults over this machine's personal Codex configuration.
+# Skills, plugins, model providers, MCP servers, and hooks come from that profile.
+cli_auth_credentials_store = "file"
