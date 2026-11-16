@@ -88,7 +88,7 @@ function codex-skills () {
     mkdir -p "$HOME/.codex/skills"
     for skill in "$DOTFILES_DIR"/skills/*(/N); do
         local target="$HOME/.codex/skills/${skill:t}"
-        if [[ -L "$target" && "${target:A}" == "${skill:A}" ]]; then
+        if [[ -e "$target" && "${target:A}" == "${skill:A}" ]]; then
             continue
         fi
         link-into-place "$skill" "$target"

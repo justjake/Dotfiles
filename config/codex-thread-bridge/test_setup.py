@@ -2,6 +2,7 @@ import json
 import os
 from pathlib import Path
 import plistlib
+import shutil
 import tempfile
 import tomllib
 import unittest
@@ -97,6 +98,13 @@ class SetupTests(unittest.TestCase):
         self.worker.symlink_to(self.primary)
         with self.assertRaisesRegex(ValueError, "must differ"):
             control.locations()
+
+    def test_preserves_legacy_whole_skills_directory_link(self):
+        shutil.rmtree(self.primary / "skills")
+        (self.primary / "skills").symlink_to(self.dotfiles / "skills")
+        setup.configure(None)
+        self.assertEqual((self.worker / "skills").resolve(), self.dotfiles / "skills")
+        self.assertTrue((self.dotfiles / "skills/personal/SKILL.md").is_file())
 
     def test_refuses_to_replace_existing_asset(self):
         self.worker.mkdir()

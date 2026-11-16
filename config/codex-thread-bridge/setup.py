@@ -37,7 +37,7 @@ def write_private(path, contents):
 def link(source, target):
     source, target = Path(source), Path(target)
     target.parent.mkdir(parents=True, exist_ok=True)
-    if target.is_symlink() and target.resolve() == source.resolve():
+    if (target.exists() or target.is_symlink()) and target.resolve() == source.resolve():
         return
     if target.exists() or target.is_symlink():
         raise RuntimeError(f"Preserving existing path; resolve this link conflict: {target}")
