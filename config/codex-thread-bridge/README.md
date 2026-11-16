@@ -20,10 +20,12 @@ on the worker server. Other projects and MCP servers are preserved. Reload that
 MCP server in existing Claude Code sessions; new sessions use the new endpoint.
 Already running bridge processes keep their original endpoint and workers.
 
-Setup installs a pinned upstream bridge with the retained Claude owner
-notification patch from `source.json`. Its source and Python environment are
-under `~/.local/share/codex-thread-bridge/`; mise and uv manage dependencies.
-The owner patch finds the ancestor Claude session through launcher processes.
+Setup installs a pinned commit of
+[`justjake/codex-thread-bridge`](https://github.com/justjake/codex-thread-bridge),
+selected by `source.json`. The fork records the ancestor Claude session that
+owns each worker, so completion hooks can notify it through launcher processes.
+Its source and Python environment are under `~/.local/share/codex-thread-bridge/`;
+mise and uv manage dependencies. Changes to the bridge are committed in the fork.
 
 The worker `config.toml` is generated from the default profile plus
 `defaults.toml`. Setup refreshes that snapshot. Desktop UI preferences and

@@ -125,11 +125,6 @@ def install_bridge(machine):
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=checkout, text=True).strip()
     if head != revision:
         raise RuntimeError("Bridge source revision changed; preserve it and resolve before setup")
-    patch = DIRECTORY / source["patch"]
-    reverse = subprocess.run(["git", "apply", "--reverse", "--check", str(patch)], cwd=checkout, capture_output=True)
-    if reverse.returncode:
-        run(["git", "apply", "--check", patch], cwd=checkout)
-        run(["git", "apply", patch], cwd=checkout)
     env = dict(os.environ)
     env.pop("VIRTUAL_ENV", None)
     run(["uv", "sync", "--frozen", "--no-dev", "--python", sys.executable], cwd=checkout, env=env)
