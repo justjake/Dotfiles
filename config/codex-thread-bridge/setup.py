@@ -40,7 +40,7 @@ def link(source, target):
         return
     if target.exists() or target.is_symlink():
         raise RuntimeError(f"Preserving existing path; resolve this link conflict: {target}")
-    target.symlink_to(os.path.relpath(source, target.parent), target_is_directory=source.is_dir())
+    target.symlink_to(os.path.relpath(source.resolve(), target.parent.resolve()), target_is_directory=source.is_dir())
 
 
 def worker_config(personal, overrides, worker, primary):

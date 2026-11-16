@@ -1,5 +1,3 @@
-import asyncio
-import importlib.util
 import json
 import os
 from pathlib import Path
@@ -17,7 +15,7 @@ class SetupTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix="codex-bridge-test-")
         self.addCleanup(self.temporary.cleanup)
-        self.user = Path(self.temporary.name)
+        self.user = Path(self.temporary.name).resolve()
         self.dotfiles = self.user / ".dotfiles"
         self.directory = self.dotfiles / "config/codex-thread-bridge"
         self.directory.mkdir(parents=True)
