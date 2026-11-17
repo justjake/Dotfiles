@@ -61,6 +61,19 @@ not migrate or archive existing threads in the default profile.
 binary. `XDG_DATA_HOME` changes the bridge installation directory. The generated
 LaunchAgent records resolved paths so it does not depend on an interactive shell.
 
+If the default `~/.codex` belongs to another account (for example, work), create
+an independent personal home and config first. Never copy the other account's
+credentials or settings. Select the personal source before the first setup:
+
+```sh
+CODEX_THREAD_BRIDGE_DEFAULT_HOME="$HOME/.codex-personal" codex-bridge-setup --service
+```
+
+Setup saves the resolved source and worker homes in ignored `machine.local.json`.
+Future setup and bridge commands reuse those homes without shell exports;
+explicit environment overrides still take precedence. Authenticate the personal
+source with `CODEX_HOME="$HOME/.codex-personal" codex login`, not the default app.
+
 Focused checks:
 
 ```sh

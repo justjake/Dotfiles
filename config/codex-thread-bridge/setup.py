@@ -93,7 +93,8 @@ def configure(project):
     if not codex:
         raise RuntimeError("Install Codex CLI before running setup")
     state = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share")) / "codex-thread-bridge"
-    machine = {"codex_binary": str(Path(codex).absolute()), "bridge_checkout": str(state / "upstream")}
+    machine = {"codex_binary": str(Path(codex).absolute()), "bridge_checkout": str(state / "upstream"),
+               "primary_home": str(primary), "worker_home": str(worker)}
     write_private(DIRECTORY / "machine.local.json", json.dumps(machine, indent=2).encode() + b"\n")
     return machine
 

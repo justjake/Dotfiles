@@ -65,6 +65,47 @@ class SetupTests(unittest.TestCase):
         self.assertEqual((self.worker / "state_5.sqlite").read_bytes(), b"worker state")
         self.assertFalse((self.primary / "state_5.sqlite").exists())
 
+    def test_setup_persists_personal_homes_without_shell_overrides(self):
+        personal = self.user / ".codex-personal"
+        custom_worker = self.user / "personal-worker"
+        with patch.dict(os.environ, {"CODEX_THREAD_BRIDGE_DEFAULT_HOME": str(personal),
+                                     "CODEX_THREAD_BRIDGE_HOME": str(custom_worker)}):
+            setup.configure(None)
+        with patch.dict(os.environ):
+            os.environ.pop("CODEX_THREAD_BRIDGE_DEFAULT_HOME")
+            os.environ.pop("CODEX_THREAD_BRIDGE_HOME")
+            self.assertEqual(control.locations(), (personal, custom_worker))
+            setup.configure(None)
+            self.assertEqual((custom_worker / "auth.json").resolve(), personal / "auth.json")
+            self.assertEqual(control.worker_environment()["CODEX_HOME"], str(custom_worker))
+        self.assertEqual(control.locations(), (self.primary, self.worker))
+        self.assertEqual((self.primary / "auth.json").read_text(), "fixture credential")
+        self.assertFalse((self.primary / "skills/personal").exists())
+
+    def test_legacy_machine_settings_keep_default_locations(self):
+        (self.directory / "machine.local.json").write_text('{"codex_binary": "/fixture/codex"}')
+        with patch.dict(os.environ):
+            os.environ.pop("CODEX_THREAD_BRIDGE_DEFAULT_HOME")
+            os.environ.pop("CODEX_THREAD_BRIDGE_HOME")
+            self.assertEqual(control.locations(), (self.primary, self.worker))
+
+    def test_serve_uses_portable_cli_flags_and_isolated_environment(self):
+        setup.configure(None)
+        with patch.object(control.sys, "argv", ["codex-bridge", "serve"]), \
+             patch.object(control.os, "execve", side_effect=SystemExit) as execute:
+            with self.assertRaises(SystemExit):
+                control.main()
+        binary, args, env = execute.call_args.args
+        self.assertEqual(binary, "/fixture/codex")
+        self.assertEqual(args, [binary, "app-server", "--listen", "unix://"])
+        self.assertEqual(env["CODEX_HOME"], str(self.worker))
+        self.assertEqual(env["CODEX_THREAD_BRIDGE_DEFAULT_HOME"], str(self.primary))
+
+    def test_invalid_machine_settings_fail_closed(self):
+        (self.directory / "machine.local.json").write_text("{")
+        with self.assertRaises(json.JSONDecodeError):
+            control.locations()
+
     def test_mcp_registration_preserves_other_projects_and_servers(self):
         project = self.user / "project"
         original = {"projects": {str(project): {"allowedTools": ["keep"], "mcpServers": {"other": {"command": "keep"}}},

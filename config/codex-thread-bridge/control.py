@@ -13,8 +13,12 @@ LABEL = "com.dotfiles.codex-thread-bridge"
 
 
 def locations():
-    primary = Path(os.environ.get("CODEX_THREAD_BRIDGE_DEFAULT_HOME", Path.home() / ".codex")).expanduser().resolve()
-    worker = Path(os.environ.get("CODEX_THREAD_BRIDGE_HOME", DIRECTORY / "home")).expanduser().resolve()
+    machine_path = DIRECTORY / "machine.local.json"
+    machine = json.loads(machine_path.read_text()) if machine_path.exists() else {}
+    primary = Path(os.environ.get("CODEX_THREAD_BRIDGE_DEFAULT_HOME",
+                                  machine.get("primary_home", Path.home() / ".codex"))).expanduser().resolve()
+    worker = Path(os.environ.get("CODEX_THREAD_BRIDGE_HOME",
+                                 machine.get("worker_home", DIRECTORY / "home"))).expanduser().resolve()
     if worker == primary:
         raise ValueError("The worker Codex home must differ from the personal Codex home")
     return primary, worker
@@ -58,8 +62,7 @@ def main():
     machine = json.loads((DIRECTORY / "machine.local.json").read_text())
     env = worker_environment()
     if command == "serve":
-        os.execve(machine["codex_binary"], [machine["codex_binary"], "app-server", "--listen", "unix://",
-                                          "--startup-client-info", json.dumps({"name": "codex_thread_bridge", "version": "0.1.0"})], env)
+        os.execve(machine["codex_binary"], [machine["codex_binary"], "app-server", "--listen", "unix://"], env)
     if command == "cli":
         os.execve(machine["codex_binary"], [machine["codex_binary"], *args], env)
     if command == "mcp":
