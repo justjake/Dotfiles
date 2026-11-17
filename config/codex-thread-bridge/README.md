@@ -82,6 +82,8 @@ application port forwarding. Host loopback access through Lima's gateway is
 disabled; this is not a firewall against other LAN addresses. The 1 TiB disk
 is sparse, not preallocated or a host-space reservation. Its actual writes
 still consume host free space. The Mac must remain awake for remote access.
+The guest hostname is `sr72-micro`, reapplied at boot. Its internal Lima
+instance name remains `personal-codex` so existing wrappers continue to work.
 
 Install the independent VM LaunchAgent (starts at user login, not before login):
 
@@ -155,7 +157,7 @@ requires explicit resolution instead of an automatic downgrade.
 
 Login prints a browser approval URL. Its ten-second timeout only stops waiting;
 the daemon can finish enrollment after browser approval. The node is named
-`personal-codex`. It does not accept subnet routes, change guest DNS, advertise
+`sr72-micro`. It does not accept subnet routes, change guest DNS, advertise
 an exit node or subnet routes, or enable Tailscale SSH. Access follows the
 tailnet's existing policy; joining does not create a restrictive tailnet ACL.
 The guest's ordinary SSH daemon remains subject to its existing key auth.

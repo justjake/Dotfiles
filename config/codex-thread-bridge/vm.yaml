@@ -28,5 +28,12 @@ propagateProxyEnv: false
 user:
   name: codex
   home: /home/codex
+provision:
+  - mode: system
+    script: |
+      #!/bin/sh
+      set -eu
+      printf 'preserve_hostname: true\n' > /etc/cloud/cloud.cfg.d/99-personal-codex-hostname.cfg
+      hostnamectl set-hostname sr72-micro
 param:
   internal_netplanOptional: "true"

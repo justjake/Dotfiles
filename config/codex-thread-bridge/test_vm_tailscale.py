@@ -70,6 +70,7 @@ elif name == "sha256sum":
         self.assertEqual(result.returncode, 0, result.stderr)
         command = next(call for call in calls if call[0] == "sudo")
         self.assertEqual(command[:3], ["sudo", "tailscale", "up"])
+        self.assertIn("--hostname=sr72-micro", command)
         for flag in ("--accept-dns=false", "--accept-routes=false", "--ssh=false",
                      "--advertise-exit-node=false", "--advertise-routes=", "--exit-node=",
                      "--advertise-connector=false"):

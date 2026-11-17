@@ -34,7 +34,7 @@ case "$command" in
         echo "Tailscale installed. Run this script with 'login' to enroll this guest."
         ;;
     login)
-        sudo tailscale up --hostname=personal-codex --accept-dns=false --accept-routes=false \
+        sudo tailscale up --hostname=sr72-micro --accept-dns=false --accept-routes=false \
             --advertise-exit-node=false --advertise-routes= --exit-node= \
             --advertise-connector=false --ssh=false --timeout=10s
         ;;
