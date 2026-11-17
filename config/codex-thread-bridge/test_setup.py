@@ -89,6 +89,12 @@ class SetupTests(unittest.TestCase):
             os.environ.pop("CODEX_THREAD_BRIDGE_HOME")
             self.assertEqual(control.locations(), (self.primary, self.worker))
 
+    def test_repeat_setup_keeps_resolved_codex_without_shell_activation(self):
+        setup.configure(None)
+        with patch.dict(os.environ), patch.object(setup.shutil, "which", return_value=None):
+            os.environ.pop("CODEX_THREAD_BRIDGE_CODEX")
+            self.assertEqual(setup.configure(None)["codex_binary"], "/fixture/codex")
+
     def test_serve_uses_portable_cli_flags_and_isolated_environment(self):
         setup.configure(None)
         with patch.object(control.sys, "argv", ["codex-bridge", "serve"]), \
@@ -100,6 +106,24 @@ class SetupTests(unittest.TestCase):
         self.assertEqual(args, [binary, "app-server", "--listen", "unix://"])
         self.assertEqual(env["CODEX_HOME"], str(self.worker))
         self.assertEqual(env["CODEX_THREAD_BRIDGE_DEFAULT_HOME"], str(self.primary))
+
+    def test_vm_commands_forward_before_touching_local_homes(self):
+        (self.directory / "machine.local.json").write_text('{"vm_instance": "personal-codex"}')
+        with patch.object(control.sys, "platform", "darwin"), \
+             patch.object(control.shutil, "which", return_value="/fixture/limactl"), \
+             patch.object(control.os, "execvp", side_effect=SystemExit) as execute, \
+             patch.object(control, "locations", side_effect=AssertionError("local home accessed")):
+            with patch.object(control.sys, "argv", ["codex-bridge", "status"]):
+                with self.assertRaises(SystemExit):
+                    control.main()
+            self.assertEqual(execute.call_args.args[1], [
+                "/fixture/limactl", "shell", "--workdir=/home/codex", "personal-codex",
+                "/home/codex/.local/bin/codex-bridge", "status"])
+            with patch.object(setup.sys, "argv", ["codex-bridge-setup", "--service", "--no-remote"]):
+                with self.assertRaises(SystemExit):
+                    setup.main()
+            self.assertEqual(execute.call_args.args[1][-3:], [
+                "/home/codex/.local/bin/codex-bridge-setup", "--service", "--no-remote"])
 
     def test_invalid_machine_settings_fail_closed(self):
         (self.directory / "machine.local.json").write_text("{")
@@ -139,6 +163,46 @@ class SetupTests(unittest.TestCase):
         self.worker.symlink_to(self.primary)
         with self.assertRaisesRegex(ValueError, "must differ"):
             control.locations()
+
+    def test_linux_service_preserves_active_workers_and_isolates_homes(self):
+        setup.configure(None)
+        with patch.object(setup.subprocess, "run") as process:
+            process.return_value.returncode = 1
+            setup.systemd_service({})
+        unit = self.user / ".config/systemd/user" / f"{control.LABEL}.service"
+        original = unit.read_text()
+        self.assertIn(f"WorkingDirectory={self.user}\n", original)
+        self.assertIn(f'Environment="CODEX_HOME={self.worker}"', original)
+        self.assertIn(f'Environment="CODEX_THREAD_BRIDGE_DEFAULT_HOME={self.primary}"', original)
+        self.assertIn("Restart=always", original)
+        self.assertIn("UMask=0077", original)
+        with patch.object(setup.subprocess, "run") as process:
+            process.return_value.returncode = 0
+            setup.systemd_service({})
+            self.assertEqual(unit.read_text(), original)
+            unit.write_text("existing definition")
+            with self.assertRaisesRegex(RuntimeError, "Preserving active workers"):
+                setup.systemd_service({})
+            self.assertEqual(unit.read_text(), "existing definition")
+
+    def test_service_can_be_prepared_before_personal_login(self):
+        with patch.object(setup.sys, "argv", ["setup", "--service", "--no-remote"]), \
+             patch.object(setup, "configure", return_value={}), \
+             patch.object(setup, "install_bridge"), \
+             patch.object(setup, "install_service") as service, \
+             patch.object(setup, "enable_remote", new_callable=AsyncMock) as remote:
+            setup.main()
+            service.assert_called_once_with({})
+            remote.assert_not_awaited()
+
+    def test_project_registration_waits_for_service_socket(self):
+        with patch.object(setup, "rpc", new_callable=AsyncMock) as call, \
+             patch.object(setup.asyncio, "sleep", new_callable=AsyncMock) as delay:
+            call.side_effect = [FileNotFoundError(), {"project": {"name": "project"}}]
+            result = asyncio.run(setup.register_worker_project(self.user / "project"))
+            self.assertEqual(result["project"]["name"], "project")
+            self.assertEqual(call.await_count, 2)
+            delay.assert_awaited_once_with(1)
 
     def test_preserves_legacy_whole_skills_directory_link(self):
         shutil.rmtree(self.primary / "skills")

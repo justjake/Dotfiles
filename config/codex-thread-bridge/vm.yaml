@@ -1,0 +1,32 @@
+# Dedicated personal Codex guest. Never inherit Lima's default home mount.
+minimumLimaVersion: 2.3.0
+vmType: vz
+arch: aarch64
+images:
+  - location: https://cloud-images.ubuntu.com/minimal/releases/resolute/release-20261105/ubuntu-26.04-minimal-cloudimg-arm64.img
+    arch: aarch64
+    digest: sha256:750d9f0c077e64734b664d357859d1de97c29d07fa126ac602ce9a939c94eac7
+cpus: 4
+memory: 8GiB
+# Sparse capacity, not reserved host space. Host free space is still the limit.
+disk: 1TiB
+mounts: []
+containerd:
+  system: false
+  user: false
+ssh:
+  loadDotSSHPubKeys: false
+  forwardAgent: false
+  forwardX11: false
+portForwards:
+  - guestIP: 0.0.0.0
+    proto: any
+    ignore: true
+networkOpts:
+  hostLoopback: false
+propagateProxyEnv: false
+user:
+  name: codex
+  home: /home/codex
+param:
+  internal_netplanOptional: "true"

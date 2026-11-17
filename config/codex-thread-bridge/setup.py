@@ -16,7 +16,7 @@ import uuid
 
 import tomli_w
 
-from control import DIRECTORY, LABEL, locations, rpc
+from control import DIRECTORY, LABEL, forward_to_vm, locations, rpc
 
 
 def run(args, **kwargs):
@@ -89,7 +89,9 @@ def configure(project):
             link(skill, primary / "skills" / skill.name)
     for name in ("codex-bridge", "codex-bridge-setup", "codex-thread-bridge", "codex-notify-claude", "codex-thread-watch"):
         link(dotfiles / "bin" / name, Path.home() / ".local/bin" / name)
-    codex = os.environ.get("CODEX_THREAD_BRIDGE_CODEX") or shutil.which("codex")
+    machine_path = DIRECTORY / "machine.local.json"
+    previous = json.loads(machine_path.read_text()) if machine_path.exists() else {}
+    codex = os.environ.get("CODEX_THREAD_BRIDGE_CODEX") or previous.get("codex_binary") or shutil.which("codex")
     if not codex:
         raise RuntimeError("Install Codex CLI before running setup")
     state = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share")) / "codex-thread-bridge"
@@ -158,37 +160,82 @@ def launch_agent(machine):
     print(f"LaunchAgent: {LABEL}")
 
 
-async def enable_remote():
+def systemd_service(machine):
+    primary, worker = locations()
+    unit = Path.home() / ".config/systemd/user" / f"{LABEL}.service"
+
+    def quote(value):
+        return json.dumps(str(value).replace("%", "%%"), ensure_ascii=False)
+
+    env = {"HOME": str(Path.home()), "DOTFILES": str(DIRECTORY.parent.parent),
+           "CODEX_HOME": str(worker), "CODEX_SQLITE_HOME": str(worker),
+           "CODEX_THREAD_BRIDGE_HOME": str(worker), "CODEX_THREAD_BRIDGE_DEFAULT_HOME": str(primary),
+           "PATH": f"{Path.home()}/.local/bin:{Path.home()}/.local/share/mise/shims:/usr/local/bin:/usr/bin:/bin"}
+    lines = ["[Unit]", "Description=Personal Codex thread bridge", "",
+             "[Service]", "Type=simple",
+             f"WorkingDirectory={str(Path.home()).replace('%', '%%')}",
+             f"ExecStart={quote(Path.home() / '.local/bin/codex-bridge')} serve",
+             "Restart=always", "RestartSec=10", "TimeoutStopSec=60", "UMask=0077"]
+    lines += [f"Environment={quote(f'{key}={value}')}" for key, value in env.items()]
+    lines += ["", "[Install]", "WantedBy=default.target", ""]
+    desired = "\n".join(lines).encode()
+    active = subprocess.run(["systemctl", "--user", "is-active", "--quiet", f"{LABEL}.service"],
+                            capture_output=True).returncode == 0
+    if active and (not unit.exists() or unit.read_bytes() != desired):
+        raise RuntimeError("Preserving active workers: stop this bridge systemd service before changing its definition")
+    write_private(unit, desired)
+    run(["systemctl", "--user", "daemon-reload"])
+    run(["systemctl", "--user", "enable", "--now", f"{LABEL}.service"])
+    print(f"User service: {LABEL}.service")
+
+
+def install_service(machine):
+    if sys.platform == "darwin":
+        launch_agent(machine)
+    elif sys.platform == "linux":
+        systemd_service(machine)
+    else:
+        raise RuntimeError("--service requires macOS launchd or Linux systemd")
+
+
+async def rpc_when_ready(method, params):
     for attempt in range(30):
         try:
-            return await rpc("remoteControl/enable", {"ephemeral": False})
+            return await rpc(method, params)
         except (OSError, TimeoutError):
             if attempt == 29:
                 raise
             await asyncio.sleep(1)
 
 
+async def enable_remote():
+    return await rpc_when_ready("remoteControl/enable", {"ephemeral": False})
+
+
 async def register_worker_project(project):
     root = str(project.resolve())
-    return await rpc("project/create", {
+    return await rpc_when_ready("project/create", {
         "name": project.resolve().name, "roots": [{"path": root}],
         "idempotencyKey": str(uuid.uuid5(uuid.NAMESPACE_URL, f"codex-thread-bridge:{root}")),
     })
 
 
 def main():
+    forward_to_vm("codex-bridge-setup", sys.argv[1:])
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, help="Update this project's Claude Code MCP registration")
     parser.add_argument("--service", action="store_true")
+    parser.add_argument("--no-remote", action="store_true", help="Install the service before login without enabling remote control")
     parser.add_argument("--configure-only", action="store_true", help="Write local config without installing dependencies or starting services")
     args = parser.parse_args()
     machine = configure(args.project)
     if not args.configure_only:
         install_bridge(machine)
     if args.service:
-        launch_agent(machine)
-        result = asyncio.run(enable_remote())
-        print(json.dumps(result, indent=2))
+        install_service(machine)
+        if not args.no_remote:
+            result = asyncio.run(enable_remote())
+            print(json.dumps(result, indent=2))
         if args.project:
             project = asyncio.run(register_worker_project(args.project))
             print(f"Worker project: {project['project']['name']} ({project['project']['id']})")

@@ -74,6 +74,70 @@ Future setup and bridge commands reuse those homes without shell exports;
 explicit environment overrides still take precedence. Authenticate the personal
 source with `CODEX_HOME="$HOME/.codex-personal" codex login`, not the default app.
 
+## Dedicated Linux VM on macOS
+
+`vm.yaml` uses Lima 2.3+ and Apple Virtualization on ARM64 Macs. It has no
+host filesystem mounts, forwarded SSH agent, container runtime, or automatic
+application port forwarding. Host loopback access through Lima's gateway is
+disabled; this is not a firewall against other LAN addresses. The 1 TiB disk
+is sparse, not preallocated or a host-space reservation. Its actual writes
+still consume host free space. The Mac must remain awake for remote access.
+
+Install the independent VM LaunchAgent (starts at user login, not before login):
+
+```sh
+brew install lima
+python3 ~/.dotfiles/config/codex-thread-bridge/vm-host.py install
+```
+
+Inside the guest (`vm-host.py shell`), install `git`, `curl`, `xz-utils`,
+`python3`, and `ca-certificates` using the guest package manager. Clone this
+dotfiles branch into `~/.dotfiles` without linking any host files, then run:
+
+```sh
+sudo loginctl enable-linger "$USER"
+sh ~/.dotfiles/config/codex-thread-bridge/vm-guest-setup.sh
+```
+
+The bootstrap verifies a pinned mise binary, installs Codex 0.160.1 and the
+existing bridge dependencies, and reuses `codex-bridge-setup --service
+--no-remote --project ~/.dotfiles`. Linux uses a systemd user service with
+restart supervision; lingering keeps it running after SSH disconnects.
+`--no-remote` allows independent provisioning before personal login.
+
+Authenticate inside the guest using the source home and the Codex binary in
+`machine.local.json`. The bootstrap prints the exact device-login command.
+Never copy the host work credentials or managed settings into the guest.
+Then run `~/.local/bin/codex-bridge enable-remote`, `status`, and `pair`.
+Any applicable managed policy must still be respected.
+
+```sh
+python3 ~/.dotfiles/config/codex-thread-bridge/vm-host.py status
+python3 ~/.dotfiles/config/codex-thread-bridge/vm-host.py shell
+python3 ~/.dotfiles/config/codex-thread-bridge/vm-host.py stop
+python3 ~/.dotfiles/config/codex-thread-bridge/vm-host.py start
+```
+
+Stopping Docker Desktop does not affect this VM. Stopping the VM LaunchAgent
+with `vm-host.py stop` stops its supervision too; plain `limactl stop` does not.
+The supervisor checks external power and the physical lid every five seconds.
+It holds an idle/system sleep assertion only while on AC power with the lid
+open. Battery power, a closed lid, an unreadable state, or VM exit releases it.
+Display sleep and screen locking remain enabled. No global `pmset` settings
+are changed. After updating the supervisor, stop/start the VM to refresh its
+LaunchAgent definition.
+
+After moving an existing personal instance, disable its outer LaunchAgent.
+Set `"vm_instance": "personal-codex"` in the host's ignored
+`machine.local.json` to route the existing `codex-bridge`, setup, CLI, and MCP
+wrappers into the guest before accessing local homes. In this mode, setup's
+`--project` paths must name guest directories, not host directories.
+Transfer credentials only from an explicitly selected personal source, while
+both personal services are stopped. Snapshot SQLite databases consistently,
+remap project roots to guest paths, and regenerate the worker config there.
+Do not migrate host-wide Claude backups, work credentials, or host settings.
+Remove the old personal credential file only after guest login is verified.
+
 Focused checks:
 
 ```sh

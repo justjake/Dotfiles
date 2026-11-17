@@ -4,12 +4,29 @@ import asyncio
 import json
 import os
 from pathlib import Path
+import shutil
 import sys
 
 from websockets.asyncio.client import unix_connect
 
 DIRECTORY = Path(__file__).resolve().parent
 LABEL = "com.dotfiles.codex-thread-bridge"
+
+
+def forward_to_vm(program, args):
+    machine_path = DIRECTORY / "machine.local.json"
+    machine = json.loads(machine_path.read_text()) if machine_path.exists() else {}
+    instance = machine.get("vm_instance")
+    if not instance:
+        return
+    if sys.platform != "darwin":
+        raise RuntimeError("VM forwarding is only supported from the macOS host")
+    binary = shutil.which("limactl")
+    if not binary:
+        raise RuntimeError("Install Lima before using the VM-backed bridge")
+    home = machine.get("vm_user_home", "/home/codex")
+    os.execvp(binary, [binary, "shell", f"--workdir={home}", instance,
+                       f"{home}/.local/bin/{program}", *args])
 
 
 def locations():
@@ -55,6 +72,7 @@ async def rpc(method, params=None, *, socket_path=None):
 
 
 def main():
+    forward_to_vm("codex-bridge", sys.argv[1:])
     if len(sys.argv) < 2:
         raise SystemExit("Usage: codex-bridge serve|status|enable-remote|pair|check|cli [ARGS...]")
     command, *args = sys.argv[1:]
