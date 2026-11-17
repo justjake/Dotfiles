@@ -138,6 +138,35 @@ remap project roots to guest paths, and regenerate the worker config there.
 Do not migrate host-wide Claude backups, work credentials, or host settings.
 Remove the old personal credential file only after guest login is verified.
 
+### Optional guest Tailscale node
+
+Inside the VM, run:
+
+```sh
+sh ~/.dotfiles/config/codex-thread-bridge/vm-tailscale-setup.sh install
+sh ~/.dotfiles/config/codex-thread-bridge/vm-tailscale-setup.sh login
+```
+
+The installer verifies the pinned ARM64 Tailscale 1.104.7 Debian package against
+the SHA-256 published in Tailscale's Ubuntu package index. It enables the
+packaged `tailscaled` system service, including guest boot startup. Repeating
+installation preserves node identity and login; an installed different version
+requires explicit resolution instead of an automatic downgrade.
+
+Login prints a browser approval URL. Its ten-second timeout only stops waiting;
+the daemon can finish enrollment after browser approval. The node is named
+`personal-codex`. It does not accept subnet routes, change guest DNS, advertise
+an exit node or subnet routes, or enable Tailscale SSH. Access follows the
+tailnet's existing policy; joining does not create a restrictive tailnet ACL.
+The guest's ordinary SSH daemon remains subject to its existing key auth.
+No host Tailscale keys or configuration are imported.
+
+State and private node keys remain in guest `/var/lib/tailscale`, never in
+dotfiles. Rebuilds require approval again; reusing a VM disk preserves identity.
+This pins installation, not all future security updates: bump the package
+version and checksum together when updating. Node-key expiry and tailnet ACLs
+remain managed through Tailscale, not silently weakened by setup.
+
 Focused checks:
 
 ```sh
