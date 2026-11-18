@@ -101,10 +101,14 @@ sudo loginctl enable-linger "$USER"
 sh ~/.dotfiles/config/codex-thread-bridge/vm-guest-setup.sh
 ```
 
-The bootstrap verifies a pinned mise binary, installs Codex 0.160.1 and the
-existing bridge dependencies, and reuses `codex-bridge-setup --service
---no-remote --project ~/.dotfiles`. Linux uses a systemd user service with
+The bootstrap verifies a pinned mise binary, configures Codex as `latest` in
+global mise settings, installs the existing bridge dependencies, and reuses
+`codex-bridge-setup --service --no-remote --project ~/.dotfiles`. Linux uses a
+systemd user service with
 restart supervision; lingering keeps it running after SSH disconnects.
+The service uses the mise shim, so `mise upgrade --global codex` followed by
+`systemctl --user restart com.dotfiles.codex-thread-bridge.service` picks up
+the new release without changing a saved binary path.
 `--no-remote` allows independent provisioning before personal login.
 
 Authenticate inside the guest using the source home and the Codex binary in

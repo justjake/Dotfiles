@@ -21,8 +21,8 @@ if [ ! -x "$HOME/.local/bin/mise" ]; then
 fi
 mise trust "$config_dir/mise.toml"
 mise -C "$config_dir" install
-mise install codex@0.160.1
-codex="$(mise where codex@0.160.1)/bin/codex"
+mise use --global --fuzzy codex@latest
+codex="$(command -v codex)"
 primary="${CODEX_THREAD_BRIDGE_DEFAULT_HOME:-$HOME/.codex-personal}"
 mkdir -p "$primary"
 chmod 700 "$primary"
