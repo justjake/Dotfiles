@@ -31,6 +31,8 @@ Use mutation flags only when the user authorizes repairs on the affected threads
 - `--repair` moves the byte offset while preserving the ordinal. Open or resume the thread afterward and rerun the audit to verify that Codex projects the remaining records.
 - `--repair-orphans` restores interrupted status and both terminal positions from a unique durable abort event in a clean, caught-up rollout. A later turn alone is insufficient. Events with an error payload or competing terminal events require investigation.
 
-Repairs use the Linux Codex writer-lock namespace under `thread-writer-locks/` and refuse active writers and open rollouts. Verify that the running Codex build uses this lock protocol in `codex-rs/rollout/src/writer_lock.rs`. The doctor takes an online backup under `thread-repair-backups/`, then checks rollout identity and the expected SQLite state in a short transaction.
+Repairs use the Linux Codex writer-lock namespace under `thread-writer-locks/` and normally refuse active writers and open rollouts. Verify that the running Codex build uses this lock protocol in `codex-rs/rollout/src/writer_lock.rs`. The doctor takes an online backup under `thread-repair-backups/`, then checks rollout identity and the expected SQLite state in a short transaction.
+
+For a loaded thread whose saved offset is past EOF, verify through `thread/read` that it is idle and check that the queue is empty. Then use `--repair --repair-loaded-idle THREAD_ID` with its exact ID. This path takes Codex’s exclusive publication coordination lock, checks the rollout signature during the transaction, and compares the old checkpoint before updating it. An existing recorder can still append, so verify the result through normal Codex projection.
 
 Report the thread IDs, observed checkpoint or turn state, any mutation and backup, and the follow-up audit result. An updated checkpoint can still be awaiting projection.

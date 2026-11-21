@@ -67,17 +67,20 @@ class Finding:
     def status(self) -> str:
         if self.checkpoint_consistent:
             return "caught-up-with-anomalies" if self.malformed_lines else "healthy"
+        if (
+            self.stable_scan
+            and not self.malformed_lines
+            and self.complete_final_line
+            and self.expected_positions == (self.old_offset,)
+            and not self.earlier_unprojected
+        ):
+            return "awaiting-projection"
         if self.loaded:
             return "loaded"
         if not self.stable_scan or self.malformed_lines or not self.complete_final_line:
             return "unsafe"
         if self.can_realign:
             return "realignable"
-        if (
-            self.expected_positions == (self.old_offset,)
-            and not self.earlier_unprojected
-        ):
-            return "awaiting-projection"
         return "unsafe"
 
     @property
@@ -352,9 +355,13 @@ def writer_locks(codex_home: Path, thread_ids: Iterable[str]) -> Iterator[None]:
         yield
 
 
-def recheck(finding: Finding, open_targets: set[str]) -> None:
+def recheck(
+    finding: Finding, open_targets: set[str], *, allow_loaded: bool = False
+) -> None:
     path = finding.thread.rollout_path
-    if str(path) in open_targets or file_signature(path) != finding.file_signature:
+    if (str(path) in open_targets and not allow_loaded) or file_signature(
+        path
+    ) != finding.file_signature:
         raise RuntimeError(f"rollout loaded or changed for {finding.thread.thread_id}")
 
 
@@ -369,18 +376,39 @@ def checkpoint_matches(connection: sqlite3.Connection, finding: Finding) -> bool
     return row == (finding.old_offset, finding.expected_ordinal)
 
 
+@contextmanager
+def publication_lock(path: Path) -> Iterator[None]:
+    # Codex takes exclusive coordination before publishing a replacement rollout.
+    # An existing recorder can append, so the repair also checks file signatures.
+    with path.open("r+b") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        yield
+
+
 def repair(
     history_path: Path,
     codex_home: Path,
     findings: Iterable[Finding],
+    allow_loaded: bool = False,
 ) -> tuple[Path | None, int]:
     selected = [
-        finding for finding in findings if finding.can_realign and not finding.loaded
+        finding
+        for finding in findings
+        if finding.can_realign
+        and (
+            not finding.loaded
+            or (allow_loaded and finding.old_offset > finding.rollout_size)
+        )
     ]
     if not selected:
         return None, 0
-    with writer_locks(codex_home, (item.thread.thread_id for item in selected)):
-        backup = backup_database(history_path, codex_home, "checkpoint-repair")
+    backup = backup_database(history_path, codex_home, "checkpoint-repair")
+    if allow_loaded and selected[0].loaded:
+        coordination = codex_home / "thread-writer-locks" / ".coordination.lock"
+        lock = publication_lock(coordination)
+    else:
+        lock = writer_locks(codex_home, (item.thread.thread_id for item in selected))
+    with lock:
         with (
             closing(sqlite3.connect(history_path, timeout=5.0)) as connection,
             connection,
@@ -388,7 +416,7 @@ def repair(
             connection.execute("BEGIN IMMEDIATE")
             targets = open_file_targets()
             for finding in selected:
-                recheck(finding, targets)
+                recheck(finding, targets, allow_loaded=allow_loaded and finding.loaded)
                 cursor = connection.execute(
                     """
                     UPDATE thread_history_projection_state
@@ -410,7 +438,7 @@ def repair(
                     )
             targets = open_file_targets()
             for finding in selected:
-                recheck(finding, targets)
+                recheck(finding, targets, allow_loaded=allow_loaded and finding.loaded)
         return backup, len(selected)
 
 
@@ -558,6 +586,11 @@ def parse_args() -> argparse.Namespace:
         "--repair", action="store_true", help="realign safe inactive checkpoints"
     )
     parser.add_argument(
+        "--repair-loaded-idle",
+        action="store_true",
+        help="realign a loaded checkpoint past EOF after verifying the thread is idle",
+    )
+    parser.add_argument(
         "--repair-orphans",
         action="store_true",
         help="restore interrupted status and boundaries from durable abort events",
@@ -570,6 +603,12 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    if args.repair_loaded_idle and (
+        not args.repair or args.all or len(args.terms) != 1
+    ):
+        raise SystemExit(
+            "--repair-loaded-idle requires --repair and one exact thread ID"
+        )
     if not args.all and not args.terms:
         raise SystemExit("pass title/ID fragments or --all")
     codex_home = (
@@ -596,6 +635,10 @@ def main() -> int:
     queue = readonly(queue_path) if queue_path else None
     try:
         threads = matching_threads(state, tuple(args.terms), args.all)
+        if args.repair_loaded_idle and (
+            len(threads) != 1 or args.terms[0] != threads[0].thread_id
+        ):
+            raise SystemExit("--repair-loaded-idle requires one exact thread ID")
         findings = audit(threads, history, queue, open_targets)
     finally:
         state.close()
@@ -608,7 +651,9 @@ def main() -> int:
     for finding in findings:
         print_finding(finding)
     if args.repair:
-        backup, count = repair(history_path, codex_home, findings)
+        backup, count = repair(
+            history_path, codex_home, findings, args.repair_loaded_idle
+        )
         print(f"repaired={count}")
         if backup is not None:
             print(f"backup={backup}")
